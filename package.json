@@ -1,11 +1,12 @@
 {
   "name": "seasite",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Static Site Builder",
-  "main": "src/index.js",
+  "main": "lib/index.js",
   "scripts": {
-    "start": "babel-node index.js",
-    "test": "jest"
+    "build": "babel src -d lib",
+    "test": "jest",
+    "prepare": "npm version patch &&  npm run build"
   },
   "bin": {
     "seasite": "src/cli.js"
