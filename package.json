@@ -20,7 +20,10 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.6.1",
-    "babel-preset-react": "^6.24.1",
+    "babel-preset-react": "^6.24.1"
+  },
+  "dependencies": {
+    "yargs": "^11.0.0",
     "cheerio": "^1.0.0-rc.2",
     "dateformat": "^3.0.3",
     "fs-extra": "^5.0.0",
@@ -33,8 +36,5 @@
     "uglify-js": "^3.3.10",
     "uglifycss": "0.0.27",
     "yamljs": "^0.3.0"
-  },
-  "dependencies": {
-    "yargs": "^11.0.0"
   }
 }
