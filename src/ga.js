@@ -4,6 +4,7 @@
 
 export function setGA($, key) {
     // https://developers.google.com/analytics/devguides/collection/gtagjs/
+    // Avoid document.write https://developers.google.com/web/tools/lighthouse/audits/document-write
 
     $('body').append(`<script> 
 var disableStr = 'ga-disable-${key}';
@@ -21,7 +22,12 @@ if (!((window.navigator && window.navigator['doNotTrack'] == 1) || (document.coo
     }
     gtag('js', new Date());
     gtag('config', '${key}', { 'anonymize_ip': true });
-    document.write('<script async src="https://www.googletagmanager.com/gtag/js?id=${key}"></sc'+'ript>');
+    
+    var script = document.createElement('script');
+    script.setAttribute('async', 'async');
+    script.setAttribute('src', "https://www.googletagmanager.com/gtag/js?id=${key}")
+    document.body.appendChild(script)
+
     console.log('Visit has been tracked by Google Analytics.');
 } else {
     console.log('Visit has NOT been tracked by Google Analytics.');
