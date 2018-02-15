@@ -4,7 +4,7 @@ Flexible web site builder: <https://holtwick.de/blog/static-jquery>
 
 ### Installation
 
-```bs
+```sh
 npm install -g
 ```
 
@@ -23,3 +23,7 @@ To create the site in folder `dist` do:
 npm start
 ```
 
+
+### License
+
+GPLv3
