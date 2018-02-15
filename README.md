@@ -2,7 +2,13 @@
 
 Flexible web site builder: <https://holtwick.de/blog/static-jquery>
 
-## Get started
+### Installation
+
+```bs
+npm install -g
+```
+
+### Get started
 
 In an empty folder setup a sample to start work with:
 
