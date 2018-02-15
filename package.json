@@ -9,7 +9,7 @@
     "prepare": "npm version patch &&  npm run build"
   },
   "bin": {
-    "seasite": "src/cli.js"
+    "seasite": "lib/cli.js"
   },
   "author": "Dirk Holtwick <dirk.holtwick@gmail.com>",
   "license": "GPL-3.0-or-later",
