@@ -27,8 +27,6 @@ const path = require('path')
 
 const command = argv._[0]
 if (command === 'init') {
-    console.log('Hello World', argv._, process.cwd())
-
     const src = path.join(__dirname, '..', 'template')
     const dst = process.cwd()
 
@@ -52,7 +50,9 @@ if (command === 'init') {
         let s = path.join(src, name)
         let d = path.join(dst, name)
         fs.copyFileSync(s, d)
+        console.log('Create ...', name)
     })
+    console.log('Done.')
 }
 else {
     console.error('Unknown command:', argv._.join(', '))

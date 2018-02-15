@@ -1,6 +1,6 @@
 {
   "name": "seasite",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Static Site Builder",
   "main": "src/index.js",
   "scripts": {
@@ -11,7 +11,11 @@
     "seasite": "src/cli.js"
   },
   "author": "Dirk Holtwick <dirk.holtwick@gmail.com>",
-  "license": "GPLv2",
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/holtwick/seasite.git"
+  },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.6.1",
