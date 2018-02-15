@@ -6,7 +6,7 @@
   "scripts": {
     "build": "babel src -d lib",
     "test": "jest",
-    "prepublish": "npm version patch &&  npm run build"
+    "prepare": "npm version patch &&  npm run build"
   },
   "bin": {
     "seasite": "src/cli.js"
