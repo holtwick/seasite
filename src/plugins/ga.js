@@ -7,11 +7,13 @@ import {Plugin} from './plugin'
 
 export class GoogleAnalyticsPlugin implements Plugin {
 
+    key:string
+
     constructor(key:string) {
         this.key = key
     }
 
-    work($) {
+    work($:Function) {
         const key = this.key
         // https://developers.google.com/analytics/devguides/collection/gtagjs/
         // Avoid document.write https://developers.google.com/web/tools/lighthouse/audits/document-write
