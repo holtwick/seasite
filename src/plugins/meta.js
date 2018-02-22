@@ -15,22 +15,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// (C)opyright 2018-01-04 Dirk Holtwick, holtwick.it. All rights reserved.
 // @flow
 // @jsx jsx
 
 // Support for Google Analytics integration, respecting do not track
 
 import {jsx} from '../jsx'
-import {Plugin} from './plugin'
 
 function isAbsoluteURL(url: string) {
     return url.indexOf('http') === 0
 }
 
-export class MetaPlugin implements Plugin {
+export function meta(opt1: Object = {}) {
 
-    work($: Function, opt: Object = {}) {
+    return ($: Function, opt2: Object = {}) => {
+        let opt = Object.assign({}, opt1, opt2)
 
         // Canonical
         if (opt.url) {
