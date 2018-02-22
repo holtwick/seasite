@@ -1,17 +1,15 @@
 // (C)opyright Dirk Holtwick, 2016-09-02 <dirk.holtwick@gmail.com>
 // @jsx html
+// @flow
 
-const cheerio = require('cheerio')
 const fs = require('fs')
 const path = require('path')
-const url = require('url')
 const process = require('process')
 
+import {dom} from './dom'
 import {jsx, HTML, prependXMLIdentifier} from './jsx'
 import {absoluteLinks} from './relativeurls'
-import {mkdir} from './fileutil'
-import {rmdir} from './fileutil'
-import {walkSync} from './fileutil'
+import {rmdir, mkdir, walkSync} from './fileutil'
 
 const LOAD_OPTIONS = {
     normalizeWhitespace: true,
@@ -19,7 +17,10 @@ const LOAD_OPTIONS = {
 
 export class SeaSite {
 
-    constructor(srcPath, basePath = null, opt = {
+    opt: Object
+    basePath: string
+
+    constructor(srcPath: string, basePath: ?string = null, opt: Object = {
         excludePatterns: [],
         includePatterns: [],
         baseURL: '',
@@ -74,7 +75,7 @@ export class SeaSite {
         }
     }
 
-    log(...args) {
+    log(...args:Array<any>) {
         console.log(...args)
     }
 
@@ -82,11 +83,11 @@ export class SeaSite {
     //     return path.join(this.basePath, urlPath);
     // }
 
-    path(urlPath) {
+    path(urlPath:string):string {
         return path.join(this.basePath, urlPath)
     }
 
-    exists(urlPath) {
+    exists(urlPath:string) {
         try {
             let p = this.path(urlPath)
             return !!fs.statSync(p)
@@ -97,39 +98,39 @@ export class SeaSite {
         return false
     }
 
-    move(fromPath, toPath) {
+    move(fromPath:string, toPath:string) {
         this.log(`move ... ${fromPath} -> ${toPath}`)
         fs.renameSync(
             this.path(fromPath),
             this.path(toPath))
     }
 
-    copy(fromPath, toPath) {
+    copy(fromPath:string, toPath:string) {
         this.log(`copy ... ${fromPath} -> ${toPath}`)
         fs.copyFileSync(
             this.path(fromPath),
             this.path(toPath))
     }
 
-    remove(pattern) {
+    remove(pattern:string) {
         for (let p of this.paths(pattern)) {
             this.log(`remove ... ${p}`)
             fs.unlinkSync(this.path(p))
         }
     }
 
-    url(path) {
+    url(path:string):string {
         if (path[0] !== '/') {
             path = '/' + path
         }
         return path
     }
 
-    absoluteURL(path) {
+    absoluteURL(path:string):string {
         return this.opt.baseURL + this.url(path)
     }
 
-    read(urlPath) {
+    read(urlPath:string):?Buffer {
         if (urlPath[0] === '/') {
             urlPath = urlPath.substring(1)
         }
@@ -137,18 +138,18 @@ export class SeaSite {
         return fs.readFileSync(inPath)
     }
 
-    readString(urlPath) {
+    readString(urlPath:string):?string {
         try {
-            let content = this.read(urlPath).toString()
+            let content = this.read(urlPath)
             // this.log(`  ... read ${urlPath}`);
-            return content
+            return content ? content.toString() : null
         } catch (ex) {
 
         }
         return null
     }
 
-    write(urlPath, content) {
+    write(urlPath:string, content:string) {
         if (urlPath[0] === '/') {
             urlPath = urlPath.substring(1)
         }
@@ -158,13 +159,13 @@ export class SeaSite {
         fs.writeFileSync(outPath, content)
     }
 
-    writeAsHTML(urlpath, $) {
+    writeAsHTML(urlpath:string, $:Function) {
         absoluteLinks($, urlpath)
         this.write(urlpath, $.html())
     }
 
     // All URL paths matching pattern
-    paths(pattern) {
+    paths(pattern:string|RegExp):Array<string> {
         let urlPaths = []
         if (typeof pattern === 'string') {
             urlPaths = [pattern]
@@ -180,18 +181,11 @@ export class SeaSite {
         return urlPaths
     }
 
-    handleString(content, options = LOAD_OPTIONS) {
-        let $ = cheerio.load(content, options)
-        $.decorate = function (selector, fn) {
-            $(selector).each((i, e) => {
-                e = $(e)
-                e.replaceWith(fn(HTML(e.html())))
-            })
-        }
-        return $
+    handleString(content:string, options:Object = LOAD_OPTIONS):Function {
+        return dom(content, options)
     }
 
-    readDOM(urlPath) {
+    readDOM(urlPath:string) {
         let content = this.readString(urlPath)
         if (content) {
             return this.handleString(content)
@@ -199,7 +193,7 @@ export class SeaSite {
         return null
     }
 
-    writeDOM($, urlPath, mode = null) {
+    writeDOM($:Function, urlPath:string, mode:?string = null) {
         let content
         if (mode === 'xml') {
             content = prependXMLIdentifier($.xml())
@@ -217,7 +211,7 @@ export class SeaSite {
         this.write(urlPath, content)
     }
 
-    handle(pattern, handler) {
+    handle(pattern:string|RegExp, handler:(any, string)=>?any) {
         let urlPaths = this.paths(pattern)
         for (let urlPath of urlPaths) {
             // this.log(`handle ... ${urlPath}`)
