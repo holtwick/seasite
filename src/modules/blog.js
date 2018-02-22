@@ -18,35 +18,14 @@
 // @flow
 // @jsx jsx
 
-import {handleLinks} from '../../lib'
 import {jsx} from '../jsx'
 import {SeaSite} from '../site'
 
 let defaults = {
-    exclude: [
-        '404.html',
-    ],
-    pattern: /\.html/,
+    pattern: /\.md/,
     handler: null,
 }
 
-export function sitemap(site: SeaSite, opt: Object = {}) {
+export function blog(site: SeaSite, opt: Object = {}) {
     opt = Object.assign({}, defaults, opt)
-
-    let sitemap = []
-    site.handle(opt.pattern, ($, path) => {
-        //  handleHeaders($)
-        handleLinks($, href => href.replace(/\.html$/, ''))
-
-        opt.handler && opt.handler($, path)
-
-        let url = site.absoluteURL(path)
-        if (opt.exclude.indexOf(path) === -1) {
-            sitemap.push(url)
-        }
-    })
-    sitemap.sort()
-    site.write('sitemap.txt', sitemap.join('\n'))
-
-    site.write('robots.txt', `User-agent: *\nSitemap: ${site.absoluteURL('sitemap.txt')}`)
 }
