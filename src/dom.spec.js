@@ -3,7 +3,7 @@
 
 import {jsx} from './jsx'
 import {dom} from './dom'
-import {TestPlugin} from './plugins'
+import {ExamplePlugin} from './plugins'
 
 describe('DOM', () => {
 
@@ -12,9 +12,11 @@ describe('DOM', () => {
         let $ = dom(r)
 
         $.applyPlugins([
-            new TestPlugin('test'),
-        ])
+            new ExamplePlugin('test'),
+        ], {
+            value: 123
+        })
 
-        expect($.html()).toBe('<html><head><meta name="test"></head><body><div><b>Bold</b></div></body></html>')
+        expect($.html()).toBe('<html><head><meta name="test" value="123"></head><body><div><b>Bold</b></div></body></html>')
     })
 })

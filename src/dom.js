@@ -26,9 +26,9 @@ export function dom(value: any, opt:Object = {
     }
 
 
-    $.applyPlugins = function (plugins:Array<Plugin>) {
+    $.applyPlugins = function (plugins:Array<Plugin>, ...opts) {
         for (let plugin of plugins) {
-            plugin.work($)
+            plugin.work($, ...opts)
         }
     }
 

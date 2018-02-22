@@ -3,4 +3,4 @@
 export * from './css'
 export * from './js'
 export * from './ga'
-export * from './test'
+export * from './example'

@@ -7,16 +7,18 @@
 import {Plugin} from './plugin'
 import {jsx} from '../jsx'
 
-export class TestPlugin implements Plugin {
+export class ExamplePlugin implements Plugin {
 
-    value: string
+    name: string
 
     constructor(value: string) {
-        this.value = value || ''
+        this.name = value || ''
     }
 
-    work($) {
-        $('head').append(<meta name={this.value}/>)
+    work($:any, opts:Object={
+        value: 0
+    }) {
+        $('head').append(<meta name={this.name} value={opts.value || 0}/>)
     }
 
 }
