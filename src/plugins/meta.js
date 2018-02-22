@@ -5,7 +5,7 @@
 
 import {Plugin} from './plugin'
 
-export class JSPlugin implements Plugin {
+export class MetaPlugin implements Plugin {
 
     work($:Function) {
         // $('link')

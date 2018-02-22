@@ -7,7 +7,7 @@ import {Plugin} from './plugin'
 
 export class CSSPlugin implements Plugin {
 
-    work($) {
+    work($:Function) {
         // $('link')
     }
 
