@@ -1,9 +1,3 @@
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.js = js;
 /*
  * Copyright (C) 2018 Dirk Holtwick <https://holtwick.de>
  *
@@ -21,6 +15,17 @@ exports.js = js;
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-function js() {
-  return function ($) {};
+// @flow
+// @jsx jsx
+
+import {jsx} from '../jsx'
+import {SeaSite} from '../site'
+
+let defaults = {
+    pattern: /\.md/,
+    handler: null,
+}
+
+export function blog(site: SeaSite, opt: Object = {}) {
+    opt = Object.assign({}, defaults, opt)
 }

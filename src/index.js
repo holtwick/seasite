@@ -21,5 +21,11 @@ export * from './site'
 export * from './markdown'
 export * from './jsx'
 export * from './relativeurls'
-export * from './ga'
-export * from './plugins'
+
+// export * from './plugins'
+// export * from './tasks'
+
+import * as plugin from './plugins'
+import * as task from './tasks'
+
+export {plugin, task}

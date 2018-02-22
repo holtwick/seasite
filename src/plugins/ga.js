@@ -15,23 +15,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// (C)opyright 2018-01-04 Dirk Holtwick, holtwick.it. All rights reserved.
 // @flow
 
 // Support for Google Analytics integration, respecting do not track
 
-import {Plugin} from './plugin'
-
-export class GoogleAnalyticsPlugin implements Plugin {
-
-    key:string
-
-    constructor(key:string) {
-        this.key = key
-    }
-
-    work($:Function) {
-        const key = this.key
+export function googleAnalytics(key:string) {
+    return ($:Function) => {
         // https://developers.google.com/analytics/devguides/collection/gtagjs/
         // Avoid document.write https://developers.google.com/web/tools/lighthouse/audits/document-write
 
@@ -63,5 +52,4 @@ if (!((window.navigator && window.navigator['doNotTrack'] == 1) || (document.coo
 }
 </script>`)
     }
-
 }

@@ -15,17 +15,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// (C)opyright 2018-01-04 Dirk Holtwick, holtwick.it. All rights reserved.
 // @flow
 
-// Support for Google Analytics integration, respecting do not track
+export function css() {
+    return ($: Function) => {
 
-import {Plugin} from './plugin'
-
-export class CSSPlugin implements Plugin {
-
-    work($:Function) {
-        // $('link')
     }
-
 }
