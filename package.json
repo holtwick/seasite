@@ -1,10 +1,12 @@
 {
   "name": "seasite",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Static Site Builder",
   "main": "lib/index.js",
   "scripts": {
+    "start": "npm run watch",
     "build": "babel src -d lib",
+    "watch": "babel src --watch -d lib",
     "test": "jest",
     "prepare": "npm run build && npm version patch -m 'Upgrade to %s'"
   },
@@ -20,7 +22,8 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.6.1",
-    "babel-preset-react": "^6.24.1"
+    "babel-preset-react": "^6.24.1",
+    "flow-bin": "^0.66.0"
   },
   "dependencies": {
     "yargs": "^11.0.0",

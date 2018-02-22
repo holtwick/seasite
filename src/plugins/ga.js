@@ -1,12 +1,24 @@
 // (C)opyright 2018-01-04 Dirk Holtwick, holtwick.it. All rights reserved.
+// @flow
 
 // Support for Google Analytics integration, respecting do not track
 
-export function setGA($, key) {
-    // https://developers.google.com/analytics/devguides/collection/gtagjs/
-    // Avoid document.write https://developers.google.com/web/tools/lighthouse/audits/document-write
+import {Plugin} from './plugin'
 
-    $('body').append(`<script> 
+export class GoogleAnalyticsPlugin implements Plugin {
+
+    key:string
+
+    constructor(key:string) {
+        this.key = key
+    }
+
+    work($:Function) {
+        const key = this.key
+        // https://developers.google.com/analytics/devguides/collection/gtagjs/
+        // Avoid document.write https://developers.google.com/web/tools/lighthouse/audits/document-write
+
+        $('body').append(`<script> 
 var disableStr = 'ga-disable-${key}';
 
 function gaOptout() {
@@ -33,4 +45,6 @@ if (!((window.navigator && window.navigator['doNotTrack'] == 1) || (document.coo
     console.log('Visit has NOT been tracked by Google Analytics.');
 }
 </script>`)
+    }
+
 }

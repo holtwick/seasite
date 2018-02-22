@@ -5,7 +5,7 @@ Flexible web site builder: <https://holtwick.de/blog/static-jquery>
 ### Installation
 
 ```sh
-npm install -g
+npm install seasite -g
 ```
 
 ### Get started
