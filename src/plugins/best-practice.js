@@ -19,11 +19,9 @@
 
 // Lighthouse recommendations
 
-import {Plugin} from './plugin'
+export function bestPractice() {
 
-export class BestPracticePlugin implements Plugin {
-
-    work($) {
+    return ($) => {
         // https://developers.google.com/web/tools/lighthouse/audits/noopener
         $('[target="_blank"]').attr('rel', 'noopener')
 

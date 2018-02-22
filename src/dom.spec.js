@@ -20,7 +20,7 @@
 
 import {jsx} from './jsx'
 import {dom} from './dom'
-import {ExamplePlugin} from './plugins'
+import {example} from './plugins'
 
 describe('DOM', () => {
 
@@ -29,7 +29,7 @@ describe('DOM', () => {
         let $ = dom(r)
 
         $.applyPlugins([
-            new ExamplePlugin('test'),
+            example('test'),
         ], {
             value: 123
         })

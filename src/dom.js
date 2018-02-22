@@ -22,7 +22,6 @@
 const cheerio = require('cheerio')
 
 import {jsx, HTML} from './jsx'
-import {Plugin} from './plugins/plugin'
 
 export function dom(value: any, opt:Object = {
     normalizeWhitespace: true
@@ -39,9 +38,9 @@ export function dom(value: any, opt:Object = {
     if (value) {
         let $:Function = value
 
-        $.applyPlugins = function (plugins: Array<Plugin>, ...opts) {
+        $.applyPlugins = function (plugins: Array<Function>, ...opts) {
             for (let plugin of plugins) {
-                plugin.work($, ...opts)
+                plugin($, ...opts)
             }
         }
 
