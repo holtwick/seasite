@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 /*
  * Copyright (C) 2018 Dirk Holtwick <https://holtwick.de>
  *
@@ -14,9 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#!/usr/bin/env node
-
 
 var argv = require('yargs')
     .usage('Usage: $0 <command> [options]')
