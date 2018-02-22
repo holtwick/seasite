@@ -15,12 +15,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// (C)opyright 2018-02-15 Dirk Holtwick, holtwick.it. All rights reserved.
+// (C)opyright 2018-01-04 Dirk Holtwick, holtwick.it. All rights reserved.
 
-export * from './css'
-export * from './js'
-export * from './ga'
-export * from './example'
-export * from './plugin'
-export * from './meta'
-export * from './best-practice'
+// Lighthouse recommendations
+
+import {Plugin} from './plugin'
+
+export class BestPracticePlugin implements Plugin {
+
+    work($) {
+        // https://developers.google.com/web/tools/lighthouse/audits/noopener
+        $('[target="_blank"]').attr('rel', 'noopener')
+
+        // https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-blocking-css
+    }
+
+}
