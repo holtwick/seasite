@@ -1,5 +1,6 @@
 // (C)opyright Dirk Holtwick, 2016-09-02 <dirk.holtwick@gmail.com>
 // @jsx html
+// @flow
 
 const cheerio = require('cheerio')
 const fs = require('fs')
@@ -12,6 +13,7 @@ import {absoluteLinks} from './relativeurls'
 import {mkdir} from './fileutil'
 import {rmdir} from './fileutil'
 import {walkSync} from './fileutil'
+import {Plugin} from './plugins/plugin'
 
 const LOAD_OPTIONS = {
     normalizeWhitespace: true,
