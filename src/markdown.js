@@ -43,7 +43,6 @@ function buildOutline(headers, level = 1, opt = {
             list += `<ul class="${opt.class[level]}">`
         }
         let h = headers[0]
-        console.log('h', h)
         if (h) {
             if (h.level === level) {
                 list += `<li><a href="#${h.anchor}">${h.text}</a>`
