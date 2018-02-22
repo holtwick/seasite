@@ -3,34 +3,40 @@
 // @flow
 
 const cheerio = require('cheerio')
-const fs = require('fs')
-const path = require('path')
-const url = require('url')
 
-import {jsx, HTML, prependXMLIdentifier} from './jsx'
-import {absoluteLinks} from './relativeurls'
+import {jsx, HTML} from './jsx'
 import {Plugin} from './plugins/plugin'
 
 export function dom(value: any, opt:Object = {
     normalizeWhitespace: true
-}): ?any {
-
-    let $
+}): Function {
 
     if (typeof value === 'string') {
-        $ = cheerio.load(value, opt)
+        value = cheerio.load(value, opt)
     }
 
-    if (!$) {
-        return null
+    if (!(typeof value === 'function' && typeof value.html === 'function')) {
+        value = null
     }
 
+    if (value) {
+        let $:Function = value
 
-    $.applyPlugins = function (plugins:Array<Plugin>, ...opts) {
-        for (let plugin of plugins) {
-            plugin.work($, ...opts)
+        $.applyPlugins = function (plugins: Array<Plugin>, ...opts) {
+            for (let plugin of plugins) {
+                plugin.work($, ...opts)
+            }
         }
+
+        $.decorate = function (selector, fn) {
+            $(selector).each((i, e) => {
+                e = $(e)
+                e.replaceWith(fn(HTML(e.html())))
+            })
+        }
+
+        return $
     }
 
-    return $
+    return cheerio.load('', opt)
 }
