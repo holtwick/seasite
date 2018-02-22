@@ -27,6 +27,7 @@ let defaults = {
         '404.html',
     ],
     pattern: /\.html/,
+    handler: null,
 }
 
 export function sitemap(site: SeaSite, opt: Object = {}) {
@@ -38,6 +39,8 @@ export function sitemap(site: SeaSite, opt: Object = {}) {
         //  handleHeaders($)
         handleLinks($, href => href.replace(/\.html$/, ''))
 
+        opt.handler && opt.handler($, path)
+
         let url = site.absoluteURL(path)
         if (opt.exclude.indexOf(path) === -1) {
             sitemap.push(url)
@@ -45,6 +48,5 @@ export function sitemap(site: SeaSite, opt: Object = {}) {
     })
     sitemap.sort()
     site.write('sitemap.txt', sitemap.join('\n'))
-
     site.write('robots.txt', `User-agent: *\nSitemap: ${site.absoluteURL('sitemap.txt')}`)
 }
