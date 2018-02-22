@@ -20,9 +20,7 @@
 // Support for Google Analytics integration, respecting do not track
 
 export function googleAnalytics(key:string) {
-
     return ($:Function) => {
-        const key = this.key
         // https://developers.google.com/analytics/devguides/collection/gtagjs/
         // Avoid document.write https://developers.google.com/web/tools/lighthouse/audits/document-write
 
@@ -54,5 +52,4 @@ if (!((window.navigator && window.navigator['doNotTrack'] == 1) || (document.coo
 }
 </script>`)
     }
-
 }
