@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "start": "npm run watch",
-    "build": "rm -rf src && babel src -d lib",
+    "build": "rm -rf lib && babel src -d lib",
     "watch": "babel src --watch -d lib",
     "test": "jest src",
     "prepare": "npm run build && npm version patch -m 'Upgrade to %s'"
