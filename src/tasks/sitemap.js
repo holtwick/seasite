@@ -19,8 +19,8 @@
 // @jsx jsx
 
 import {handleLinks} from '../index'
-import {jsx} from '../jsx'
-import {SeaSite} from '../site'
+import {jsx} from '../site/jsx'
+import {SeaSite} from '../site/site'
 
 let defaults = {
     exclude: [

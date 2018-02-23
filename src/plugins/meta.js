@@ -18,7 +18,7 @@
 // @flow
 // @jsx jsx
 
-import {jsx} from '../jsx'
+import {jsx} from '../site/jsx'
 
 function isAbsoluteURL(url: string) {
     return url.indexOf('http') === 0

@@ -18,10 +18,8 @@
 // @flow
 // @jsx jsx
 
-import {parseMarkdown, prependXMLIdentifier, setXMLMode} from '../index'
-import {dom} from '../dom'
-import {jsx} from '../jsx'
-import {SeaSite} from '../site'
+import {SeaSite, parseMarkdown, prependXMLIdentifier, setXMLMode, dom} from '../index'
+import {jsx} from '../site/jsx'
 import dateformat from 'dateformat'
 import _ from 'lodash'
 

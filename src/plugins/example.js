@@ -18,7 +18,7 @@
 // @flow
 // @jsx jsx
 
-import {jsx} from '../jsx'
+import {jsx} from '../site/jsx'
 
 export function example(name: string = '') {
     return ($: Function, opt: Object = {value: 0}) => {

@@ -19,9 +19,9 @@
 // @jsx jsx
 
 import {HTML, parseMarkdown, plugin} from '../index'
-import {dom} from '../dom'
-import {jsx} from '../jsx'
-import {SeaSite} from '../site'
+import {dom} from '../site/dom'
+import {jsx} from '../site/jsx'
+import {SeaSite} from '../site/site'
 import dateformat from 'dateformat'
 
 function pathToHTMLPath(path) {

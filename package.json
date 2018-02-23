@@ -7,7 +7,7 @@
     "start": "npm run watch",
     "build": "babel src -d lib",
     "watch": "babel src --watch -d lib",
-    "test": "jest",
+    "test": "jest src",
     "prepare": "npm run build && npm version patch -m 'Upgrade to %s'"
   },
   "bin": {

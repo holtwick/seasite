@@ -19,7 +19,7 @@
 // @jsx jsx
 
 import {absoluteLinks} from '../index'
-import {jsx} from '../jsx'
+import {jsx} from '../site/jsx'
 
 const defaults = {
     relative: false
