@@ -33,7 +33,6 @@ export function href(gopt: Object = {}) {
 
     return ($: Function, opt: Object = {}) => {
         opt = Object.assign({}, gopt, opt)
-        console.log('[href]', opt.path)
         absoluteLinks($, opt.path)
     }
 
