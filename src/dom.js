@@ -23,36 +23,35 @@ const cheerio = require('cheerio')
 
 import {jsx, HTML} from './jsx'
 
-export function dom(value: any, opt:Object = {
-    normalizeWhitespace: true
+export function dom(value: string | Buffer | Function, opt: Object = {
+    normalizeWhitespace: true,
 }): Function {
 
-    if (typeof value === 'string') {
-        value = cheerio.load(value, opt)
+    if (value instanceof Buffer) {
+        value = value.toString('utf8')
     }
 
     if (!(typeof value === 'function' && typeof value.html === 'function')) {
-        value = null
+        if (typeof value !== 'string') {
+            value = ''
+        }
+        value = cheerio.load(value, opt)
     }
 
-    if (value) {
-        let $:Function = value
+    let $: Function = value
 
-        $.applyPlugins = function (plugins: Array<Function>, ...opts) {
-            for (let plugin of plugins) {
-                plugin($, ...opts)
-            }
+    $.applyPlugins = function (plugins: Array<Function>, ...opts) {
+        for (let plugin of plugins) {
+            plugin($, ...opts)
         }
-
-        $.decorate = function (selector, fn) {
-            $(selector).each((i, e) => {
-                e = $(e)
-                e.replaceWith(fn(HTML(e.html())))
-            })
-        }
-
-        return $
     }
 
-    return cheerio.load('', opt)
+    $.decorate = function (selector, fn) {
+        $(selector).each((i, e) => {
+            e = $(e)
+            e.replaceWith(fn(HTML(e.html())))
+        })
+    }
+
+    return $
 }

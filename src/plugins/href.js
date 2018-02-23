@@ -15,12 +15,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// (C)opyright 2018-02-15 Dirk Holtwick, holtwick.it. All rights reserved.
+// @flow
+// @jsx jsx
 
-export * from './css'
-export * from './js'
-export * from './ga'
-export * from './example'
-export * from './meta'
-export * from './best-practice'
-export * from './href'
+import {absoluteLinks} from '../index'
+import {jsx} from '../jsx'
+
+const defaults = {
+    relative: false
+}
+
+function isAbsoluteURL(url: string) {
+    return url.indexOf('http') === 0
+}
+
+export function href(gopt: Object = {}) {
+
+    return ($: Function, opt: Object = {}) => {
+        opt = Object.assign({}, gopt, opt)
+        console.log('[href]', opt.path)
+        absoluteLinks($, opt.path)
+    }
+
+}

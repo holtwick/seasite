@@ -18,7 +18,7 @@
 // @flow
 // @jsx jsx
 
-import {parseMarkdown, prependXMLIdentifier, setXMLMode} from '../../lib'
+import {parseMarkdown, prependXMLIdentifier, setXMLMode} from '../index'
 import {dom} from '../dom'
 import {jsx} from '../jsx'
 import {SeaSite} from '../site'

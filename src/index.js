@@ -20,6 +20,7 @@
 export * from './site'
 export * from './markdown'
 export * from './jsx'
+export * from './dom'
 export * from './relativeurls'
 
 // export * from './plugins'
