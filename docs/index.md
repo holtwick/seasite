@@ -45,6 +45,30 @@ The third parameter will hold options:
 
 - `baseURL`
 
+### site.handle(pattern)
+
+xxx
+
+### site.copy(from, to)
+
+xxx
+
+### site.move(from, to)
+
+xxx
+
+### site.remove(path)
+
+xxx
+
+### site.read()
+
+xxx
+
+### site.write()
+
+xxx
+
 ## DOM
 
 The real magic is in the jQuery like manipulation of the contents. `Cheerio` is used to provide the functionality. In SeaSite the `dom()` helper converts input like strings to a jQuery like DOM environment. It also adds some more functionalities, like support for [plugins](#plugins).
@@ -55,7 +79,7 @@ $(b).text('Hallo Welt')
 expect($.html()).toEqual('<b>Hallo Welt</b>')
 ```
 
-## Task {#tasks}
+## Tasks {#tasks}
 
 These are solutions for common tasks. The first parameter is
 
@@ -63,7 +87,7 @@ These are solutions for common tasks. The first parameter is
 import task from `seasite`
 ```
 
-### task.blog
+### task.blog(site, opt)
 
 ```js
 task.blog(site, {
@@ -73,13 +97,17 @@ task.blog(site, {
 })
 ```
 
-### task.sitemap
+### task.sitemap(site)
 
-## Plugin {#plugins}
+xxx
+
+## Plugins {#plugins}
 
 Plugins perform changes on a DOM object. They can be reused. Example:
 
 ```js
+import plugin from 'seasite'
+
 const plugins = [
     plugin.meta({
         twitter: '@holtwick'
@@ -92,23 +120,17 @@ $.applyPlugins(plugins, {
 })
 ```
 
-### plugin.bestPractice
+### plugin.bestPractice()
 
-### plugin.googleAnalytics
+xxx
 
-### plugin.meta
+### plugin.googleAnalytics(key)
 
-## File Operations
+xxx
 
-### site.copy(from, to)
+### plugin.meta(opt)
 
-### site.move(from, to)
-
-### site.remove(path)
-
-### site.read()
-
-### site.write()
+xxx
 
 ## Appendix
 
