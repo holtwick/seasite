@@ -29,9 +29,106 @@ The following command will create the site in the folder `dist`:
 npm start
 ```
 
-## API
+## Site
 
-### SeaSite
+The central piece of the engine is the `SeaSite` object. In the most simple setup a source and a destination folder will be defined. The first action that will happen is to close the destination to the source folder. All following actions will operate on this clone.
+
+```js
+import {SeaSite} from 'seasite'
+
+let site = new SeaSite(
+        'public',  // Source
+        'dist')    // Destination
+```
+
+The third parameter will hold options:
+
+- `baseURL`
+
+### site.handle(pattern)
+
+xxx
+
+### site.copy(from, to)
+
+xxx
+
+### site.move(from, to)
+
+xxx
+
+### site.remove(path)
+
+xxx
+
+### site.read()
+
+xxx
+
+### site.write()
+
+xxx
+
+## DOM
+
+The real magic is in the jQuery like manipulation of the contents. `Cheerio` is used to provide the functionality. In SeaSite the `dom()` helper converts input like strings to a jQuery like DOM environment. It also adds some more functionalities, like support for [plugins](#plugins).
+
+```jsx
+let $ = dom('<b>Hello World</b>')
+$(b).text('Hallo Welt')
+expect($.html()).toEqual('<b>Hallo Welt</b>')
+```
+
+## Tasks {#tasks}
+
+These are solutions for common tasks. The first parameter is
+
+```js
+import task from `seasite`
+```
+
+### task.blog(site, opt)
+
+```js
+task.blog(site, {
+    template(site) {
+        return site.read('blog/template.html')
+    }
+})
+```
+
+### task.sitemap(site)
+
+xxx
+
+## Plugins {#plugins}
+
+Plugins perform changes on a DOM object. They can be reused. Example:
+
+```js
+import plugin from 'seasite'
+
+const plugins = [
+    plugin.meta({
+        twitter: '@holtwick'
+    }),
+    plugin.bestPractice()
+]
+
+$.applyPlugins(plugins, {
+    title: 'Hello World'
+})
+```
+
+### plugin.bestPractice()
+
+xxx
+
+### plugin.googleAnalytics(key)
+
+xxx
+
+### plugin.meta(opt)
 
 xxx
 

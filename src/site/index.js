@@ -15,8 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as plugin from './plugins'
-import * as task from './tasks'
-
 export * from './site'
-export {plugin, task}
+export * from './markdown'
+export * from './jsx'
+export * from './dom'
+export * from './relativeurls'
