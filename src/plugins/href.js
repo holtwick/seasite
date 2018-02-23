@@ -1,14 +1,3 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.blog = blog;
-
-var _jsx = require('../jsx');
-
-var _site = require('../site');
-
 /*
  * Copyright (C) 2018 Dirk Holtwick <https://holtwick.de>
  *
@@ -26,15 +15,26 @@ var _site = require('../site');
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+// @flow
 // @jsx jsx
 
-var defaults = {
-    pattern: /\.md/,
-    handler: null
-};
+import {absoluteLinks} from '../index'
+import {jsx} from '../site/jsx'
 
-function blog(site) {
-    var opt = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+const defaults = {
+    relative: false
+}
 
-    opt = Object.assign({}, defaults, opt);
+function isAbsoluteURL(url: string) {
+    return url.indexOf('http') === 0
+}
+
+export function href(gopt: Object = {}) {
+
+    return ($: Function, opt: Object = {}) => {
+        opt = Object.assign({}, gopt, opt)
+        console.log('[href]', opt.path)
+        absoluteLinks($, opt.path)
+    }
+
 }

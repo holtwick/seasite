@@ -18,18 +18,16 @@
 // @flow
 // @jsx jsx
 
-// Support for Google Analytics integration, respecting do not track
-
-import {jsx} from '../jsx'
+import {jsx} from '../site/jsx'
 
 function isAbsoluteURL(url: string) {
     return url.indexOf('http') === 0
 }
 
-export function meta(opt1: Object = {}) {
+export function meta(gopt: Object = {}) {
 
-    return ($: Function, opt2: Object = {}) => {
-        let opt = Object.assign({}, opt1, opt2)
+    return ($: Function, opt: Object = {}) => {
+        opt = Object.assign({}, gopt, opt)
 
         // Canonical
         if (opt.url) {
@@ -116,9 +114,13 @@ export function meta(opt1: Object = {}) {
         }
 
         // Generator, Type
-        $('head')
-            .append(<meta name="generator" content="SeaSite, https://github.com/holtwick/seasite/"/>)
-            .append(<meta property="og:type" content="website"/>)
+        {
+            $('meta[name="generator"]').remove()
+            $('meta[property="og:type"]').remove()
+            $('head')
+                .append(<meta name="generator" content="SeaSite, https://github.com/holtwick/seasite/"/>)
+                .append(<meta property="og:type" content="website"/>)
+        }
 
     }
 

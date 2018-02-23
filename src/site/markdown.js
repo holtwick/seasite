@@ -15,7 +15,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// (C)opyright Dirk Holtwick, 2016-08-20 <dirk.holtwick@gmail.com>
 // @jsx jsx
 
 import {jsx, HTML, prependXMLIdentifier} from './jsx'
@@ -24,8 +23,6 @@ const fs = require('fs')
 const marked = require('marked')
 const hljs = require('highlight.js')
 const yaml = require('yamljs')
-
-// const dateformat = require('dateformat')
 
 function buildOutline(headers, level = 1, opt = {
     maxLevel: 2,
