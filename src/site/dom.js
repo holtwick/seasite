@@ -23,6 +23,21 @@ const cheerio = require('cheerio')
 
 import {jsx, HTML} from './jsx'
 
+export function isDOM(obj:any):boolean {
+    return obj && typeof obj === 'function' && typeof obj.html === 'function'
+}
+
+export function toString(obj:any):string {
+    if (obj) {
+        if (obj instanceof Buffer) {
+            return toString('utf8')
+        } else if (isDOM(obj)) {
+            return obj.html()
+        }
+    }
+    return (obj || '').toString()
+}
+
 export function dom(value: string | Buffer | Function, opt: Object = {
     normalizeWhitespace: true,
 }): Function {
@@ -31,13 +46,14 @@ export function dom(value: string | Buffer | Function, opt: Object = {
         value = value.toString('utf8')
     }
 
-    if (!(typeof value === 'function' && typeof value.html === 'function')) {
+    if (!isDOM(value)) {
         if (typeof value !== 'string') {
             value = ''
         }
         value = cheerio.load(value, opt)
     }
 
+    // FLOW:2018-02-23
     let $: Function = value
 
     $.applyPlugins = function (plugins: Array<Function>, ...opts) {
