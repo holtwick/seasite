@@ -23,7 +23,7 @@ const fs = require('fs')
 const path = require('path')
 const process = require('process')
 
-import {dom} from './dom'
+import {dom, isDOM} from './dom'
 import {jsx, HTML, prependXMLIdentifier} from './jsx'
 import {absoluteLinks} from './relativeurls'
 import {rmdir, mkdir, walkSync} from './fileutil'
@@ -92,19 +92,17 @@ export class SeaSite {
         }
     }
 
-    log(...args:Array<any>) {
+    log(...args: Array<any>) {
         console.log(...args)
     }
 
-    // outPath (urlPath) {
-    //     return path.join(this.basePath, urlPath);
-    // }
+    // Path and URL
 
-    path(urlPath:string):string {
+    path(urlPath: string): string {
         return path.join(this.basePath, urlPath)
     }
 
-    exists(urlPath:string) {
+    exists(urlPath: string) {
         try {
             let p = this.path(urlPath)
             return !!fs.statSync(p)
@@ -115,74 +113,75 @@ export class SeaSite {
         return false
     }
 
-    move(fromPath:string, toPath:string) {
-        this.log(`move ... ${fromPath} -> ${toPath}`)
-        fs.renameSync(
-            this.path(fromPath),
-            this.path(toPath))
-    }
-
-    copy(fromPath:string, toPath:string) {
-        this.log(`copy ... ${fromPath} -> ${toPath}`)
-        fs.copyFileSync(
-            this.path(fromPath),
-            this.path(toPath))
-    }
-
-    remove(pattern:string) {
-        for (let p of this.paths(pattern)) {
-            this.log(`remove ... ${p}`)
-            fs.unlinkSync(this.path(p))
-        }
-    }
-
-    url(path:string):string {
+    url(path: string): string {
         if (path[0] !== '/') {
             path = '/' + path
         }
         return path
     }
 
-    absoluteURL(path:string):string {
+    absoluteURL(path: string): string {
         return this.opt.baseURL + this.url(path)
     }
 
-    read(urlPath:string):?Buffer {
-        if (urlPath[0] === '/') {
-            urlPath = urlPath.substring(1)
-        }
-        let inPath = path.join(this.basePath, urlPath)
-        return fs.readFileSync(inPath)
+    // File Actions
+
+    move(fromPath: string, toPath: string) {
+        this.log(`move ... ${fromPath} -> ${toPath}`)
+        fs.renameSync(
+            this.path(fromPath),
+            this.path(toPath))
     }
 
-    readString(urlPath:string):?string {
-        try {
-            let content = this.read(urlPath)
-            // this.log(`  ... read ${urlPath}`);
-            return content ? content.toString() : null
-        } catch (ex) {
+    copy(fromPath: string, toPath: string) {
+        this.log(`copy ... ${fromPath} -> ${toPath}`)
+        fs.copyFileSync(
+            this.path(fromPath),
+            this.path(toPath))
+    }
 
+    remove(pattern: string) {
+        for (let p of this.paths(pattern)) {
+            this.log(`remove ... ${p}`)
+            fs.unlinkSync(this.path(p))
+        }
+    }
+
+    // Read / Write
+
+    read(urlPath: string): ?Buffer {
+        try {
+            if (urlPath[0] === '/') {
+                urlPath = urlPath.substring(1)
+            }
+            let inPath = path.join(this.basePath, urlPath)
+            return fs.readFileSync(inPath)
+        } catch (ex) {
+            console.error('Failed to .read file:', urlPath)
         }
         return null
     }
 
-    write(urlPath:string, content:string) {
+    write(urlPath: string, content: string | Buffer | Function) {
         if (urlPath[0] === '/') {
             urlPath = urlPath.substring(1)
         }
         let outPath = path.join(this.basePath, urlPath)
         mkdir(path.dirname(outPath))
         this.log(`write ... ${outPath}`)
+
+        if (typeof content !== 'string') {
+            if (isDOM(content)) {
+                content = content.html()
+            } else {
+                content = content.toString()
+            }
+        }
         fs.writeFileSync(outPath, content)
     }
 
-    writeAsHTML(urlpath:string, $:Function) {
-        absoluteLinks($, urlpath)
-        this.write(urlpath, $.html())
-    }
-
     // All URL paths matching pattern
-    paths(pattern:string|RegExp):Array<string> {
+    paths(pattern: string | RegExp): Array<string> {
         let urlPaths = []
         if (typeof pattern === 'string') {
             urlPaths = [pattern]
@@ -198,19 +197,8 @@ export class SeaSite {
         return urlPaths
     }
 
-    handleString(content:string, options:Object = LOAD_OPTIONS):Function {
-        return dom(content, options)
-    }
-
-    readDOM(urlPath:string) {
-        let content = this.readString(urlPath)
-        if (content) {
-            return this.handleString(content)
-        }
-        return null
-    }
-
-    writeDOM($:Function, urlPath:string, mode:?string = null) {
+    // DEPRECATED:2018-02-23
+    writeDOM($: Function, urlPath: string, mode: ?string = null) {
         let content
         if (mode === 'xml') {
             content = prependXMLIdentifier($.xml())
@@ -228,15 +216,15 @@ export class SeaSite {
         this.write(urlPath, content)
     }
 
-    handle(pattern:string|RegExp, handler:(any, string)=>?any) {
+    handle(pattern: string | RegExp, handler: (any, string) => ?any) {
         let urlPaths = this.paths(pattern)
         for (let urlPath of urlPaths) {
             // this.log(`handle ... ${urlPath}`)
-            let content = this.readString(urlPath) || ''
+            let content = this.read(urlPath) || ''
             if (/\.(html?|xml)$/i.test(urlPath)) {
                 let xmlMode = /\.xml$/i.test(urlPath)
                 // let normalizeWhitespace = false
-                let $ = this.handleString(content, {xmlMode})
+                let $ = dom(content, {xmlMode})
                 let ret = handler($, urlPath)
                 if (ret !== false) {
                     if (typeof ret === 'string' && ret !== 'xml') {

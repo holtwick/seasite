@@ -15,6 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+// @flow
 // @jsx jsx
 
 import {jsx, HTML, prependXMLIdentifier} from './jsx'
@@ -27,17 +28,17 @@ const yaml = require('yamljs')
 function buildOutline(headers, level = 1, opt = {
     maxLevel: 2,
     class: {
-        1: 'nav bs-docs-sidenav',
-        2: 'nav',
-        3: 'nav',
-        4: 'nav',
-        5: 'nav',
+        '1': 'nav bs-docs-sidenav',
+        '2': 'nav',
+        '3': 'nav',
+        '4': 'nav',
+        '5': 'nav',
     },
 }) {
     let list = ''
     while (headers && headers.length > 0) {
         if (!list) {
-            list += `<ul class="${opt.class[level]}">`
+            list += `<ul class="${opt.class[level.toString()]}">`
         }
         let h = headers[0]
         if (h) {
@@ -67,14 +68,14 @@ function buildOutline(headers, level = 1, opt = {
     return list
 }
 
-export function parseMarkdown(content, opt = {
+export function parseMarkdown(content:string|Buffer, opt:Object = {
     outline: false,
 }) {
     // Props
 
     // assert(content != null && content.length > 0 && typeof content === 'string', 'parseMarkdown expects content', content);
     let result = {}
-    result.content = content.replace(/^---([\s\S]*?)---/gi, function (_, propString) {
+    result.content = content.toString().replace(/^---([\s\S]*?)---/gi, function (_, propString) {
         result.props = yaml.parse(propString.trim())
         return ''
     })
@@ -136,7 +137,7 @@ export function parseMarkdown(content, opt = {
     return result
 }
 
-export function readMarkdown(p) {
-    const md = fs.readFileSync(p, 'utf8')
-    return marked(md).toString()
-}
+// export function readMarkdown(p) {
+//     const md = fs.readFileSync(p, 'utf8')
+//     return marked(md).toString()
+// }

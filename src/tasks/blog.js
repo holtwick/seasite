@@ -74,7 +74,7 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
 
     // RSS
     setXMLMode(true)
-    let atomContent = site.handleString(
+    let atomContent = dom(
         <rss version="2.0" xmlns__atom="http://www.w3.org/2005/Atom">
             <channel>
                 <title>{opt.title}</title>
