@@ -16,37 +16,21 @@
  */
 
 // @flow
+// @jsx jsx
 
-import * as url from "url"
-import {handleLinks} from '../site/relativeurls'
+import {SeaSite} from '../site/site'
 
-const defaults = {
-    // relative: false,
-    handleURL(url) {
-        return url
-    }
+let defaults = {
+    patterns: [
+        /\.md/,
+        'template.html',
+    ],
 }
 
-function isAbsoluteURL(url: string) {
-    return url.indexOf('http') === 0
-}
+export function cleanup(site: SeaSite, opt: Object = {}) {
+    opt = Object.assign({}, defaults, opt)
 
-export function href(gopt: Object = {}) {
-    gopt = Object.assign({}, defaults, gopt)
-
-    return ($: Function, opt: Object = {}) => {
-        opt = Object.assign({}, gopt, opt)
-
-        let baseURL = opt.path || '/'
-        if (baseURL[0] !== '/') {
-            baseURL = '/' + baseURL
-        }
-
-        handleLinks($, href => {
-            return opt.handleURL(url.resolve(baseURL, href))
-        })
-
-        // absoluteLinks($, opt.path)
+    for (let pattern of opt.patterns) {
+        site.remove(pattern)
     }
-
 }

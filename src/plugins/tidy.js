@@ -17,36 +17,15 @@
 
 // @flow
 
-import * as url from "url"
-import {handleLinks} from '../site/relativeurls'
+const defaults = {}
 
-const defaults = {
-    // relative: false,
-    handleURL(url) {
-        return url
-    }
-}
-
-function isAbsoluteURL(url: string) {
-    return url.indexOf('http') === 0
-}
-
-export function href(gopt: Object = {}) {
+export function tidy(gopt: Object = {}) {
     gopt = Object.assign({}, defaults, gopt)
 
     return ($: Function, opt: Object = {}) => {
-        opt = Object.assign({}, gopt, opt)
-
-        let baseURL = opt.path || '/'
-        if (baseURL[0] !== '/') {
-            baseURL = '/' + baseURL
-        }
-
-        handleLinks($, href => {
-            return opt.handleURL(url.resolve(baseURL, href))
-        })
-
-        // absoluteLinks($, opt.path)
+        let html = $.html()
+        html = html.replace(/(>)(<(meta|link|script))/gi, '$1\n$2')
+        $.reload(html)
     }
 
 }
