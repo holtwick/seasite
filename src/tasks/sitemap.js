@@ -41,7 +41,7 @@ export function sitemap(site: SeaSite, opt: Object = {}) {
 
         opt.handler($, path)
 
-        let url = site.absoluteURL(path)
+        let url = site.publicURL(path)
         if (opt.exclude.indexOf(path) === -1) {
             sitemap.push(url)
         }
@@ -49,5 +49,5 @@ export function sitemap(site: SeaSite, opt: Object = {}) {
     sitemap.sort()
     site.write('sitemap.txt', sitemap.join('\n'))
 
-    site.write('robots.txt', `User-agent: *\nSitemap: ${site.absoluteURL('sitemap.txt')}`)
+    site.write('robots.txt', `User-agent: *\nSitemap: ${site.publicURL('sitemap.txt')}`)
 }

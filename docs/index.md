@@ -44,6 +44,9 @@ let site = new SeaSite(
 The third parameter will hold options:
 
 - `baseURL`
+- `publicURL(path)`: Override for [`site.publicURL()`](#publicURL)
+
+The **path pattern** (referred to as `pattern`) that is used in some of the following methods, can be either a simple string representing the full path, like `contact/index.html` or a regular expression like `.*\.md` which would retrieve all Markdown files, even those in sub directories. The last option is to pass an `Array` with string representations described before.
 
 ### site.handle(pattern)
 
@@ -57,21 +60,25 @@ xxx
 
 xxx
 
-### site.remove(path)
+### site.remove(pattern)
 
 xxx
 
-### site.read()
+### site.read(path)
 
 xxx
 
-### site.write()
+### site.write(path)
 
 xxx
 
-? site.paths()
+### site.paths(pattern):patterns
 
+xxx
 
+### site.publicURL(path):url {#publicURL}
+
+Convert a `path` to a public URL that you e.g. would like to see as the canonical URL or in the sitemap. This should usually also include the scheme and host name. Example: `https://example.com/contact`
 
 ## DOM
 

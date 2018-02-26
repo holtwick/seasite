@@ -96,10 +96,27 @@ export class SeaSite {
         console.log(...args)
     }
 
-    // Path and URL
+    // Paths
 
     path(urlPath: string): string {
         return path.join(this.basePath, urlPath)
+    }
+
+    // All URL paths matching pattern
+    paths(pattern: string | RegExp): Array<string> {
+        let urlPaths = []
+        if (typeof pattern === 'string') {
+            urlPaths = [pattern]
+        } else if (pattern instanceof RegExp) {
+            urlPaths = walkSync(this.basePath).filter(file => {
+                pattern.lastIndex = 0
+                return pattern.test(file)
+            })
+        } else if (Array.isArray(pattern)) {
+            urlPaths = pattern
+        }
+        urlPaths.sort()
+        return urlPaths
     }
 
     exists(urlPath: string) {
@@ -113,6 +130,8 @@ export class SeaSite {
         return false
     }
 
+    // URLs
+
     url(path: string): string {
         if (path[0] !== '/') {
             path = '/' + path
@@ -120,9 +139,16 @@ export class SeaSite {
         return path
     }
 
-    absoluteURL(path: string): string {
+    publicURL(path: string): string {
+        if (this.opt.publicURL) {
+            return this.opt.publicURL(this.url(path))
+        }
         return this.opt.baseURL + this.url(path)
     }
+
+    // absoluteURL(path: string): string {
+    //     return this.opt.baseURL + this.url(path)
+    // }
 
     // File Actions
 
@@ -178,23 +204,6 @@ export class SeaSite {
             }
         }
         fs.writeFileSync(outPath, content)
-    }
-
-    // All URL paths matching pattern
-    paths(pattern: string | RegExp): Array<string> {
-        let urlPaths = []
-        if (typeof pattern === 'string') {
-            urlPaths = [pattern]
-        } else if (pattern instanceof RegExp) {
-            urlPaths = walkSync(this.basePath).filter(file => {
-                pattern.lastIndex = 0
-                return pattern.test(file)
-            })
-        } else if (Array.isArray(pattern)) {
-            urlPaths = pattern
-        }
-        urlPaths.sort()
-        return urlPaths
     }
 
     // DEPRECATED:2018-02-23

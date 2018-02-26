@@ -89,7 +89,7 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
         let atomEntry =
             <item>
                 <title>{post.title}</title>
-                <link>{site.absoluteURL(post.htmlPath)}</link>
+                <link>{site.publicURL(post.htmlPath)}</link>
                 <pubDate>{dateformat(post.date, 'isoDateTime')}</pubDate>
                 <author>{opt.author}</author>
                 <description>{post.html}</description>
