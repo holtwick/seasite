@@ -23,6 +23,9 @@ To create the site in folder `dist` do:
 npm start
 ```
 
+### Docs
+
+More [dcoumentation here](DOCS.md).
 
 ### License
 

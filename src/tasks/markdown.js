@@ -28,7 +28,7 @@ const defaults = {
     pattern: /.*\.md$/,
     template(site) {
         return <div>
-            <div id="content" />
+            <div id="content"/>
         </div>
     },
     handle($, opt) {
@@ -68,6 +68,10 @@ export function markdown(site: SeaSite, gopt: Object = {}): Array<Object> {
 
         opt.html = $.html()
         pages.push(opt)
+
+        if (gopt.cleanup === true) {
+            site.remove(path)
+        }
 
         site.write(pathToHTMLPath(opt.path), opt.html)
     })

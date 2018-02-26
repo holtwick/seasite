@@ -1,6 +1,6 @@
 {
   "name": "seasite",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Static Site Builder",
   "main": "lib/index.js",
   "scripts": {
@@ -26,18 +26,18 @@
     "flow-bin": "^0.66.0"
   },
   "dependencies": {
-    "yargs": "^11.0.0",
     "cheerio": "^1.0.0-rc.2",
     "dateformat": "^3.0.3",
     "fs-extra": "^5.0.0",
     "highlight.js": "^9.12.0",
     "html-minifier": "^3.5.9",
-    "jest": "^22.3.0",
+    "jest": "^22.4.2",
     "less": "^2.7.3",
     "lodash": "^4.17.5",
-    "marked": "^0.3.12",
-    "uglify-js": "^3.3.10",
+    "marked": "^0.3.16",
+    "uglify-js": "^3.3.12",
     "uglifycss": "0.0.27",
-    "yamljs": "^0.3.0"
+    "yamljs": "^0.3.0",
+    "yargs": "^11.0.0"
   }
 }

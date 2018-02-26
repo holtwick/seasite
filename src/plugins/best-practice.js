@@ -26,6 +26,9 @@ export function bestPractice() {
         $('[target="_blank"]').attr('rel', 'noopener')
 
         // https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-blocking-css
+
+        // Different image resolutions
+        $('img[src]')
     }
 
 }
