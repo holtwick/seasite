@@ -19,6 +19,7 @@
 // @jsx jsx
 
 import {handleLinks} from '../index'
+import {walkSync} from '../site/fileutil'
 import {jsx} from '../site/jsx'
 import {SeaSite} from '../site/site'
 
@@ -42,10 +43,24 @@ export function sitemap(site: SeaSite, opt: Object = {}) {
         opt.handler($, path)
 
         let url = site.publicURL(path)
-        if (opt.exclude.indexOf(path) === -1) {
-            sitemap.push(url)
+
+        for (let pattern of opt.exclude) {
+            if (typeof pattern === 'string') {
+                if (path.indexOf(pattern) === 0) {
+                    return
+                }
+            }
+            else if (pattern instanceof RegExp) {
+                pattern.lastIndex = 0
+                if (pattern.test(path)) {
+                    return
+                }
+            }
         }
+
+        sitemap.push(url)
     })
+
     sitemap.sort()
     site.write('sitemap.txt', sitemap.join('\n'))
 
