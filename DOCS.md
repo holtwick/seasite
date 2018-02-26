@@ -48,39 +48,51 @@ The third parameter will hold options:
 
 The **path pattern** (referred to as `pattern`) that is used in some of the following methods, can be either a simple string representing the full path, like `contact/index.html` or a regular expression like `.*\.md` which would retrieve all Markdown files, even those in sub directories. The last option is to pass an `Array` with string representations described before.
 
-### site.handle(pattern)
+### site.handle(pattern, fn)
 
-xxx
+Make all files matching `pattern` go through `fn`. For HTML and XML files the parameters of `fn` will be `dom` and `path` otherwise just the content. Example:
+
+```js
+site.handle(/.*\.html/, ($, path) => {
+    $('title').text(path)
+})
+```
+
+
 
 ### site.copy(from, to)
 
-xxx
+Copy file.
 
 ### site.move(from, to)
 
-xxx
+Move file.
 
 ### site.remove(pattern)
 
-xxx
+Remove files.
 
 ### site.read(path)
 
-xxx
+Read file at `path`. Result is of type Buffer.
 
-### site.write(path)
+### site.write(path, data)
 
-xxx
+Writes `data` to `path` overwriting existing files without asking for confirmation. `data` can be of type String, Buffer or [DOM](#dom).
 
-### site.paths(pattern):patterns
+### site.paths(pattern):paths
 
-xxx
+Returns all paths that match `pattern`
+
+### site.url(path):url
+
+Converts a path to a local url with leading `/`.
 
 ### site.publicURL(path):url {#publicURL}
 
 Convert a `path` to a public URL that you e.g. would like to see as the canonical URL or in the sitemap. This should usually also include the scheme and host name. Example: `https://example.com/contact`
 
-## DOM
+## DOM {#dom}
 
 The real magic is in the jQuery like manipulation of the contents. `Cheerio` is used to provide the functionality. In SeaSite the `dom()` helper converts input like strings to a jQuery like DOM environment. It also adds some more functionalities, like support for [plugins](#plugins).
 
@@ -108,9 +120,13 @@ task.blog(site, {
 })
 ```
 
+### task.markdown(site)
+
+Converts all Markdown files ending on `.md` to HTML files. You can mix in templates and custom handlers.
+
 ### task.sitemap(site)
 
-xxx
+Creates a `sitemap.txt` file. Should be called after all other tasks are completed and templates etc. are removed. Can also be used to apply plugins to all HTML files, as a final step.
 
 ## Plugins {#plugins}
 
@@ -133,15 +149,15 @@ $.applyPlugins(plugins, {
 
 ### plugin.bestPractice()
 
-xxx
+Make some changes to fit Google Lighthouse *best practice tests* better.
 
 ### plugin.googleAnalytics(key)
 
-xxx
+Add JS snippet that calls Google Analytics. It will respect *do not track* settings of the browser. Also supports *opt out*.
 
 ### plugin.meta(opt)
 
-xxx
+Apply various `meta` tags to improve SEO quality. TBD.
 
 ## Appendix
 
