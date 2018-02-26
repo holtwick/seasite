@@ -37,13 +37,8 @@ export function sitemap(site: SeaSite, opt: Object = {}) {
 
     let sitemap = []
     site.handle(opt.pattern, ($, path) => {
-        //  handleHeaders($)
-        // handleLinks($, href => href.replace(/\.html$/, ''))
 
-        opt.handler($, path)
-
-        let url = site.publicURL(path)
-
+        // Exclude?
         for (let pattern of opt.exclude) {
             if (typeof pattern === 'string') {
                 if (path.indexOf(pattern) === 0) {
@@ -58,6 +53,9 @@ export function sitemap(site: SeaSite, opt: Object = {}) {
             }
         }
 
+        opt.handler($, path)
+
+        let url = site.publicURL(path)
         sitemap.push(url)
     })
 

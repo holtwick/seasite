@@ -110,7 +110,7 @@ These are solutions for common tasks. The first parameter is
 import task from `seasite`
 ```
 
-### task.blog(site, opt)
+### task.blog(site, options)
 
 ```js
 task.blog(site, {
@@ -120,13 +120,18 @@ task.blog(site, {
 })
 ```
 
-### task.markdown(site)
+### task.markdown(site, options)
 
 Converts all Markdown files ending on `.md` to HTML files. You can mix in templates and custom handlers.
 
-### task.sitemap(site)
+### task.sitemap(site, options)
 
 Creates a `sitemap.txt` file. Should be called after all other tasks are completed and templates etc. are removed. Can also be used to apply plugins to all HTML files, as a final step.
+
+Options:
+
+- `exclude`: List of patterns to exclude. Strings also match if they are at the beginning. For example `['private/']` will exclude all files in folder `private`
+- `handler($, path)`: Will be called for each HTML file handled and not excluded.
 
 ## Plugins {#plugins}
 
