@@ -15,13 +15,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// (C)opyright 2018-02-15 Dirk Holtwick, holtwick.it. All rights reserved.
+// @flow
 
-export * from './css'
-export * from './js'
-export * from './ga'
-export * from './example'
-export * from './meta'
-export * from './best-practice'
-export * from './href'
-export * from './tidy'
+const defaults = {}
+
+export function tidy(gopt: Object = {}) {
+    gopt = Object.assign({}, defaults, gopt)
+
+    return ($: Function, opt: Object = {}) => {
+        let html = $.html()
+        html = html.replace(/(>)(<(meta|link|script))/gi, '$1\n$2')
+        $.reload(html)
+    }
+
+}

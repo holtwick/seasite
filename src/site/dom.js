@@ -69,5 +69,9 @@ export function dom(value: string | Buffer | Function, opt: Object = {
         })
     }
 
+    $.reload = function (html) {
+        $.root().empty().html($.load(html).root())
+    }
+
     return $
 }
