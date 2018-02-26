@@ -37,7 +37,7 @@ export function sitemap(site: SeaSite, opt: Object = {}) {
     let sitemap = []
     site.handle(opt.pattern, ($, path) => {
         //  handleHeaders($)
-        handleLinks($, href => href.replace(/\.html$/, ''))
+        // handleLinks($, href => href.replace(/\.html$/, ''))
 
         opt.handler($, path)
 
