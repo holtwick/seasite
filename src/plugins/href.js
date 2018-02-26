@@ -18,11 +18,15 @@
 // @flow
 // @jsx jsx
 
-import {absoluteLinks} from '../index'
+import * as url from "url"
 import {jsx} from '../site/jsx'
+import {handleLinks} from '../site/relativeurls'
 
 const defaults = {
-    relative: false
+    relative: false,
+    handleURL(url) {
+        return url
+    }
 }
 
 function isAbsoluteURL(url: string) {
@@ -33,7 +37,17 @@ export function href(gopt: Object = {}) {
 
     return ($: Function, opt: Object = {}) => {
         opt = Object.assign({}, gopt, opt)
-        absoluteLinks($, opt.path)
+
+        let baseURL = opt.path || '/'
+        if (baseURL[0] !== '/') {
+            baseURL = '/' + baseURL
+        }
+
+        handleLinks($, href => {
+            return url.resolve(baseURL, href)
+        })
+
+        // absoluteLinks($, opt.path)
     }
 
 }

@@ -69,6 +69,10 @@ xxx
 
 xxx
 
+? site.paths()
+
+
+
 ## DOM
 
 The real magic is in the jQuery like manipulation of the contents. `Cheerio` is used to provide the functionality. In SeaSite the `dom()` helper converts input like strings to a jQuery like DOM environment. It also adds some more functionalities, like support for [plugins](#plugins).

@@ -210,6 +210,7 @@ export class SeaSite {
         }
 
         // Strip comments
+        // TODO:2018-02-23 migrate!
         content = content.replace(/<!--(.*?)-->/g, '')
 
         // this.log($.html());
