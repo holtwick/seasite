@@ -1,0 +1,584 @@
+/*!
+ * IE10 viewport hack for Surface/desktop Windows 8 bug
+ * Copyright 2014-2015 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ */
+@import (inline) "css/bootstrap.min.css";
+@import (inline) "css/ie10-viewport-bug-workaround.css";
+
+// https://dequeuniversity.com/rules/axe/2.2/color-contrast?application=lighthouse
+@color: #337ab7; // #264D82
+
+@colorBgBody: #fdfdfd; // #ffffff;
+@colorBgBox: @colorBgBody; // #f3f3f3;
+@colorBgTopNav: @colorBgBody; //#fafafa;
+
+@colorFont: #333333;
+
+@codeBg: #444;
+@codeFg: #eee;
+
+@codeInlineFg: black;
+@codeInlineBg: #e4e4e4;
+
+body {
+    font-family: inherit;
+    /*font-family: "SF UI Display", "Helvetica Neue", Helvetica, sans-serif;*/
+    font-weight: 500;
+    /*min-height: 2000px;*/
+    // padding-top: 70px;
+    background: @colorBgBody;
+    font-size: 16px;
+    color: @colorFont;
+    //text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
+    text-rendering: optimizeLegibility !important;
+    -webkit-font-smoothing: antialiased !important;
+}
+
+a {
+    color: @color;
+}
+
+/*
+ * Side navigation
+ *
+ * Scrollspy and affixed enhanced navigation to highlight sections and secondary
+ * sections of docs content.
+ */
+
+/* By default it's not affixed in mobile views, so undo that */
+.bs-docs-sidebar.affix {
+    position: static;
+}
+
+@media (min-width: 768px) {
+    .bs-docs-sidebar {
+        padding-left: 20px;
+    }
+}
+
+/* First level of nav */
+.bs-docs-sidenav {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    // background-color: #bbb;
+    border-left: 2px solid #ccc;
+}
+
+/* All levels of nav */
+.bs-docs-sidebar .nav > li > a {
+    display: block;
+    padding: 4px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #585858;
+}
+
+.bs-docs-sidebar .nav > li > a:hover,
+.bs-docs-sidebar .nav > li > a:focus {
+    // padding-left: 18px;
+    color: @color;
+    text-decoration: none;
+    background-color: transparent;
+    // border-left: 1px solid @color;
+}
+
+.bs-docs-sidebar .nav > .active > a,
+.bs-docs-sidebar .nav > .active:hover > a,
+.bs-docs-sidebar .nav > .active:focus > a {
+    // padding-left: 18px;
+    font-weight: bold;
+    color: @color;
+    background-color: transparent;
+    // border-left: 2px solid @color;
+}
+
+/* Nav: second level (shown on .active) */
+.bs-docs-sidebar .nav .nav {
+    display: none; /* Hide by default, but at >768px, show it */
+    //padding-bottom: 10px;
+}
+
+.bs-docs-sidebar .nav .nav > li > a {
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 30px;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.bs-docs-sidebar .nav .nav > li > a:hover,
+.bs-docs-sidebar .nav .nav > li > a:focus {
+    //padding-left: 29px;
+}
+
+.bs-docs-sidebar .nav .nav > .active > a,
+.bs-docs-sidebar .nav .nav > .active:hover > a,
+.bs-docs-sidebar .nav .nav > .active:focus > a {
+    //padding-left: 28px;
+    font-weight: 500;
+}
+
+.bs-docs-sidebar .nav .nav .nav > li > a {
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 50px;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.bs-docs-sidebar .nav .nav .nav > li > a:hover,
+.bs-docs-sidebar .nav .nav .nav > li > a:focus {
+    //padding-left: 29px;
+}
+
+.bs-docs-sidebar .nav .nav .nav > .active > a,
+.bs-docs-sidebar .nav .nav .nav > .active:hover > a,
+.bs-docs-sidebar .nav .nav .nav > .active:focus > a {
+    //padding-left: 28px;
+    font-weight: 500;
+}
+
+/* Back to top (hidden on mobile) */
+.back-to-top {
+    display: none;
+    padding: 4px 10px;
+    margin-top: 10px;
+    margin-left: 10px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #999;
+}
+
+.back-to-top:hover {
+    color: @color;
+    text-decoration: none;
+}
+
+@media (min-width: 768px) {
+    .back-to-top {
+        display: block;
+    }
+}
+
+/* Show and affix the side nav when space allows it */
+@media (min-width: 992px) {
+    .bs-docs-sidebar .nav > .active > ul {
+        display: block;
+    }
+
+    /* Widen the fixed sidebar */
+    .bs-docs-sidebar.affix,
+    .bs-docs-sidebar.affix-bottom {
+        width: 213px;
+    }
+
+    .bs-docs-sidebar.affix {
+        position: fixed; /* Undo the static from mobile first approach */
+        top: 20px;
+    }
+
+    .bs-docs-sidebar.affix-bottom {
+        position: absolute; /* Undo the static from mobile first approach */
+    }
+
+    .bs-docs-sidebar.affix-bottom .bs-docs-sidenav,
+    .bs-docs-sidebar.affix .bs-docs-sidenav {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+}
+
+@media (min-width: 1200px) {
+    /* Widen the fixed sidebar again */
+    .bs-docs-sidebar.affix-bottom,
+    .bs-docs-sidebar.affix {
+        width: 263px;
+    }
+}
+
+//
+
+.blog-post {
+
+    h1, h2, h3, h4, h5, h6 {
+
+        a.anchor {
+            color: inherit;
+            text-decoration: inherit;
+        }
+
+        a.anchor:hover:after,
+        &:hover a.anchor:after {
+            text-decoration: none;
+            color: #ccc;
+            content: ' #' attr(name);
+        }
+    }
+
+    img.about-pic {
+        margin-left: 2em;
+        margin-bottom: 2em;
+        float: right;
+        border-radius: 4px;
+    }
+
+    b, strong {
+        //font-weight: 500;
+        color: black;
+    }
+
+    img {
+        max-width: 100%;
+    }
+
+    img.screen {
+        display: block;
+        margin: auto;
+        text-align: center;
+    }
+
+    code {
+        background-color: @codeInlineBg;
+        color: @codeInlineFg;
+        // font-weight: normal;
+        // font-weight: 600;
+        font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+    }
+
+    pre {
+        border: none;
+        background-color: @codeBg;
+
+        code {
+            color: @codeFg;
+            background-color: inherit;
+        }
+    }
+
+    h2 {
+        // color: @color;
+        // border-bottom: 1px solid @color;
+        margin-top: 32px;
+        margin-bottom: 8px;
+        line-height: 32px;
+        font-size: 26px;
+    }
+
+    h3 {
+        color: #666;
+        margin-top: 32px;
+        margin-bottom: 2px;
+        line-height: 32px;
+        font-size: 22px;
+    }
+
+    h4 {
+        color: #666;
+        font-size: 18px;
+        font-weight: 500;
+        margin-top: 32px;
+    }
+
+    &.doc {
+
+        h2 {
+            margin-top: 32px;
+            padding-top: 32px;
+            font-size: 30px;
+        }
+
+        h3 {
+            margin-top: 32px;
+            padding-top: 32px;
+        }
+
+        h4 {
+            font-weight: bold;
+        }
+
+        h5 {
+            font-size: inherit;;
+            font-weight: bold;
+        }
+
+        p, ol, ul, pre, blockquote, h4, h5 {
+            margin-left: 32px;
+        }
+
+        h1, h2, h3 {
+            margin-bottom: 20px;
+        }
+
+    }
+
+}
+
+//
+
+.navbar-default {
+    font-weight: normal;
+}
+
+.navbar-brand {
+    /*margin-right: 0.5em;*/
+    font-size: 20px;
+}
+
+.navbar-brand.logo {
+    /*margin-right: 0.5em;*/
+    padding-top: 10px;
+    font-size: 24px;
+}
+
+//.navbar-brand img {
+//    border-radius: 4px;
+//}
+
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:focus,
+.navbar-default .navbar-nav > .active > a:hover {
+    background-color: inherit;
+    color: @color;
+    // font-weight: 700;
+    // border-bottom: 1px solid @color;
+}
+
+//
+
+.blog-post-title, .sidebar-module h4 {
+    //font-weight: normal;
+    font-size: 30px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.blog-post-meta {
+    margin-top: -16px;
+    margin-bottom: 20px;
+    color: #808080;
+    //font-weight: normal;
+}
+
+//
+
+.sidebar {
+    // position: fixed;
+}
+
+.sidebar-module {
+    margin: 0;
+    margin-top: 20px;
+    margin-bottom: 40px;
+    //border-radius: 4px;
+    //padding: 20px;
+    width: 100%;
+    background: @colorBgBox;
+
+    & h4 {
+        margin-top: 0;
+        margin-bottom: 12px;
+    }
+
+    & ol {
+        margin-bottom: 0;
+    }
+
+    &.recent-posts li {
+        margin-top: 12px;
+    }
+}
+
+.navbar {
+    background-color: @colorBgTopNav;
+    border-color: #e7e7e7;
+    border: none;
+
+    #navbar {
+        border-bottom: 1px solid #eee;
+    }
+}
+
+/*
+ * Footer
+ */
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    /* Margin bottom by footer height */
+    margin-bottom: 140px;
+}
+
+.blog-footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 120px;
+    color: #999;
+}
+
+//#footer {
+//    border-top: 1px solid #eee;
+//    //padding: 20px 0;
+//
+//}
+
+//.blog-footer p:last-child {
+//    margin-bottom: 0;
+//}
+
+/*
+ https://highlightjs.org
+ https://highlightjs.org/static/demo/
+ https://github.com/isagalaev/highlight.js/tree/master/src/styles
+ */
+
+/*
+.hljs {
+    display: block;
+    background: white;
+    padding: .5em;
+    // color: #333333;
+    overflow-x: auto
+}
+
+.hljs-comment, .hljs-meta {
+    color: #969896
+}
+
+.hljs-string, .hljs-variable, .hljs-template-variable, .hljs-strong,
+.hljs-emphasis, .hljs-quote {
+    color: #df5000
+}
+
+.hljs-keyword, .hljs-selector-tag, .hljs-type {
+    color: #a71d5d
+}
+
+.hljs-literal, .hljs-symbol, .hljs-bullet, .hljs-attribute {
+    color: #0086b3
+}
+
+.hljs-section, .hljs-name {
+    color: #63a35c
+}
+
+.hljs-tag {
+    color: #333333
+}
+
+.hljs-title, .hljs-attr, .hljs-selector-id, .hljs-selector-class,
+.hljs-selector-attr, .hljs-selector-pseudo {
+    color: #795da3
+}
+
+.hljs-addition {
+    color: #55a532;
+    background-color: #eaffea
+}
+
+.hljs-deletion {
+    color: #bd2c00;
+    background-color: #ffecec
+}
+
+.hljs-link {
+    text-decoration: underline
+}
+*/
+
+.blog-post pre,
+.hljs {
+    display: block;
+    overflow-x: auto;
+    padding: 0.5em;
+    background: #444;
+    color: white;
+}
+
+.hljs-name,
+.hljs-strong {
+    font-weight: bold;
+}
+
+.hljs-code,
+.hljs-emphasis {
+    font-style: italic;
+}
+
+.hljs-tag {
+    color: #62c8f3;
+}
+
+.hljs-variable,
+.hljs-template-variable,
+.hljs-selector-id,
+.hljs-selector-class {
+    color: #ade5fc;
+}
+
+.hljs-string,
+.hljs-bullet {
+    color: #a2fca2;
+}
+
+.hljs-type,
+.hljs-title,
+.hljs-section,
+.hljs-attribute,
+.hljs-quote,
+.hljs-built_in,
+.hljs-builtin-name {
+    color: #ffa;
+}
+
+.hljs-number,
+.hljs-symbol,
+.hljs-bullet {
+    color: #d36363;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal {
+    color: #fcc28c;
+}
+
+.hljs-comment,
+.hljs-deletion,
+.hljs-code {
+    color: #888;
+}
+
+.hljs-regexp,
+.hljs-link {
+    color: #c6b4f0;
+}
+
+.hljs-meta {
+    color: #fc9b9b;
+}
+
+.hljs-deletion {
+    background-color: #fc9b9b;
+    color: #333;
+}
+
+.hljs-addition {
+    background-color: #a2fca2;
+    color: #333;
+}
+
+.hljs a {
+    color: inherit;
+}
+
+.hljs a:focus,
+.hljs a:hover {
+    color: inherit;
+    text-decoration: underline;
+}

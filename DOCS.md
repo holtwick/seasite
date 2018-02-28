@@ -1,6 +1,11 @@
+---
+group: docs
+outline: true 
+---
+
 # Documentation of "SeaSite"
 
-> Author: Dirk Holtwick, [holtwick.de](https://holtwick.de)
+*Author: Dirk Holtwick, [holtwick.de](https://holtwick.de)*
 
 ## Introduction
 

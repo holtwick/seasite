@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Dirk Holtwick - holtwick.it</title>
+
+    <link href="custom.css" rel="stylesheet" media="all">
+
+    <link rel="shortcut icon" href="./img/favicon.png" type="image/png">
+    <link rel="icon" type="image/png" href="./img/favicon-32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="./img/favicon-96.png" sizes="96x96">
+    <link rel="apple-touch-icon" sizes="180x180" href="./img/apple-touch-icon.png">
+
+    <link rel="alternate" type="application/rss+xml" title="Blog of Dirk Holtwick" href="/atom.xml">
+</head>
+
+<body>
+
+<nav class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand logo" href="/">
+                <img alt="Brand" src="img/logo.png" height="28">
+            </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav -navbar-right">
+                <!--<li class="active"><a href="#">Home</a></li>-->
+                <li data-group="index"><a href="/">About</a></li>
+                <li data-group="blog"><a href="blog/">Blog</a></li>
+                <li data-group="product"><a href="products">Products</a></li>
+                <li data-group="docs"><a href="docs">Documentation</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>
+
+<div class="container">
+    <div class="row">
+
+        <div class="col-sm-8 blog-main">
+
+            <div class="post blog-post" id="content">
+                <h1 class="blog-post-title">Sample blog post</h1>
+                <p class="blog-post-meta">January 1, 2014 by <a href="#">Mark</a></p>
+
+                <p>This blog post shows a few different types of content that's supported and styled with Bootstrap. Basic typography, images, and code are all supported.</p>
+                <hr>
+                <p>Cum sociis natoque penatibus et magnis <a href="#">dis parturient montes</a>, nascetur ridiculus mus. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Sed posuere consectetur est at lobortis.
+                    Cras mattis consectetur purus sit amet fermentum.</p>
+                <blockquote>
+                    <p>Curabitur blandit tempus porttitor. <strong>Nullam quis risus eget urna mollis</strong> ornare vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                </blockquote>
+                <p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
+                <h2><a name="sample" class="anchor" href="#sample">Heading</a></h2>
+                <p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Morbi leo risus, porta ac consectetur ac, vestibulum
+                    at eros.</p>
+                <h3>Sub-heading</h3>
+                <p>Cum sociis natoque penatibus et magnis <code>props</code> dis parturient montes, nascetur ridiculus mus.</p>
+                <pre><code class="lang-js">site.handle(<span class="hljs-regexp">/.*\.md/</span>, (content, path) =&gt; {
+   <span class="hljs-keyword">let</span> $ = site.readDOM(<span class="hljs-string">'template.html'</span>)
+   <span class="hljs-keyword">let</span> htmlPath = path.replace(<span class="hljs-regexp">/\.md$/</span>, <span class="hljs-string">'.html'</span>)
+   <span class="hljs-keyword">let</span> md = parseMarkdown(content)
+   <span class="hljs-keyword">let</span> title = md.props.title
+   $(<span class="hljs-string">'title'</span>).text(<span class="hljs-string">`<span class="hljs-subst">${title}</span> - My Website`</span>)
+   $(<span class="hljs-string">'#title'</span>).text(title)
+   $(<span class="hljs-string">'#content'</span>).html(md.html)
+   site.write(htmlPath, $.html())
+})
+</code></pre>
+                <p>Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa.</p>
+
+                <h3>Sub-heading</h3>
+                <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo,
+                    tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+                <ul>
+                    <li>Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</li>
+                    <li>Donec id elit non mi porta gravida at eget metus.</li>
+                    <li>Nulla vitae elit libero, a pharetra augue.</li>
+                </ul>
+                <p>Donec ullamcorper nulla non metus auctor fringilla. Nulla vitae elit libero, a pharetra augue.</p>
+                <ol>
+                    <li>Vestibulum id ligula porta felis euismod semper.</li>
+                    <li>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</li>
+                    <li>Maecenas sed diam eget risus varius blandit sit amet non magna.</li>
+                </ol>
+                <p>Cras mattis consectetur purus sit amet fermentum. Sed posuere consectetur est at lobortis.</p>
+                <h1>Header 1</h1>
+                <h2>Header 2</h2>
+                <h3>Header 3</h3>
+                <h4>Header 4</h4>
+                <h5>Header 5</h5>
+                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
+                    clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed
+                    diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
+                    clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed
+                    diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
+                    clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed
+                    diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
+                    clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed
+                    diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+            </div><!-- /.blog-post -->
+
+        </div><!-- /.blog-main -->
+
+        <div class="col-sm-1">&nbsp;</div>
+        <div class="col-sm-3" id="sidebar">
+            <div class="sidebar">
+                <!--<div class="sidebar-module sidebar-module-inset well">-->
+                <!--<h4>About</h4>-->
+                <!--<p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>-->
+                <!--</div>-->
+                <div class="sidebar-module recent-posts" id="recent-posts-container">
+                    <h4>Recent Posts</h4>
+                    <ol class="list-unstyled" id="recent-posts">
+                        <li><a href="#">March 2014</a></li>
+                        <li><a href="#">February 2014</a></li>
+                        <li><a href="#">January 2014</a></li>
+                        <li><a href="#">December 2013</a></li>
+                        <li><a href="#">November 2013</a></li>
+                        <li><a href="#">October 2013</a></li>
+                        <li><a href="#">September 2013</a></li>
+                        <li><a href="#">August 2013</a></li>
+                        <li><a href="#">July 2013</a></li>
+                        <li><a href="#">June 2013</a></li>
+                        <li><a href="#">May 2013</a></li>
+                        <li><a href="#">April 2013</a></li>
+                    </ol>
+                </div>
+                <div class="sidebar-module">
+                    <h4>Links</h4>
+                    <ol class="list-unstyled">
+                        <li><a target="_blank" href="https://github.com/holtwick">GitHub</a></li>
+                        <li><a target="_blank" href="https://twitter.com/holtwick">Twitter</a></li>
+                        <li><a target="_blank" href="https://www.linkedin.com/in/holtwick/">LinkedIn</a> /
+                            <a target="_blank" href="https://www.xing.com/profile/Dirk_Holtwick/cv">XING</a></li>
+                        <li><a target="_blank" href="/atom.xml">RSS</a></li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.blog-sidebar -->
+
+    </div><!-- /.row -->
+</div><!-- /.container -->
+
+<footer class="blog-footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <hr>
+                <p>
+                    <a href="#top" class="pull-right">Back to top</a>
+                    <a href="./imprint">Imprint / Impressum</a>
+                </p>
+                <p>
+                    © 2018 Dirk Holtwick
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="/lib.min.js" async></script>
+</body>
+</html>
