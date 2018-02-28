@@ -18,9 +18,13 @@ const TEMPLATE_PATH = 'template.html'
 function main() {
 
     function handleURL(url) {
+        if (url.indexOf('/seasite-website/') !== 0) {
+            url = '/seasite-website' + url
+        }
         return url
-            .replace(/\.html$/, '')
-            .replace(/\/index$/, '/')
+        // return url
+        //     .replace(/\.html$/, '')
+        //     .replace(/\/index$/, '/')
     }
 
     let site = new SeaSite(
@@ -156,7 +160,7 @@ function main() {
         handler($, path) {
             let url = site.publicURL(path)
             let title = $('title').text()
-            title = `Dirk Holtwick - ${title}`
+            title = `SeaSite - ${title}`
             $.applyPlugins(plugins, {
                 path,
                 url,
