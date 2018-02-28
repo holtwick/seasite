@@ -1,0 +1,50 @@
+# (C)opyright 2017-12-29 Dirk Holtwick, holtwick.de. All rights reserved.
+
+# DirectoryIndex index.php index.html
+ErrorDocument 404 /404.html
+
+RewriteEngine on
+
+# Enforce https
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP_REFERER} !^$
+RewriteCond %{HTTP_REFERER} .*
+RewriteRule ^(.*)$ https://holtwick.dist$1?referrer=%{HTTP_REFERER} [L,QSA,R=301]
+
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://holtwick.dist$1?referrer=%2 [L,R=301]
+
+# Make sure we are on holtwick.dist
+RewriteCond %{HTTP_HOST}   !^holtwick\.dist [NC]
+RewriteCond %{HTTP_HOST}   !^$
+RewriteRule ^(.*)$         https://holtwick.dist$1 [L,R]
+
+# Remove WWW.
+#RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+#RewriteRule ^ https://%1%{REQUEST_URI}?referrer=%{SERVER_NAME} [R=301,L]
+
+# Add WWW.
+# RewriteCond %{HTTP_HOST} ^!www\. [NC]
+# RewriteRule .* https://%{SERVER_NAME}%{REQUEST_URI}?referrer=%{SERVER_NAME} [L,R=301]
+
+# Sparkle URLs historical
+# https://www.receipts-app.com/sparklecast.xml
+# https://www.receipts-app.com/goto/sparklecast.xml
+# https://www.receipts-app.com/updater.php
+
+# Allow to omit trailing .html
+RewriteRule ^([^.]+[^/])$ $1.html?a=1 [PT]
+
+# PHP
+# RewriteRule ^(.*?).html$ $1.php [PT]
+
+# Cache
+# <IfModule mod_headers.c>
+#     # 1h 3600 ; 15m 900 ; 30m 1800
+#     <FilesMatch "\.(jpg|jpeg|png|gif|swf|woff)$">
+#         Header set Cache-Control "max-age=1800, public"
+#     </FilesMatch>
+#     <FilesMatch "\.(js|css|swf)$">
+#         Header set Cache-Control "max-age=1800"
+#     </FilesMatch>
+# </IfModule>

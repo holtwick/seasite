@@ -21,8 +21,21 @@
 // 3. Emulate CDATA by <cdata> element
 
 export function escapeHTML(s) {
-    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+    return s
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
 }
+
+export function unescapeHTML(s) {
+    return s
+        .replace(/&lt;/gi, '<')
+        .replace(/&gt;/gi, '>')
+        .replace(/&quot;/gi, '"')
+        .replace(/&amp;/gi, '&')
+}
+
 
 let USED_JSX = [] // HACK:dholtwick:2016-08-23
 var __xmlMode = false // HACK:2017-12-29
