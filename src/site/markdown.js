@@ -18,7 +18,7 @@
 // @flow
 // @jsx jsx
 
-import {jsx, HTML, prependXMLIdentifier} from './jsx'
+import {jsx, HTML, prependXMLIdentifier, unescapeHTML} from './jsx'
 
 const fs = require('fs')
 const marked = require('marked')
@@ -96,6 +96,10 @@ export function parseMarkdown(content:string|Buffer, opt:Object = {
             anchor = a
             return ''
         })
+        if (!props.title) {
+            props.title = unescapeHTML(text)
+            return ''
+        }
         if (opt.outline) {
             anchor = anchor || 'outline-' + ++ctr
             headers.push({level: +level, anchor, text})
@@ -128,9 +132,8 @@ export function parseMarkdown(content:string|Buffer, opt:Object = {
 
     if (opt.outline) {
         // result.outline = headers
-        // console.log(headers)
         // console.log(buildOutline(headers))
-        result.outline = buildOutline(headers)
+        result.outline = buildOutline(headers, headers[0].level)
     }
 
     // result.outPath = result.outPath.replace(/\.(md|markdown)$/i, '.html');
