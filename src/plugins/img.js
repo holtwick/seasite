@@ -44,26 +44,38 @@ export function img(gopt: Object = {}) {
                 let img = $(el)
                 let src = img.attr('src')
 
-                if (isAbsoluteURL(src)) {
-                    return
+                if (!isAbsoluteURL(src)) {
+                    let p
+                    if (src[0] === '/') {
+                        src = src.substr(1)
+                        p = join(basePath, src)
+                    } else {
+                        p = join(basePath, path, '..', src)
+                    }
+
+                    if (!existsSync(p)) {
+                        console.error(`Image at ${p} is referenced in ${path} but is missing!`)
+                        return
+                    }
+
+                    if (!(img.attr('width') || img.attr('height'))) {
+                        let size = sizeOf(p);
+
+                        if (src.indexOf('@2x.') > 0) {
+                            size.width /= 2
+                            size.height /= 2
+                        }
+                        img.attr('width', size.width.toString())
+                        console.log('[img]', src, p, size)
+                    }
                 }
 
-                let p
-                if (src[0] === '/') {
-                    src = src.substr(1)
-                    p = join(basePath, src)
-                } else {
-                    p = join(basePath, path, '..', src)
+                let parent = img.parent('p')
+                if (parent) {
+                    if (!$(parent).text().trim()) {
+                        $(parent).addClass('img-wrapper')
+                    }
                 }
-
-                if (!existsSync(p)) {
-                    console.error(`Image at ${p} is referenced in ${path} but is missing!`)
-                    return
-                }
-
-                let size = sizeOf(p);
-
-                console.log('[img]', src, p, size)
 
                 // console.log(dimensions.width, dimensions.height);
             })
