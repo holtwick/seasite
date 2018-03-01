@@ -159,7 +159,9 @@ $.applyPlugins(plugins, {
 
 ### plugin.bestPractice()
 
-Make some changes to fit Google Lighthouse *best practice tests* better.
+Make some changes to fit **[Google Lighthouse](https://developers.google.com/web/tools/lighthouse)** *best practice tests* better.
+
+- `<a target="_blank">` will receive `rel=noopener` attribute. [More.](https://developers.google.com/web/tools/lighthouse/audits/noopener)
 
 ### plugin.googleAnalytics(key)
 
@@ -168,6 +170,19 @@ Add JS snippet that calls Google Analytics. It will respect *do not track* setti
 ### plugin.meta(opt)
 
 Apply various `meta` tags to improve SEO quality. TBD.
+
+- `title` will set `<title>` and `<meta og:title>`
+- ...
+
+### plugin.img(opt) {#plugin.img}
+
+Requires `opt.site` or `opt.basePath` to know about the base folder of the site. Optionally  `opt.path` can be passed to resolve relative links.
+
+The plugin collects all `img` elements and checks if the referred `src` file does exists. If `width` and `height` are missing, `width` will be set from the original image file. If the file name contains `@2x.` the half sizes will be used.
+
+If the `img` element is the only child of a `p` element, the class `img-wrapped` will be added to the `p` element.
+
+**Todo:** Fill `srcset` with appropriate info.
 
 ## Appendix
 
