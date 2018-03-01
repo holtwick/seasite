@@ -1,6 +1,6 @@
 # SeaSite
 
-Flexible static web site builder inspired by jQuery:
+Static web site builder inspired by jQuery:
 <https://holtwick.de/blog/static-jquery>
 
 ### Installation
