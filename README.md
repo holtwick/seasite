@@ -1,8 +1,11 @@
-# seasite
+# SeaSite
 
-Flexible web site builder: <https://holtwick.de/blog/static-jquery>
+Flexible static web site builder inspired by jQuery:
+<https://holtwick.de/blog/static-jquery>
 
 ### Installation
+
+Install via [npm](https://www.npmjs.com/package/seasite):
 
 ```sh
 npm install seasite -g
@@ -31,6 +34,13 @@ The source of it is in [DOCS.md](DOCS.md).
 
 Also visit the [example folder](example/).
 
+### Websites built with SeaSite
+
+- <https://www.receipts-app.com>
+- <https://holtwick.de>
+- <https://zutun.io>
+
 ### License
 
-GPLv3
+The project is licensed under GPLv3. If you need a commercial license, please get in [contact with me](https://holtwick.de/support).
+
