@@ -199,7 +199,7 @@ export class SeaSite {
             this.path(toPath))
     }
 
-    remove(pattern: string) {
+    remove(pattern: SeaSitePattern) {
         for (let p of this.paths(pattern)) {
             this.log(`remove ... ${p}`)
             fs.unlinkSync(this.path(p))

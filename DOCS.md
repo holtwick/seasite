@@ -121,6 +121,30 @@ These are solutions for common tasks. The first parameter is
 import task from `seasite`
 ```
 
+### task.handle(site, options)  {#taskhandle}
+
+Walk through all files.
+
+Options:
+
+- `pattern`: Patterns to be included
+- `exclude`: Patterns to be excluded
+- `plugins`: Plugins to be applied if file is DOM compatible
+- `handler($, path)`: Will be called for each HTML file handled and not excluded.
+
+### task.html(site, options)
+
+Walk through all HTML files.
+
+Options:
+
+- `pattern`: Pattern is preset to filter files ending on `.html` or `.htm`
+- Other options as in [task.handle()](#taskhandle)
+
+### task.markdown(site, options)
+
+Converts all Markdown files ending on `.md` to HTML files. You can mix in templates and custom handlers.
+
 ### task.blog(site, options)
 
 ```js
@@ -131,18 +155,15 @@ task.blog(site, {
 })
 ```
 
-### task.markdown(site, options)
-
-Converts all Markdown files ending on `.md` to HTML files. You can mix in templates and custom handlers.
-
 ### task.sitemap(site, options)
 
-Creates a `sitemap.txt` file. Should be called after all other tasks are completed and templates etc. are removed. Can also be used to apply plugins to all HTML files, as a final step.
+Creates a `sitemap.txt` file. Should be called after all other tasks are completed and templates etc. are removed. 
 
 Options:
 
 - `exclude`: List of patterns to exclude. Strings also match if they are at the beginning. For example `['private/']` will exclude all files in folder `private`
-- `handler($, path)`: Will be called for each HTML file handled and not excluded.
+
+  ​
 
 ## Plugins {#plugins}
 
@@ -189,6 +210,13 @@ The plugin collects all `img` elements and checks if the referred `src` file doe
 If the `img` element is the only child of a `p` element, the class `img-wrapped` will be added to the `p` element.
 
 **Todo:** Fill `srcset` with appropriate info.
+
+### More Plugins
+
+To be documented:
+
+- plugin.href()
+- plugin.tidy()
 
 ## Appendix
 

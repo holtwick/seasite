@@ -18,34 +18,21 @@
 // @flow
 // @jsx jsx
 
-import {pathMatchesPatterns} from '../site'
 import {SeaSite} from '../site/site'
 
 let defaults = {
     exclude: [
         '404.html',
     ],
-    pattern: /\.html/,
-    handler($, path) {
-    },
+    pattern: /\.html?$/,
 }
 
 export function sitemap(site: SeaSite, opt: Object = {}) {
     opt = Object.assign({}, defaults, opt)
 
-    let sitemap = []
-    site.handle(opt.pattern, ($, path) => {
-        if (pathMatchesPatterns(path, opt.exclude)) {
-            return false // don't write
-        }
-
-        let url = site.publicURL(path)
-        sitemap.push(url)
-
-        if (!opt.handler || opt.handler($, path) === false) {
-            return false // don't write
-        }
-    })
+    let sitemap = site
+        .paths(opt.pattern, opt.exclude)
+        .map(path => site.publicURL(path))
 
     sitemap.sort()
     site.write('sitemap.txt', sitemap.join('\n'))
