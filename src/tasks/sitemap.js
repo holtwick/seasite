@@ -18,9 +18,7 @@
 // @flow
 // @jsx jsx
 
-import {handleLinks} from '../index'
-import {walkSync} from '../site/fileutil'
-import {jsx} from '../site/jsx'
+import {pathMatchesPatterns} from '../site'
 import {SeaSite} from '../site/site'
 
 let defaults = {
@@ -37,26 +35,16 @@ export function sitemap(site: SeaSite, opt: Object = {}) {
 
     let sitemap = []
     site.handle(opt.pattern, ($, path) => {
-
-        // Exclude?
-        for (let pattern of opt.exclude) {
-            if (typeof pattern === 'string') {
-                if (path.indexOf(pattern) === 0) {
-                    return
-                }
-            }
-            else if (pattern instanceof RegExp) {
-                pattern.lastIndex = 0
-                if (pattern.test(path)) {
-                    return
-                }
-            }
+        if (pathMatchesPatterns(path, opt.exclude)) {
+            return false // don't write
         }
-
-        opt.handler($, path)
 
         let url = site.publicURL(path)
         sitemap.push(url)
+
+        if (!opt.handler || opt.handler($, path) === false) {
+            return false // don't write
+        }
     })
 
     sitemap.sort()

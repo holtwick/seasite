@@ -19,6 +19,7 @@
 // @jsx jsx
 
 import {parseMarkdown, plugin, jsx, dom, SeaSite} from '../index'
+import {pathMatchesPatterns} from '../site'
 
 function pathToHTMLPath(path) {
     return path.replace(/\..+?$/, '.html').replace(/\/-/, '/')
@@ -47,6 +48,11 @@ export function markdown(site: SeaSite, gopt: Object = {}): Array<Object> {
     ]
 
     site.handle(gopt.pattern, (content, path) => {
+
+        if (pathMatchesPatterns(path, gopt.exclude)) {
+            return false // don't write
+        }
+
         let md = parseMarkdown(content)
         let props = md.props
         let html = md.html

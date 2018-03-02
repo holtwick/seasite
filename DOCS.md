@@ -51,7 +51,13 @@ The third parameter will hold options:
 - `baseURL`
 - `publicURL(path)`: Override for [`site.publicURL()`](#publicURL)
 
-The **path pattern** (referred to as `pattern`) that is used in some of the following methods, can be either a simple string representing the full path, like `contact/index.html` or a regular expression like `.*\.md` which would retrieve all Markdown files, even those in sub directories. The last option is to pass an `Array` with string representations described before.
+### Paths
+
+For the following features it is important to understand what `path` refers to. So after the instantiation of `SeaSite` all work is happening on the copy in the destination folder. A path like `index.html` will than map to `dist/index.html` in our previous example. **Todo: Slash requirements?!**
+
+### Patterns
+
+The **path pattern** (referred to as `pattern`) that is used in some of the following methods, can be either a simple string representing the full path, like `contact/index.html` or a regular expression like `.*\.md` which would retrieve all Markdown files, even those in sub directories. The last option is to pass an `Array` with a list of strings or regular expressions as described before.
 
 ### site.handle(pattern, fn)
 
@@ -85,9 +91,9 @@ Read file at `path`. Result is of type Buffer.
 
 Writes `data` to `path` overwriting existing files without asking for confirmation. `data` can be of type String, Buffer or [DOM](#dom).
 
-### site.paths(pattern):paths
+### site.paths(pattern, excludePattern):paths
 
-Returns all paths that match `pattern`
+Returns all paths that match `pattern`. Optionally matches can be excluded via `excludePattern`.
 
 ### site.url(path):url
 
