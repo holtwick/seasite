@@ -18,24 +18,14 @@
 // @flow
 // @jsx jsx
 
-import {SeaSite} from '../site/site'
+import {SeaSite} from '../index'
+import {handle} from './handle'
 
-let defaults = {
-    exclude: [
-        '404.html',
-    ],
+const defaults = {
     pattern: /\.html?$/,
 }
 
-export function sitemap(site: SeaSite, opt: Object = {}) {
-    opt = Object.assign({}, defaults, opt)
-
-    let sitemap = site
-        .paths(opt.pattern, opt.exclude)
-        .map(path => site.publicURL(path))
-
-    sitemap.sort()
-    site.write('sitemap.txt', sitemap.join('\n'))
-
-    site.write('robots.txt', `User-agent: *\nSitemap: ${site.publicURL('sitemap.txt')}`)
+export function html(site: SeaSite, gopt: Object = {}): Array<Object> {
+    gopt = Object.assign({}, defaults, gopt)
+    return handle(site, gopt)
 }
