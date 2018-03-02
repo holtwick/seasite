@@ -30,7 +30,7 @@ import {rmdir, mkdir, walkSync} from './fileutil'
 type SeaSitePattern = string | RegExp | Array<string | RegExp>
 
 
-function isPattern(pattern: ?SeaSitePattern): boolean {
+export function isPattern(pattern: ?SeaSitePattern): boolean {
     return pattern != null && (
         pattern instanceof RegExp ||
         typeof pattern === 'string' ||

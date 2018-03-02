@@ -15,8 +15,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export * from './sitemap'
-export * from './blog'
-export * from './markdown'
-export * from './html'
-export * from './handle'
+// @flow
+// @jsx jsx
+
+import {SeaSite} from '../index'
+import {handle} from './handle'
+
+const defaults = {
+    pattern: /\.html?$/,
+}
+
+export function html(site: SeaSite, gopt: Object = {}): Array<Object> {
+    gopt = Object.assign({}, defaults, gopt)
+    return handle(site, gopt)
+}
