@@ -29,19 +29,26 @@ import {rmdir, mkdir, walkSync} from './fileutil'
 
 type SeaSitePattern = string | RegExp | Array<string | RegExp>
 
-export function pathMatchesPatterns(path: string, patterns: ?SeaSitePattern): boolean {
-    if (patterns == null) {
-        return true
-    }
+
+function isPattern(pattern: ?SeaSitePattern): boolean {
+    return pattern != null && (
+        pattern instanceof RegExp ||
+        typeof pattern === 'string' ||
+        Array.isArray(pattern))
+}
+
+export function pathMatchesPatterns(path: string, patterns: SeaSitePattern): boolean {
     if (!Array.isArray(patterns)) {
         patterns = [patterns]
     }
-    if (patterns.length === 0) {
-        return true
-    }
     for (let pattern of patterns) {
         if (typeof pattern === 'string') {
-            if (path.indexOf(pattern) === 0) {
+            if (pattern[pattern.length - 1] === '/') {
+                if (path.indexOf(pattern) === 0) {
+                    return true
+                }
+            }
+            else if (path === pattern) {
                 return true
             }
         }
@@ -55,6 +62,18 @@ export function pathMatchesPatterns(path: string, patterns: ?SeaSitePattern): bo
     return false
 }
 
+export function filterByPatterns(paths: ?Array<string>, patterns: ?SeaSitePattern, exclude: ?SeaSitePattern): Array<string> {
+    return (paths || [])
+        .filter(file => {
+            if (pathMatchesPatterns(file, patterns || [])) {
+                if (isPattern(exclude)) {
+                    return !pathMatchesPatterns(file, exclude || [])
+                }
+                return true
+            }
+            return false
+        })
+}
 
 // const LOAD_OPTIONS = {
 //     normalizeWhitespace: true,
@@ -77,20 +96,10 @@ export class SeaSite {
             this.basePath = basePath
 
             // Filter files
-            let files = walkSync(srcPath)
-                .filter(file =>
-                    pathMatchesPatterns(file, opt.includePatterns) && !pathMatchesPatterns(file, opt.excludePatterns))
-
-            // files = files.filter(file =>
-            //     opt.includePatterns.some(pattern => {
-            //         pattern.lastIndex = 0
-            //         return pattern.test(file)
-            //     })
-            //     && !(opt.excludePatterns.some(pattern => {
-            //         pattern.lastIndex = 0
-            //         // this.log(path, pattern.test(path));
-            //         return pattern.test(file)
-            //     })))
+            let files = filterByPatterns(
+                walkSync(srcPath),
+                opt.includePatterns,
+                opt.excludePatterns)
 
             // Remove old site copy
             rmdir(basePath)
@@ -135,9 +144,10 @@ export class SeaSite {
 
     // All URL paths matching pattern
     paths(pattern: SeaSitePattern, exclude: ?SeaSitePattern): Array<string> {
-        let urlPaths = walkSync(this.basePath)
-            .filter(file =>
-                pathMatchesPatterns(file, pattern) && !pathMatchesPatterns(file, exclude))
+        let urlPaths = filterByPatterns(
+            walkSync(this.basePath),
+            pattern,
+            exclude)
         urlPaths.sort()
         return urlPaths
     }
@@ -249,7 +259,7 @@ export class SeaSite {
         this.write(urlPath, content)
     }
 
-    handle(pattern: SeaSitePattern, handler: (any, string) => ?any) {
+    handle(pattern: SeaSitePattern|Object, handler: (any, string) => ?any) {
         let urlPaths = this.paths(pattern)
         for (let urlPath of urlPaths) {
             // this.log(`handle ... ${urlPath}`)
