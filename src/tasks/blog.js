@@ -19,6 +19,7 @@
 // @jsx jsx
 
 import {SeaSite, parseMarkdown, prependXMLIdentifier, setXMLMode, dom} from '../index'
+import {pathMatchesPatterns} from '../site'
 import {jsx} from '../site/jsx'
 import dateformat from 'dateformat'
 import _ from 'lodash'
@@ -50,6 +51,11 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
 
     // Collect post data
     site.handle(opt.pattern, (content, path) => {
+
+        if (pathMatchesPatterns(path, opt.exclude)) {
+            return;
+        }
+
         let md = parseMarkdown(content)
         let props = md.props
         let html = md.html

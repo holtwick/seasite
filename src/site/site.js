@@ -15,7 +15,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// (C)opyright Dirk Holtwick, 2016-09-02 <dirk.holtwick@gmail.com>
 // @jsx html
 // @flow
 
@@ -24,13 +23,61 @@ const path = require('path')
 const process = require('process')
 
 import {dom, isDOM} from './dom'
-import {jsx, HTML, prependXMLIdentifier} from './jsx'
+import {jsx, prependXMLIdentifier} from './jsx'
 import {absoluteLinks} from './relativeurls'
 import {rmdir, mkdir, walkSync} from './fileutil'
 
-const LOAD_OPTIONS = {
-    normalizeWhitespace: true,
+type SeaSitePattern = string | RegExp | Array<string | RegExp>
+
+
+export function isPattern(pattern: ?SeaSitePattern): boolean {
+    return pattern != null && (
+        pattern instanceof RegExp ||
+        typeof pattern === 'string' ||
+        Array.isArray(pattern))
 }
+
+export function pathMatchesPatterns(path: string, patterns: SeaSitePattern): boolean {
+    if (!Array.isArray(patterns)) {
+        patterns = [patterns]
+    }
+    for (let pattern of patterns) {
+        if (typeof pattern === 'string') {
+            if (pattern[pattern.length - 1] === '/') {
+                if (path.indexOf(pattern) === 0) {
+                    return true
+                }
+            }
+            else if (path === pattern) {
+                return true
+            }
+        }
+        else if (pattern instanceof RegExp) {
+            pattern.lastIndex = 0
+            if (pattern.test(path)) {
+                return true
+            }
+        }
+    }
+    return false
+}
+
+export function filterByPatterns(paths: ?Array<string>, patterns: ?SeaSitePattern, exclude: ?SeaSitePattern): Array<string> {
+    return (paths || [])
+        .filter(file => {
+            if (pathMatchesPatterns(file, patterns || [])) {
+                if (isPattern(exclude)) {
+                    return !pathMatchesPatterns(file, exclude || [])
+                }
+                return true
+            }
+            return false
+        })
+}
+
+// const LOAD_OPTIONS = {
+//     normalizeWhitespace: true,
+// }
 
 export class SeaSite {
 
@@ -38,8 +85,8 @@ export class SeaSite {
     basePath: string
 
     constructor(srcPath: string, basePath: ?string = null, opt: Object = {
-        excludePatterns: [],
-        includePatterns: [],
+        excludePatterns: null,
+        includePatterns: null,
         baseURL: '',
     }) {
         this.opt = opt
@@ -49,17 +96,10 @@ export class SeaSite {
             this.basePath = basePath
 
             // Filter files
-            let files = walkSync(srcPath)
-            files = files.filter(file =>
-                opt.includePatterns.some(pattern => {
-                    pattern.lastIndex = 0
-                    return pattern.test(file)
-                })
-                && !(opt.excludePatterns.some(pattern => {
-                    pattern.lastIndex = 0
-                    // this.log(path, pattern.test(path));
-                    return pattern.test(file)
-                })))
+            let files = filterByPatterns(
+                walkSync(srcPath),
+                opt.includePatterns,
+                opt.excludePatterns)
 
             // Remove old site copy
             rmdir(basePath)
@@ -103,18 +143,11 @@ export class SeaSite {
     }
 
     // All URL paths matching pattern
-    paths(pattern: string | RegExp): Array<string> {
-        let urlPaths = []
-        if (typeof pattern === 'string') {
-            urlPaths = [pattern]
-        } else if (pattern instanceof RegExp) {
-            urlPaths = walkSync(this.basePath).filter(file => {
-                pattern.lastIndex = 0
-                return pattern.test(file)
-            })
-        } else if (Array.isArray(pattern)) {
-            urlPaths = pattern
-        }
+    paths(pattern: SeaSitePattern, exclude: ?SeaSitePattern): Array<string> {
+        let urlPaths = filterByPatterns(
+            walkSync(this.basePath),
+            pattern,
+            exclude)
         urlPaths.sort()
         return urlPaths
     }
@@ -166,7 +199,7 @@ export class SeaSite {
             this.path(toPath))
     }
 
-    remove(pattern: string) {
+    remove(pattern: SeaSitePattern) {
         for (let p of this.paths(pattern)) {
             this.log(`remove ... ${p}`)
             fs.unlinkSync(this.path(p))
@@ -226,7 +259,7 @@ export class SeaSite {
         this.write(urlPath, content)
     }
 
-    handle(pattern: string | RegExp, handler: (any, string) => ?any) {
+    handle(pattern: SeaSitePattern|Object, handler: (any, string) => ?any) {
         let urlPaths = this.paths(pattern)
         for (let urlPath of urlPaths) {
             // this.log(`handle ... ${urlPath}`)

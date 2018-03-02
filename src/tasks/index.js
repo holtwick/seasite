@@ -18,3 +18,5 @@
 export * from './sitemap'
 export * from './blog'
 export * from './markdown'
+export * from './html'
+export * from './handle'
