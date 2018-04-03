@@ -29,6 +29,8 @@ import {rmdir, mkdir, walkSync} from './fileutil'
 
 type SeaSitePattern = string | RegExp | Array<string | RegExp>
 
+// This is required to bypass systems umask settings
+process.umask(0o022)
 
 export function isPattern(pattern: ?SeaSitePattern): boolean {
     return pattern != null && (
