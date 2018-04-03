@@ -113,7 +113,9 @@ export class SeaSite {
                 let data = fs.readFileSync(src)
                 mkdir(path.dirname(dst))
                 // this.log(`  cloned ... ${dst}`)
-                fs.writeFileSync(dst, data)
+                fs.writeFileSync(dst, data, {
+                    mode: 0o644,
+                })
             }
             //     // Paths
             //     let pages = [];
@@ -236,7 +238,9 @@ export class SeaSite {
                 content = content.toString()
             }
         }
-        fs.writeFileSync(outPath, content)
+        fs.writeFileSync(outPath, content, {
+            mode: 0o644,
+        })
     }
 
     // DEPRECATED:2018-02-23

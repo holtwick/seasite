@@ -67,7 +67,7 @@ export function mkdir(p, root = '') {
     let dir = dirs.shift()
     root = (root || '') + dir + path.sep
     try {
-        fs.mkdirSync(root)
+        fs.mkdirSync(root, 0o755)
     }
     catch (ex) {
         //dir wasn't made, something went wrong
