@@ -38,19 +38,22 @@ export function youtube(gopt: Object = {}) {
 
         if (basePath) {
             $('iframe[src]').each((i, el) => {
-                let img = $(el)
-                let src = img.attr('src')
+                let iframe = $(el)
+                let src = iframe.attr('src')
                 let m = /^https:\/\/www.youtube.com\/embed\/(.*?)$/.exec(src)
                 let key = m[1]
                 if (key && key.length) {
-                    let root = img.parent('div.embed-video-container') || img
-                    // console.log('[youtube.yt]', key, root.html())
+                    let root = iframe
+                    let div = iframe.parent('div.embed-video-container,div.embed-responsive')
+                    if (div.html()) {
+                        root = div
+                    }
                     let staticLink = `https://youtu.be/${key}`
                     let onClick = `this.parentNode.innerHTML = '<iframe src="https://www.youtube.com/embed/${key}?autoplay=1" frameBorder="0" allowFullScreen class="embed-responsive-item"></iframe>'; return false;`
                     root.replaceWith(
                         <div className="video-wrapper embed-video-container embed-responsive embed-responsive-16by9">
                             <a href={staticLink} onClick={onClick}>
-                                <img src={`https://i.ytimg.com/vi/${key}/maxresdefault.jpg`}
+                                <img src={`https://i.ytimg.com/vi/${key}/0.jpg`} width="100%"
                                      className='youtube-placeholder'/>
                             </a>
                             <div className="video-overlay-content">
