@@ -50,11 +50,9 @@ export function href(gopt: Object = {}) {
             } else {
                 href = url.resolve(baseURL, href)
             }
-            console.log('[href.handleLinks]', href)
-            return opt.handleURL(href)
+            href = opt.handleURL(href)
+            return href
         })
-
-        // absoluteLinks($, opt.path)
     }
 
 }

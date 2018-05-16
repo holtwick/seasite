@@ -201,6 +201,13 @@ Apply various `meta` tags to improve SEO quality. TBD.
 - `title` will set `<title>` and `<meta og:title>`
 - ...
 
+### plugin.href(opt) {#plugin.href}
+
+Normalize links to the needs of the current site.
+
+- `relative` will transform links to be relative to the basePath of the current file
+- `handleURL(url)` allows final modifications for the resulting URL like stripping the `.html` part etc. 
+
 ### plugin.img(opt) {#plugin.img}
 
 Requires `opt.site` or `opt.basePath` to know about the base folder of the site. Optionally  `opt.path` can be passed to resolve relative links.

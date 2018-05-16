@@ -24,7 +24,7 @@ const process = require('process')
 
 import {dom, isDOM} from './dom'
 import {jsx, prependXMLIdentifier} from './jsx'
-import {absoluteLinks} from './relativeurls'
+// import {absoluteLinks} from './relativeurls'
 import {rmdir, mkdir, walkSync} from './fileutil'
 
 type SeaSitePattern = string | RegExp | Array<string | RegExp>
@@ -253,7 +253,7 @@ export class SeaSite {
             // HACK:dholtwick:2016-08-23 Workaround cheerio bug
             content = content.replace(/<!--\[CDATA\[>([\s\S]*?)]]-->/g, '<![CDATA[$1]]>')
         } else {
-            absoluteLinks($, '/' + urlPath)
+            // absoluteLinks($, '/' + urlPath)
             content = $.html()
         }
 

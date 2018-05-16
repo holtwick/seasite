@@ -94,11 +94,11 @@ export function handleLinks($, handle) {
     }
 }
 
-export function absoluteLinks($, baseURL = '/') {
-    if (baseURL[0] !== '/') {
-        baseURL = '/' + baseURL
-    }
-    handleLinks($, href => {
-        return url.resolve(baseURL, href)
-    })
-}
+// export function absoluteLinks($, baseURL = '/') {
+//     if (baseURL[0] !== '/') {
+//         baseURL = '/' + baseURL
+//     }
+//     handleLinks($, href => {
+//         return url.resolve(baseURL, href)
+//     })
+// }

@@ -40,9 +40,9 @@ function main() {
             },
         })
 
-    const templatePlugins = [
-        plugin.href(),
-    ]
+    // const templatePlugins = [
+    //     plugin.href(),
+    // ]
 
     const $ = dom(site.read(TEMPLATE_PATH))
     $.applyPlugins([
@@ -148,8 +148,8 @@ function main() {
             twitter: 'holtwick',
         }),
         plugin.href({
-            handleURL,
-            // relative: true,
+            // handleURL,
+            relative: true,
         }),
         plugin.bestPractice(),
         plugin.tidy(),
