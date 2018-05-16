@@ -211,6 +211,10 @@ If the `img` element is the only child of a `p` element, the class `img-wrapped`
 
 **Todo:** Fill `srcset` with appropriate info.
 
+### plugin.youtube(opt)
+
+Streamlines embedded Youtube videos and adds an overlay. The embedded video will only be inserted after the user clicked the play button. This results in faster page loading and better privacy experience.
+
 ### More Plugins
 
 To be documented:
