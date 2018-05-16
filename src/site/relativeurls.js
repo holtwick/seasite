@@ -19,7 +19,7 @@
 
 import * as url from 'url'
 
-function urlRelative(fromURL, toURL) {
+export function urlRelative(fromURL, toURL) {
     try {
         // assert(fromURL[0] === '/', `Expected absolute URL ${fromURL}`);
         // assert(toURL[0] === '/', `Expected absolute URL ${toURL}`);
