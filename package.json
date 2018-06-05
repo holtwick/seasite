@@ -21,22 +21,22 @@
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
+    "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
-    "flow-bin": "^0.71.0"
+    "flow-bin": "^0.73.0"
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
     "dateformat": "^3.0.3",
-    "fs-extra": "^6.0.0",
+    "fs-extra": "^6.0.1",
     "highlight.js": "^9.12.0",
-    "html-minifier": "^3.5.15",
+    "html-minifier": "^3.5.16",
     "image-size": "^0.6.2",
-    "jest": "^22.4.3",
+    "jest": "^23.1.0",
     "less": "^3.0.4",
     "lodash": "^4.17.10",
-    "marked": "^0.3.19",
-    "uglify-js": "^3.3.24",
+    "marked": "^0.4.0",
+    "uglify-js": "^3.4.0",
     "uglifycss": "0.0.29",
     "yamljs": "^0.3.0",
     "yargs": "^11.1.0"
