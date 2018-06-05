@@ -46,7 +46,7 @@ Lorem **ipsum**
             title: 'One World',
         })
 
-        expect(r.html).toBe('<h1>This is a world</h1><pre><code class="lang-js">alert(1)\nalert(2)\n</code></pre>\n<p>Lorem <strong>ipsum</strong></p>\n')
+        expect(r.html).toBe('<h1>This is a world</h1><pre><code class="lang-js">alert(1)\nalert(2)</code></pre>\n<p>Lorem <strong>ipsum</strong></p>\n')
     })
 
 })
