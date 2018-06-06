@@ -34,7 +34,7 @@ The following command will create the site in the folder `dist`:
 npm start
 ```
 
-## Site
+## Basic Concepts
 
 The central piece of the engine is the `SeaSite` object. In the most simple setup a source and a destination folder will be defined. The first action that will happen is to close the destination to the source folder. All following actions will operate on this clone.
 
@@ -59,6 +59,18 @@ For the following features it is important to understand what `path` refers to. 
 
 The **path pattern** (referred to as `pattern`) that is used in some of the following methods, can be either a simple string representing the full path, like `contact/index.html` or a regular expression like `.*\.md` which would retrieve all Markdown files, even those in sub directories. The last option is to pass an `Array` with a list of strings or regular expressions as described before.
 
+### DOM {#dom}
+
+The real magic is in the jQuery like manipulation of the contents. `Cheerio` is used to provide the functionality. In SeaSite the `dom()` helper converts input like strings to a jQuery like DOM environment. It also adds some more functionalities, like support for [plugins](#plugins).
+
+```jsx
+let $ = dom('<b>Hello World</b>')
+$(b).text('Hallo Welt')
+expect($.html()).toEqual('<b>Hallo Welt</b>')
+```
+
+## Site {#site}
+
 ### site.handle(pattern, fn)
 
 Make all files matching `pattern` go through `fn`. For HTML and XML files the parameters of `fn` will be `dom` and `path` otherwise just the content. Example:
@@ -68,8 +80,6 @@ site.handle(/.*\.html/, ($, path) => {
     $('title').text(path)
 })
 ```
-
-
 
 ### site.copy(from, to)
 
@@ -102,16 +112,6 @@ Converts a path to a local url with leading `/`.
 ### site.publicURL(path):url {#publicURL}
 
 Convert a `path` to a public URL that you e.g. would like to see as the canonical URL or in the sitemap. This should usually also include the scheme and host name. Example: `https://example.com/contact`
-
-## DOM {#dom}
-
-The real magic is in the jQuery like manipulation of the contents. `Cheerio` is used to provide the functionality. In SeaSite the `dom()` helper converts input like strings to a jQuery like DOM environment. It also adds some more functionalities, like support for [plugins](#plugins).
-
-```jsx
-let $ = dom('<b>Hello World</b>')
-$(b).text('Hallo Welt')
-expect($.html()).toEqual('<b>Hallo Welt</b>')
-```
 
 ## Tasks {#tasks}
 
@@ -233,4 +233,4 @@ To be documented:
 
 ### License
 
-The project is licensed under GPLv3. If you need a commercial license, please get in [contact with me](https://holtwick.de/support).
+The project is licensed under AGPLv3. If you need a commercial license, please get in [contact with me](https://holtwick.de/support).
