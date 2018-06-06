@@ -17,14 +17,14 @@
 
 // @flow
 
-import * as url from "url"
-import {handleLinks} from '../site/relativeurls'
+import * as url from 'url'
+import {handleLinks, urlRelative} from '../site/relativeurls'
 
 const defaults = {
-    // relative: false,
+    relative: false,
     handleURL(url) {
         return url
-    }
+    },
 }
 
 function isAbsoluteURL(url: string) {
@@ -43,10 +43,16 @@ export function href(gopt: Object = {}) {
         }
 
         handleLinks($, href => {
-            return opt.handleURL(url.resolve(baseURL, href))
+            if (opt.relative) {
+                const toUrl = url.resolve('/', href)
+                const fromUrl = url.resolve('/', baseURL)
+                href = urlRelative(fromUrl, toUrl)
+            } else {
+                href = url.resolve(baseURL, href)
+            }
+            href = opt.handleURL(href)
+            return href
         })
-
-        // absoluteLinks($, opt.path)
     }
 
 }

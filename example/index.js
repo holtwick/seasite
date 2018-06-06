@@ -40,9 +40,9 @@ function main() {
             },
         })
 
-    const templatePlugins = [
-        plugin.href(),
-    ]
+    // const templatePlugins = [
+    //     plugin.href(),
+    // ]
 
     const $ = dom(site.read(TEMPLATE_PATH))
     $.applyPlugins([
@@ -147,16 +147,15 @@ function main() {
             lang: 'en',
             twitter: 'holtwick',
         }),
-        plugin.href({handleURL}),
+        plugin.href({
+            // handleURL,
+            relative: true,
+        }),
         plugin.bestPractice(),
         plugin.tidy(),
     ]
 
-    task.sitemap(site, {
-        exclude: [
-            '404.html',
-            TEMPLATE_PATH,
-        ],
+    task.html(site, {
         handler($, path) {
             let url = site.publicURL(path)
             let title = $('title').text()
@@ -167,6 +166,13 @@ function main() {
                 title,
             })
         },
+    })
+
+    task.sitemap(site, {
+        exclude: [
+            '404.html',
+            TEMPLATE_PATH,
+        ],
     })
 }
 

@@ -18,7 +18,7 @@
 // @flow
 // @jsx jsx
 
-import {jsx, HTML, prependXMLIdentifier, unescapeHTML} from './jsx'
+import {jsx, HTML, prependXMLIdentifier, unescapeHTML, escapeHTML} from './jsx'
 
 const fs = require('fs')
 const marked = require('marked')
@@ -68,7 +68,7 @@ function buildOutline(headers, level = 1, opt = {
     return list
 }
 
-export function parseMarkdown(content:string|Buffer, opt:Object = {
+export function parseMarkdown(content: string | Buffer, opt: Object = {
     outline: false,
 }) {
     // Props
@@ -102,7 +102,11 @@ export function parseMarkdown(content:string|Buffer, opt:Object = {
         }
         if (opt.outline) {
             anchor = anchor || 'outline-' + ++ctr
-            headers.push({level: +level, anchor, text})
+            headers.push({
+                level: +level,
+                anchor,
+                text: text.replace(/<.*?>/g, '').trim()
+            })
         }
         if (props.inc) {
             level = +level + +props.inc

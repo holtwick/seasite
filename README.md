@@ -42,5 +42,5 @@ Also visit the [example folder](example/).
 
 ### License
 
-The project is licensed under GPLv3. If you need a commercial license, please get in [contact with me](https://holtwick.de/support).
+The project is licensed under AGPLv3. If you need a commercial license, please get in [contact with me](https://holtwick.de/support).
 

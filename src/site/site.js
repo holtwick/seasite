@@ -24,11 +24,13 @@ const process = require('process')
 
 import {dom, isDOM} from './dom'
 import {jsx, prependXMLIdentifier} from './jsx'
-import {absoluteLinks} from './relativeurls'
+// import {absoluteLinks} from './relativeurls'
 import {rmdir, mkdir, walkSync} from './fileutil'
 
 type SeaSitePattern = string | RegExp | Array<string | RegExp>
 
+// This is required to bypass systems umask settings
+process.umask(0o022)
 
 export function isPattern(pattern: ?SeaSitePattern): boolean {
     return pattern != null && (
@@ -113,7 +115,9 @@ export class SeaSite {
                 let data = fs.readFileSync(src)
                 mkdir(path.dirname(dst))
                 // this.log(`  cloned ... ${dst}`)
-                fs.writeFileSync(dst, data)
+                fs.writeFileSync(dst, data, {
+                    mode: 0o644,
+                })
             }
             //     // Paths
             //     let pages = [];
@@ -236,7 +240,9 @@ export class SeaSite {
                 content = content.toString()
             }
         }
-        fs.writeFileSync(outPath, content)
+        fs.writeFileSync(outPath, content, {
+            mode: 0o644,
+        })
     }
 
     // DEPRECATED:2018-02-23
@@ -247,7 +253,7 @@ export class SeaSite {
             // HACK:dholtwick:2016-08-23 Workaround cheerio bug
             content = content.replace(/<!--\[CDATA\[>([\s\S]*?)]]-->/g, '<![CDATA[$1]]>')
         } else {
-            absoluteLinks($, '/' + urlPath)
+            // absoluteLinks($, '/' + urlPath)
             content = $.html()
         }
 
