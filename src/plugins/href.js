@@ -27,10 +27,6 @@ const defaults = {
     },
 }
 
-function isAbsoluteURL(url: string) {
-    return url.indexOf('http') === 0
-}
-
 export function href(gopt: Object = {}) {
     gopt = Object.assign({}, defaults, gopt)
 
