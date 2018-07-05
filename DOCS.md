@@ -222,6 +222,13 @@ If the `img` element is the only child of a `p` element, the class `img-wrapped`
 
 Streamlines embedded Youtube videos and adds an overlay. The embedded video will only be inserted after the user clicked the play button. This results in faster page loading and better privacy experience.
 
+### plugin.disqus(opt)
+
+Commenting provided by [disqus.com](https://disqus.com). The integration is done lazily i.e. user first needs to confirm before actuel 3rd party code is loaded.
+
+- `selector` defining the containers where the code should be added to (Default `.disqus`)
+- `disqusURL` is the JS code URL provided by disqus to be used [for embedding](https://disqus.com/admin/install/platforms/universalcode/) 
+
 ### More Plugins
 
 To be documented:
