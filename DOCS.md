@@ -113,6 +113,16 @@ Converts a path to a local url with leading `/`.
 
 Convert a `path` to a public URL that you e.g. would like to see as the canonical URL or in the sitemap. This should usually also include the scheme and host name. Example: `https://example.com/contact`
 
+### site.copyNPM(module, relativePath, toSitePath)
+
+Copies subfolder of an NPM module into the site's public space. This can be useful to always get the latest `jquery` etc via NPM instead of getting it manually. Example:
+
+```js
+site.copyNOPM('jquery', 'dist', 'js/jquery')
+```
+
+
+
 ## Tasks {#tasks}
 
 These are solutions for common tasks. The first parameter is
