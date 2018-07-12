@@ -19,16 +19,13 @@
 
 import {join} from 'path'
 import {existsSync} from 'fs'
+import {isAbsoluteURL} from '../site/relativeurls'
 
 const sizeOf = require('image-size')
 
 const OPT = {}
 
 let cache = {}
-
-function isAbsoluteURL(url: string) {
-    return url.indexOf('http') === 0
-}
 
 export function img(gopt: Object = {}) {
     gopt = Object.assign({}, OPT, gopt)

@@ -19,6 +19,7 @@
 // @flow
 
 const fs = require('fs')
+const fsx = require('fs-extra')
 const path = require('path')
 const process = require('process')
 
@@ -203,6 +204,24 @@ export class SeaSite {
             this.path(toPath))
     }
 
+    copyNPM(moduleName: string, fromRelativePath: string = '', toPath: string = 'npm') {
+        this.log(`copy npm module ${moduleName}/${fromRelativePath} -> ${toPath}`)
+        let p = require.resolve(moduleName, {
+            paths: [this.basePath]
+        })
+        let rx = /^.*\/node_modules\/[^\/]+/gi
+        let m = rx.exec(p)
+        if (m) {
+            p = m[0]
+            p = path.join(p, fromRelativePath)
+            let d = this.path(toPath)
+            mkdir(d)
+            fsx.copySync(
+                p,
+                d)
+        }
+    }
+
     remove(pattern: SeaSitePattern) {
         for (let p of this.paths(pattern)) {
             this.log(`remove ... ${p}`)
@@ -265,7 +284,7 @@ export class SeaSite {
         this.write(urlPath, content)
     }
 
-    handle(pattern: SeaSitePattern|Object, handler: (any, string) => ?any) {
+    handle(pattern: SeaSitePattern | Object, handler: (any, string) => ?any) {
         let urlPaths = this.paths(pattern)
         for (let urlPath of urlPaths) {
             // this.log(`handle ... ${urlPath}`)

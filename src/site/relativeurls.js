@@ -19,6 +19,10 @@
 
 import * as url from 'url'
 
+export function isAbsoluteURL(url: string) {
+    return url.indexOf('http') === 0
+}
+
 export function urlRelative(fromURL, toURL) {
     try {
         // assert(fromURL[0] === '/', `Expected absolute URL ${fromURL}`);
