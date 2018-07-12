@@ -28,23 +28,17 @@ export function localize(gopt: Object = {}) {
     return ($: Function, opt: Object = {}) => {
         opt = Object.assign({}, gopt, opt)
 
-        console.log('[localize.op]', opt)
         const lang = opt.lang.toLowerCase()
         if (lang) {
             let stringsPath = path.join(process.cwd(), 'languages', `${lang}.json`)
-            console.log('[localize.]', stringsPath)
             let strings = opt.strings || JSON.parse(fs.readFileSync(stringsPath, {encoding: 'utf8'}))
-            console.log('[localize.]', strings)
 
             let html = $.html()
-            html = html.replace(/__?([^<"']+)/gi, (m, s) => {
-                console.log('[localize.]', s)
-                return strings[s] || s
+            html = html.replace(/([>"'])__?([^<"']+)/gi, (m, p, s) => {
+                return p + (strings[s] || strings[s.trim()] || s)
             })
             $.reload(html)
         }
-
-        // https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-blocking-css
     }
 
 }
