@@ -18,6 +18,7 @@
 // (C)opyright 2018-01-04 Dirk Holtwick, holtwick.it. All rights reserved.
 
 import fs from 'fs'
+import path from 'path'
 
 const OPT = {}
 
@@ -27,21 +28,20 @@ export function localize(gopt: Object = {}) {
     return ($: Function, opt: Object = {}) => {
         opt = Object.assign({}, gopt, opt)
 
-        const lang = opt.lang.lowerCase
+        console.log('[localize.op]', opt)
+        const lang = opt.lang.toLowerCase()
         if (lang) {
-            let strings = opt.strings || JSON.parse(fs.readFileSync(`languages/${lang}.json`, {encoding: 'utf8'}))
-            console.log('[localize.]', string)
+            let stringsPath = path.join(process.cwd(), 'languages', `${lang}.json`)
+            console.log('[localize.]', stringsPath)
+            let strings = opt.strings || JSON.parse(fs.readFileSync(stringsPath, {encoding: 'utf8'}))
+            console.log('[localize.]', strings)
 
-            $('*[href^="_"]').attr('href')
-            $('*:contains("_")').each((i, e) => {
-                e = $(e)
-                let s = e.text().trim()
-                if (trim().indexOf('_') === 0) {
-                    s = s.replace(/_+/, '')
-                    s = strings[s] || s
-                    e.text(s)
-                }
+            let html = $.html()
+            html = html.replace(/__?([^<"']+)/gi, (m, s) => {
+                console.log('[localize.]', s)
+                return strings[s] || s
             })
+            $.reload(html)
         }
 
         // https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-blocking-css

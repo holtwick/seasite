@@ -228,6 +228,25 @@ If the `img` element is the only child of a `p` element, the class `img-wrapped`
 
 **Todo:** Fill `srcset` with appropriate info.
 
+### plugin.localize(opt) 
+
+This helps to translate a page to a different language easily. Lets go with German `opt.lang = 'de'` in this example. 
+
+You can provide the translation strings in a JSON file you put in the `languages` folder (in out example `languages/de.json`) or by setting `opt.string` to a dictionary mapping each source string to its translation:
+
+```json
+{
+    "Hello World": "Hallo Welt",
+    "/en/hello": "/de/hello"
+}
+```
+
+Now in the HTML you can prepend any attribute or text with one or two `_` to mark it for translation:
+
+```html
+<a href="_/en/hello">_Hello World</a>
+```
+
 ### plugin.youtube(opt)
 
 Streamlines embedded Youtube videos and adds an overlay. The embedded video will only be inserted after the user clicked the play button. This results in faster page loading and better privacy experience.
