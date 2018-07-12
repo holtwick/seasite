@@ -1,6 +1,6 @@
 {
   "name": "seasite",
-  "version": "0.3.10",
+  "version": "0.4.1",
   "description": "Static Site Builder",
   "main": "lib/index.js",
   "scripts": {
