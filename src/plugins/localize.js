@@ -34,8 +34,14 @@ export function localize(gopt: Object = {}) {
             let strings = opt.strings || JSON.parse(fs.readFileSync(stringsPath, {encoding: 'utf8'}))
 
             let html = $.html()
-            html = html.replace(/([>"'])__?([^<"']+)/gi, (m, p, s) => {
-                return p + (strings[s] || strings[s.trim()] || s)
+            html = html.replace(/([>"'])(__?([^<"']+))/gi, (m, p, f, s) => {
+                if (s && f !== '_blank') {
+                    let sr = strings[s] || strings[s.trim()]
+                    if (!sr && opt.missing) {
+                        opt.missing[s] = s
+                    }
+                    return p + (sr || s)
+                }
             })
             $.reload(html)
         }

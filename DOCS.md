@@ -247,6 +247,22 @@ Now in the HTML you can prepend any attribute or text with one or two `_` to mar
 <a href="_/en/hello">_Hello World</a>
 ```
 
+For debugging purposes missing strings can be collected:
+
+```js
+let missing = {}
+
+doSomethingWithPlugin(
+    plugin.localized({
+    	lang: 'de',
+	    missing
+	})
+)
+
+console.log('These strings are missing:', 
+            JSON.stringify(missing, null, 2))
+```
+
 ### plugin.youtube(opt)
 
 Streamlines embedded Youtube videos and adds an overlay. The embedded video will only be inserted after the user clicked the play button. This results in faster page loading and better privacy experience.
