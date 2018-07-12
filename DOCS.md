@@ -113,6 +113,16 @@ Converts a path to a local url with leading `/`.
 
 Convert a `path` to a public URL that you e.g. would like to see as the canonical URL or in the sitemap. This should usually also include the scheme and host name. Example: `https://example.com/contact`
 
+### site.copyNPM(module, relativePath, toSitePath)
+
+Copies subfolder of an NPM module into the site's public space. This can be useful to always get the latest `jquery` etc via NPM instead of getting it manually. Example:
+
+```js
+site.copyNOPM('jquery', 'dist', 'js/jquery')
+```
+
+
+
 ## Tasks {#tasks}
 
 These are solutions for common tasks. The first parameter is
@@ -218,9 +228,51 @@ If the `img` element is the only child of a `p` element, the class `img-wrapped`
 
 **Todo:** Fill `srcset` with appropriate info.
 
+### plugin.localize(opt) 
+
+This helps to translate a page to a different language easily. Lets go with German `opt.lang = 'de'` in this example. 
+
+You can provide the translation strings in a JSON file you put in the `languages` folder (in out example `languages/de.json`) or by setting `opt.string` to a dictionary mapping each source string to its translation:
+
+```json
+{
+    "Hello World": "Hallo Welt",
+    "/en/hello": "/de/hello"
+}
+```
+
+Now in the HTML you can prepend any attribute or text with one or two `_` to mark it for translation:
+
+```html
+<a href="_/en/hello">_Hello World</a>
+```
+
+For debugging purposes missing strings can be collected:
+
+```js
+let missing = {}
+
+doSomethingWithPlugin(
+    plugin.localized({
+    	lang: 'de',
+	    missing
+	})
+)
+
+console.log('These strings are missing:', 
+            JSON.stringify(missing, null, 2))
+```
+
 ### plugin.youtube(opt)
 
 Streamlines embedded Youtube videos and adds an overlay. The embedded video will only be inserted after the user clicked the play button. This results in faster page loading and better privacy experience.
+
+### plugin.disqus(opt)
+
+Commenting provided by [disqus.com](https://disqus.com). The integration is done lazily i.e. user first needs to confirm before actuel 3rd party code is loaded.
+
+- `selector` defining the containers where the code should be added to (Default `.disqus`)
+- `disqusURL` is the JS code URL provided by disqus to be used [for embedding](https://disqus.com/admin/install/platforms/universalcode/) 
 
 ### More Plugins
 

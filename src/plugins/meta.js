@@ -19,10 +19,7 @@
 // @jsx jsx
 
 import {jsx} from '../site/jsx'
-
-function isAbsoluteURL(url: string) {
-    return url.indexOf('http') === 0
-}
+import {isAbsoluteURL} from '../site/relativeurls'
 
 export function meta(gopt: Object = {}) {
 
