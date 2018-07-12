@@ -8,6 +8,7 @@
     "build": "rm -rf lib && babel src -d lib",
     "watch": "babel src --watch -d lib",
     "test": "jest src",
+    "docs": "(cd example && npm run production)",
     "prepare": "npm run build && npm version patch -m 'Upgrade to %s'"
   },
   "bin": {
