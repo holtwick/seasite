@@ -19,7 +19,7 @@
 
 import fs from 'fs'
 import path from 'path'
-
+import log from '../log'
 const OPT = {}
 
 export function localize(gopt: Object = {}) {
@@ -31,7 +31,15 @@ export function localize(gopt: Object = {}) {
         const lang = opt.lang.toLowerCase()
         if (lang) {
             let stringsPath = path.join(process.cwd(), 'languages', `${lang}.json`)
-            let strings = opt.strings || JSON.parse(fs.readFileSync(stringsPath, {encoding: 'utf8'}))
+
+            let strings
+            try {
+                strings = opt.strings || JSON.parse(fs.readFileSync(stringsPath, {encoding: 'utf8'}))
+            }
+            catch (e) {
+                log.warn('[plugin.localize] Error loading strings for', lang, '=>', e.toString())
+                strings = {}
+            }
 
             let html = $.html()
             html = html.replace(/([>"'])(__?([^<"']+))/gi, (m, p, f, s) => {

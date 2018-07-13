@@ -59,6 +59,10 @@
         this.context = defaultContext
         this.setLevel(defaultContext.filterLevel)
         this.log = this.info  // Convenience alias.
+        this.count = {
+            error: 0,
+            warn: 0
+        }
     }
 
     ContextualLogger.prototype = {
@@ -90,10 +94,12 @@
         },
 
         warn: function () {
+            this.count.warn += 1
             this.invoke(Logger.WARN, arguments)
         },
 
         error: function () {
+            this.count.error += 1
             this.invoke(Logger.ERROR, arguments)
         },
 
@@ -104,6 +110,7 @@
                 } else {
                     args[0] = "Assertion failed: " + args[0].toString()
                 }
+                this.count.error += 1
                 this.invoke(Logger.ERROR, args)
             }
         },
@@ -144,6 +151,7 @@
         L.warn = bind(globalLogger, globalLogger.warn)
         L.error = bind(globalLogger, globalLogger.error)
         L.assert = bind(globalLogger, globalLogger.assert)
+        L.count = globalLogger.count
 
         // Don't forget the convenience alias!
         L.log = L.info
