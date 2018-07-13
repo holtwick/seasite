@@ -81,6 +81,30 @@ site.handle(/.*\.html/, ($, path) => {
 })
 ```
 
+Usually the DOM is manipulated and written back to replace the source file. You can also return a `string` to be written as the file content.
+
+In case no file should be written at all, return `false`.
+
+For more flexibility you can also return an object describing details about the output. The available properties:
+
+- `path`: The new destination path
+- `content`: Override the `$` and use this as the file's content. It can be of type DOM or string
+- `mode`: The mode which should be used to write out the DOM, default is `html` but also `xml` is supported.
+- `ignore`: Set to `true` is the same as returning `false`.
+
+An example:
+
+```js
+site.handle('/en/help', $ => {
+    $.applyPlugins([plugin.localize({
+        lang: 'de'
+    })])
+    return {
+        path: '/de/help'
+    }
+})
+```
+
 ### site.copy(from, to)
 
 Copy file.

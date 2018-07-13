@@ -301,29 +301,50 @@ export class SeaSite {
             log.warn('Did not match any file for', pattern)
         }
         for (let urlPath of urlPaths) {
-            // this.log(`handle ... ${urlPath}`)
+            this.log(`handle ... ${urlPath}`)
             let content = this.read(urlPath) || ''
+
+            let result = {
+                path: urlPath,
+                mode: null,
+                content: null,
+                ignore: false,
+            }
+
+            let ret = null
             if (/\.(html?|xml)$/i.test(urlPath)) {
                 let xmlMode = /\.xml$/i.test(urlPath)
-                // let normalizeWhitespace = false
                 let $ = dom(content, {xmlMode})
-                let ret = handler($, urlPath)
-                if (ret !== false) {
-                    if (typeof ret === 'string' && ret !== 'xml') {
-                        this.write(urlPath, ret)
-                    } else {
-                        this.writeDOM($, urlPath, ret)
-                    }
-                }
+                result.mode = xmlMode ? 'xml' : 'html'
+                result.content = $
+                ret = handler($, urlPath)
             } else {
-                let ret = handler(content, urlPath)
-                if (ret !== false && ret != null) {
-                    this.write(urlPath, ret)
+                result.content = content
+                ret = handler(content, urlPath)
+            }
+
+            if (ret !== false) {
+                if (typeof ret === 'string') {
+                    ret = {content: ret}
+                }
+                ret = ret || result || {}
+                if (ret.ignore !== true) {
+                    let p = ret.path || urlPath
+                    let content = ret.content || result.content
+                    if (isDOM(content)) {
+                        let mode = ret.mode || result.mode
+                        if (mode === 'html') {
+                            this.writeDOM(content, p, mode)
+                        }
+                    } else if(content) {
+                        this.write(p, content)
+                    } else {
+                        log.error('Unknow content type for', p, '=>', content)
+                    }
                 }
             }
         }
     }
-
 }
 
 process.on('unhandledRejection', function (reason, p) {
