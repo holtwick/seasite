@@ -61,7 +61,7 @@ The **path pattern** (referred to as `pattern`) that is used in some of the foll
 
 ### DOM {#dom}
 
-The real magic is in the jQuery like manipulation of the contents. `Cheerio` is used to provide the functionality. In SeaSite the `dom()` helper converts input like strings to a jQuery like DOM environment. It also adds some more functionalities, like support for [plugins](#plugins).
+The real magic is in the jQuery like manipulation of the contents. [Cheerio](https://cheerio.js.org) is used to provide the functionality. In SeaSite the `dom()` helper converts input like strings to a jQuery like DOM environment. It also adds some more functionalities, like support for [plugins](#plugins).
 
 ```jsx
 let $ = dom('<b>Hello World</b>')
