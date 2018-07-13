@@ -51,11 +51,11 @@ The third parameter will hold options:
 - `baseURL`
 - `publicURL(path)`: Override for [`site.publicURL()`](#publicURL)
 
-### Paths
+### Paths {#paths}
 
 For the following features it is important to understand what `path` refers to. So after the instantiation of `SeaSite` all work is happening on the copy in the destination folder. A path like `index.html` will than map to `dist/index.html` in our previous example. **Todo: Slash requirements?!**
 
-### Patterns
+### Patterns {#patterns}
 
 The **path pattern** (referred to as `pattern`) that is used in some of the following methods, can be either a simple string representing the full path, like `contact/index.html` or a regular expression like `.*\.md` which would retrieve all Markdown files, even those in sub directories. The last option is to pass an `Array` with a list of strings or regular expressions as described before.
 
@@ -127,7 +127,7 @@ Writes `data` to `path` overwriting existing files without asking for confirmati
 
 ### site.paths(pattern, excludePattern):paths
 
-Returns all paths that match `pattern`. Optionally matches can be excluded via `excludePattern`.
+Returns all paths that match `pattern`. Optionally matches can be excluded via `excludePattern`. Set [patterns](#patterns) section to learn more about which patterns are supported.
 
 ### site.url(path):url
 
@@ -168,8 +168,8 @@ Walk through all files.
 
 Options:
 
-- `pattern`: Patterns to be included
-- `exclude`: Patterns to be excluded
+- `pattern`: [Patterns](#patterns) to be included
+- `exclude`: [Patterns](#patterns) to be excluded
 - `plugins`: Plugins to be applied if file is DOM compatible
 - `handler($, path)`: Will be called for each HTML file handled and not excluded.
 
@@ -179,8 +179,8 @@ Walk through all HTML files.
 
 Options:
 
-- `pattern`: Pattern is preset to filter files ending on `.html` or `.htm`
-- Other options as in [task.handle()](#taskhandle)
+- `pattern`: [Patterns](#patterns) to be included. Preset to filter files ending on `.html` or `.htm`
+- `exclude`: [Patterns](#patterns) to be excluded
 
 ### task.markdown(site, options)
 
@@ -248,6 +248,7 @@ Normalize links to the needs of the current site.
 
 - `relative` will transform links to be relative to the basePath of the current file
 - `handleURL(url)` allows final modifications for the resulting URL like stripping the `.html` part etc. 
+- `ignore`: Regular expression
 
 ### plugin.img(opt) {#plugin.img}
 

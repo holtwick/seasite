@@ -23,6 +23,7 @@ import {handle} from './handle'
 
 const defaults = {
     pattern: /\.html?$/,
+    exclude: null
 }
 
 export function html(site: SeaSite, gopt: Object = {}): Array<Object> {
