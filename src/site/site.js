@@ -95,12 +95,15 @@ export class SeaSite {
 
     opt: Object
     basePath: string
+    log: Function
 
     constructor(srcPath: string, basePath: ?string = null, opt: Object = {
         excludePatterns: null,
         includePatterns: null,
         baseURL: '',
     }) {
+
+        this.log = log
         log.setLevel(opt.logLevel || log.INFO)
 
         this.opt = opt
@@ -126,7 +129,7 @@ export class SeaSite {
                 let dst = path.join(basePath, file)
                 let data = fs.readFileSync(src)
                 mkdir(path.dirname(dst))
-                // this.log(`  cloned ... ${dst}`)
+                // this.log.debug(`  cloned ... ${dst}`)
                 fs.writeFileSync(dst, data, {
                     mode: 0o644,
                 })
@@ -146,10 +149,6 @@ export class SeaSite {
             //         pages.push(page);
             //     }
         }
-    }
-
-    log(...args: Array<any>) {
-        log.debug(...args)
     }
 
     // Paths
@@ -202,21 +201,21 @@ export class SeaSite {
     // File Actions
 
     move(fromPath: string, toPath: string) {
-        this.log(`move ... ${fromPath} -> ${toPath}`)
+        this.log.debug(`move ... ${fromPath} -> ${toPath}`)
         fs.renameSync(
             this.path(fromPath),
             this.path(toPath))
     }
 
     copy(fromPath: string, toPath: string) {
-        this.log(`copy ... ${fromPath} -> ${toPath}`)
+        this.log.debug(`copy ... ${fromPath} -> ${toPath}`)
         fs.copyFileSync(
             this.path(fromPath),
             this.path(toPath))
     }
 
     copyNPM(moduleName: string, fromRelativePath: string = '', toPath: string = 'npm') {
-        this.log(`copy npm module ${moduleName}/${fromRelativePath} -> ${toPath}`)
+        this.log.debug(`copy npm module ${moduleName}/${fromRelativePath} -> ${toPath}`)
         let p = require.resolve(moduleName, {
             paths: [this.basePath],
         })
@@ -235,7 +234,7 @@ export class SeaSite {
 
     remove(pattern: SeaSitePattern) {
         for (let p of this.paths(pattern)) {
-            this.log(`remove ... ${p}`)
+            this.log.debug(`remove ... ${p}`)
             fs.unlinkSync(this.path(p))
         }
     }
@@ -261,7 +260,7 @@ export class SeaSite {
         }
         let outPath = path.join(this.basePath, urlPath)
         mkdir(path.dirname(outPath))
-        this.log(`write ... ${outPath}`)
+        this.log.debug(`write ... ${outPath}`)
 
         if (typeof content !== 'string') {
             if (isDOM(content)) {
@@ -291,7 +290,7 @@ export class SeaSite {
         // TODO:2018-02-23 migrate!
         content = content.replace(/<!--(.*?)-->/g, '')
 
-        // this.log($.html());
+        // this.log.debug($.html());
         this.write(urlPath, content)
     }
 
@@ -301,7 +300,7 @@ export class SeaSite {
             log.warn('Did not match any file for', pattern)
         }
         for (let urlPath of urlPaths) {
-            this.log(`handle ... ${urlPath}`)
+            this.log.debug(`handle ... ${urlPath}`)
             let content = this.read(urlPath) || ''
 
             let result = {
@@ -336,7 +335,7 @@ export class SeaSite {
                         if (mode === 'html') {
                             this.writeDOM(content, p, mode)
                         }
-                    } else if(content) {
+                    } else if (content) {
                         this.write(p, content)
                     } else {
                         log.error('Unknow content type for', p, '=>', content)
