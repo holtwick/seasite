@@ -21,12 +21,14 @@
 const fs = require('fs')
 const fsx = require('fs-extra')
 const path = require('path')
-const process = require('process')
+// const process = require('process')
 
 import {dom, isDOM} from './dom'
 import {jsx, prependXMLIdentifier} from './jsx'
 // import {absoluteLinks} from './relativeurls'
 import {rmdir, mkdir, walkSync} from './fileutil'
+
+import log from '../log'
 
 type SeaSitePattern = string | RegExp | Array<string | RegExp>
 
@@ -99,6 +101,8 @@ export class SeaSite {
         includePatterns: null,
         baseURL: '',
     }) {
+        log.setLevel(opt.logLevel || log.INFO)
+
         this.opt = opt
         if (basePath == null) {
             this.basePath = srcPath
@@ -145,7 +149,7 @@ export class SeaSite {
     }
 
     log(...args: Array<any>) {
-        console.log(...args)
+        log.debug(...args)
     }
 
     // Paths
@@ -294,7 +298,7 @@ export class SeaSite {
     handle(pattern: SeaSitePattern | Object, handler: (any, string) => ?any) {
         let urlPaths = this.paths(pattern)
         if (!urlPaths || urlPaths.length <= 0) {
-            console.log('Did not match any file for', pattern)
+            log.warn('Did not match any file for', pattern)
         }
         for (let urlPath of urlPaths) {
             // this.log(`handle ... ${urlPath}`)

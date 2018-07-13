@@ -20,6 +20,7 @@
 import {join} from 'path'
 import {existsSync} from 'fs'
 import {isAbsoluteURL} from '../site/relativeurls'
+import log from '../log'
 
 const sizeOf = require('image-size')
 
@@ -41,6 +42,11 @@ export function img(gopt: Object = {}) {
                 let img = $(el)
                 let src = img.attr('src')
 
+                if (src.indexOf('data:') === 0) {
+                    log.debug('[plugin.image] Skip data image:', src)
+                    return
+                }
+
                 if (!isAbsoluteURL(src)) {
                     let p
                     if (src[0] === '/') {
@@ -51,7 +57,7 @@ export function img(gopt: Object = {}) {
                     }
 
                     if (!existsSync(p)) {
-                        console.error(`Image at ${p} is referenced in ${path} but is missing!`)
+                        log.warn(`[plugin.image] Image at ${p} is referenced in ${path} but is missing!`)
                         return
                     }
 
