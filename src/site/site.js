@@ -46,6 +46,13 @@ export function pathMatchesPatterns(path: string, patterns: SeaSitePattern): boo
     }
     for (let pattern of patterns) {
         if (typeof pattern === 'string') {
+
+            // Strip leading /
+            if (pattern.indexOf('/') === 0) {
+                pattern = pattern.substring(1)
+            }
+
+            // Match folder ?
             if (pattern[pattern.length - 1] === '/') {
                 if (path.indexOf(pattern) === 0) {
                     return true
@@ -207,7 +214,7 @@ export class SeaSite {
     copyNPM(moduleName: string, fromRelativePath: string = '', toPath: string = 'npm') {
         this.log(`copy npm module ${moduleName}/${fromRelativePath} -> ${toPath}`)
         let p = require.resolve(moduleName, {
-            paths: [this.basePath]
+            paths: [this.basePath],
         })
         let rx = /^.*\/node_modules\/[^\/]+/gi
         let m = rx.exec(p)
@@ -286,6 +293,9 @@ export class SeaSite {
 
     handle(pattern: SeaSitePattern | Object, handler: (any, string) => ?any) {
         let urlPaths = this.paths(pattern)
+        if (!urlPaths || urlPaths.length <= 0) {
+            console.log('Did not match any file for', pattern)
+        }
         for (let urlPath of urlPaths) {
             // this.log(`handle ... ${urlPath}`)
             let content = this.read(urlPath) || ''
