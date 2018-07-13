@@ -1,6 +1,6 @@
 // (C)opyright by Dirk Holtwick, 2018 <https://holtwick.de/copyright>
 
-/*!
+/* Original code:
  * js-logger - http://github.com/jonnyreeves/js-logger
  * Jonny Reeves, http://jonnyreeves.co.uk/
  * js-logger may be freely distributed under the MIT license.
@@ -97,6 +97,17 @@
             this.invoke(Logger.ERROR, arguments)
         },
 
+        assert: function (assertion, ...args) {
+            if (!assertion) {
+                if (!args || args.length <= 0) {
+                    args = ["Assertion failed"]
+                } else {
+                    args[0] = "Assertion failed: " + args[0].toString()
+                }
+                this.invoke(Logger.ERROR, args)
+            }
+        },
+
         time: function (label) {
             if (typeof label === 'string' && label.length > 0) {
                 this.invoke(Logger.TIME, [label, 'start'])
@@ -132,6 +143,7 @@
         L.info = bind(globalLogger, globalLogger.info)
         L.warn = bind(globalLogger, globalLogger.warn)
         L.error = bind(globalLogger, globalLogger.error)
+        L.assert = bind(globalLogger, globalLogger.assert)
 
         // Don't forget the convenience alias!
         L.log = L.info

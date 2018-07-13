@@ -120,7 +120,7 @@ export class SeaSite {
             mkdir(basePath)
 
             // Copy site
-            this.log(`cloning ... ${srcPath} -> ${basePath}`)
+            log.info(`Site creation ... ${srcPath} -> ${basePath}`)
             for (let file of files) {
                 let src = path.join(srcPath, file)
                 let dst = path.join(basePath, file)

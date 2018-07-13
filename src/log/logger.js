@@ -43,7 +43,8 @@ function translateLogLevel(level) {
         //         prefix: 'T|    ',
         //         color: 'magenta',
         //     }
-        default: break
+        default:
+            break
     }
     return {
         prefix: 'V|    ',
@@ -169,5 +170,5 @@ try {
 
 let logger = log
 export {
-    log
+    log,
 }
