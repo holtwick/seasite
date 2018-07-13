@@ -145,7 +145,14 @@ Copies subfolder of an NPM module into the site's public space. This can be usef
 site.copyNOPM('jquery', 'dist', 'js/jquery')
 ```
 
+### site.log
 
+The logger used by `site`. Example:
+
+```js
+site.log.info('Start')
+site.log.warn('Missing', missing)
+```
 
 ## Tasks {#tasks}
 
