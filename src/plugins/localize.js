@@ -29,12 +29,14 @@ export function localize(gopt: Object = {}) {
         opt = Object.assign({}, gopt, opt)
 
         const lang = opt.lang.toLowerCase()
+        log.assert(!!lang, '[plugin.localize] opt.lang required')
+
         if (lang) {
             let stringsPath = path.join(process.cwd(), 'languages', `${lang}.json`)
 
             let strings
             try {
-                strings = opt.strings || JSON.parse(fs.readFileSync(stringsPath, {encoding: 'utf8'}))
+                strings = opt.strings || JSON.parse(fs.readFileSync(stringsPath, {encoding: 'utf8'})) || {}
             }
             catch (e) {
                 log.warn('[plugin.localize] Error loading strings for', lang, '=>', e.toString())
@@ -42,11 +44,11 @@ export function localize(gopt: Object = {}) {
             }
 
             let html = $.html()
-            html = html.replace(/([>"'])(__?([^<"']+))/gi, (m, p, f, s) => {
+            html = html.replace(/([>"']\s*)(__?([^<"']+))/gi, (m, p, f, s) => {
                 if (s && f !== '_blank') {
                     let sr = strings[s] || strings[s.trim()]
                     if (!sr && opt.missing) {
-                        opt.missing[s] = s
+                        opt.missing[s.trim()] = s.trim()
                     }
                     return p + (sr || s)
                 }

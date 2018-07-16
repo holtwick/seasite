@@ -112,7 +112,7 @@ export function parseMarkdown(content: string | Buffer, opt: Object = {
             level = +level + +props.inc
         }
         if (anchor) {
-            return `<h${level} id="${anchor}"><a name="${anchor}" class="anchor" href="#${anchor}">${text}</a></h${level}>`
+            return `<h${level} data-anchor="${anchor}"><a name="${anchor}" class="anchor" href="#${anchor}">${text}</a></h${level}>`
         }
         return `<h${level}>${text}</h${level}>`
     }
