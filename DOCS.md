@@ -295,6 +295,25 @@ console.log('These strings are missing:',
             JSON.stringify(missing, null, 2))
 ```
 
+Additionally to that it is also possible to set the language on a **per element level** by setting `data-lang`.
+
+```html
+<span data-lang="en">Hello World</span>
+<span data-lang="de">Hallo Welt</span>
+```
+
+If an element has a `data-lang` attribute it will be removed if it does not match the current language. For testing in your template you might like add something like the following to only see on language version:
+
+```html
+<style>
+    *[data-lang=de] {
+        display: none;
+    }
+</style>
+```
+
+
+
 ### plugin.youtube(opt)
 
 Streamlines embedded Youtube videos and adds an overlay. The embedded video will only be inserted after the user clicked the play button. This results in faster page loading and better privacy experience.

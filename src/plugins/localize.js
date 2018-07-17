@@ -20,6 +20,7 @@
 import fs from 'fs'
 import path from 'path'
 import log from '../log'
+
 const OPT = {}
 
 export function localize(gopt: Object = {}) {
@@ -44,7 +45,8 @@ export function localize(gopt: Object = {}) {
             }
 
             let html = $.html()
-            html = html.replace(/([>"']\s*)(__?([^<"']+))/gi, (m, p, f, s) => {
+
+            let fn = (m, p, f, s) => {
                 if (s && f !== '_blank') {
                     let sr = strings[s] || strings[s.trim()]
                     if (!sr && opt.missing) {
@@ -52,8 +54,16 @@ export function localize(gopt: Object = {}) {
                     }
                     return p + (sr || s)
                 }
-            })
+            }
+
+            html = html.replace(/(>\s*)(__?([^<]+))/gm, fn)
+            html = html.replace(/(")(__?([^"]+))/gm, fn)
+            html = html.replace(/(&apos;)(__?([^&]+))/gm, fn) // quoted when inside an attribute like onclick="setLang('_lang')"
+
             $.reload(html)
+
+            // On element level
+            $(`*[data-lang]:not([data-lang=${lang}])`).remove()
         }
     }
 

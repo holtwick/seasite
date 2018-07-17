@@ -29,7 +29,8 @@ function pathToHTMLPath(path) {
 }
 
 let defaults = {
-    pattern: /blog\/.*\.md$/,
+    folder: 'blog',
+    pattern: null,
     handler: null,
     title: 'Blog',
     url: '',
@@ -48,6 +49,10 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
 
     opt = Object.assign({}, defaults, opt)
     let posts = []
+
+    if (!opt.pattern && opt.folder) {
+        opt.pattern = new RegExp(opt.folder + '\/.*\.md$')
+    }
 
     // Collect post data
     site.handle(opt.pattern, (content, path) => {
@@ -106,7 +111,7 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
     setXMLMode(false)
 
     const xml = prependXMLIdentifier(atomContent.xml())
-    site.write(`/blog/atom.xml`, xml)
+    site.write(`${opt.folder}/atom.xml`, xml)
     site.write(`/atom.xml`, xml)
 
     // Blog Archive
@@ -129,7 +134,7 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
         )
         $('title').text(opt.title)
         $('#recent-posts-container').remove()
-        site.write('/blog/index.html', $.html())
+        site.write(`${opt.folder}/index.html`, $.html())
     }
 
     return posts
