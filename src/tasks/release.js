@@ -60,13 +60,10 @@ export function release(site: SeaSite, opt: Object = {}): Array<Object> {
 
             const descPath = `${prefix}${version}.md`
             if (existsSync(site.path(descPath))) {
-                // const md = readMarkdown(pp)
-                // if (md) {
-                // console.log(pp, md);
-
                 const stat = statSync(site.path(path)) || {}
                 return {
                     date: stat.mtime, // creation time
+                    size: stat.size,
                     major,
                     minor,
                     patch,

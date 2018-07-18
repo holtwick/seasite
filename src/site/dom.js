@@ -75,3 +75,7 @@ export function dom(value: string | Buffer | Function, opt: Object = {
 
     return $
 }
+
+export function xml(value: string | Buffer | Function) {
+    return dom(value, {xmlMode: true})
+}

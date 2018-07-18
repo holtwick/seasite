@@ -19,10 +19,26 @@
 // @jsx jsx
 
 import {jsx} from './jsx'
+import {dom, xml} from './dom'
 
 describe('JSX', () => {
+
     it('jsx', () => {
         let r = <div><b>Bold</b></div>
         expect(r).toBe('<div><b>Bold</b></div>')
+    })
+
+    it('link xml', () => {
+        let r = <div>
+            <link>myLink</link>
+            <link href="123"/>
+        </div>
+        expect(r).toBe('<div><link>myLink</link><link href="123"></link></div>')
+
+        let x = xml(r).xml()
+        expect(x).toBe('<div><link>myLink</link><link href="123"/></div>')
+
+        let h = dom(r).html()
+        expect(h).toBe('<html><head></head><body><div><link>myLink<link href="123"></div></body></html>')
     })
 })

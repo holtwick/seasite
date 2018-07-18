@@ -285,7 +285,7 @@ export class SeaSite {
         if (mode === 'xml') {
             content = prependXMLIdentifier($.xml())
             // HACK:dholtwick:2016-08-23 Workaround cheerio bug
-            content = content.replace(/<!--\[CDATA\[>([\s\S]*?)]]-->/g, '<![CDATA[$1]]>')
+            content = content.replace(/<\!--\[CDATA\[>([\s\S]*?)]]-->/g, '<![CDATA[$1]]>')
         } else {
             // absoluteLinks($, '/' + urlPath)
             content = $.html()
@@ -300,13 +300,23 @@ export class SeaSite {
     }
 
     handle(pattern: SeaSitePattern | Object, handler: (any, string) => ?any) {
+        // let urlPaths = []
+        // if (typeof pattern === 'string') {
+        //     urlPaths = [pattern]
+        // } else {
         let urlPaths = this.paths(pattern)
         if (!urlPaths || urlPaths.length <= 0) {
             log.warn('Did not match any file for', pattern)
         }
+        // }
+
         for (let urlPath of urlPaths) {
             log.debug(`handle ... ${urlPath}`)
-            let content = this.read(urlPath) || ''
+
+            let content = ''
+            if (this.exists(urlPath)) {
+                content = this.read(urlPath)
+            }
 
             let result = {
                 path: urlPath,

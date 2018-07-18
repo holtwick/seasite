@@ -61,7 +61,7 @@ export function jsx(tag, attrs, ...children) {
         if (tag !== 'cdata') {
             s += `<${tag}`
         } else {
-            s += '<![CDATA['
+            s += '<!--[CDATA['
         }
 
         // Add attributes
@@ -94,12 +94,12 @@ export function jsx(tag, attrs, ...children) {
             s += `>`
         }
 
-        if (!__xmlMode) {
-            if (['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr'].indexOf(tag) !== -1) {
-                USED_JSX.push(s)
-                return s
-            }
-        }
+        // if (!__xmlMode) {
+        //     if (['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr'].indexOf(tag) !== -1) {
+        //         USED_JSX.push(s)
+        //         return s
+        //     }
+        // }
     }
 
     // Append children
@@ -122,7 +122,7 @@ export function jsx(tag, attrs, ...children) {
         if (tag !== 'cdata') {
             s += `</${tag}>`
         } else {
-            s += ']]>'
+            s += ']]-->'
         }
     }
     USED_JSX.push(s)
