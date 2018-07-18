@@ -102,55 +102,7 @@ export function release(site: SeaSite, opt: Object = {}): Array<Object> {
 
     return entries
 
-    // ----------- BUILDS --------------
-    //
-    // const BUILDSPATH = './builds'
-    // const DOWNLOADS = fs.readdirSync(BUILDSPATH)
-    //     .filter(p => /\.\d+(-\d+)?\.zip$/.test(p))
-    //     .map(filename => {
-    //         const r = /((\d+)\.(\d+)\.(\d+)(\.(\d+))?)(-(\d+))?/.exec(filename)
-    //         // console.log(r, filename)
-    //         const version = r[1]
-    //         const pp = path.join(BUILDSPATH, `Receipts-${version}.md`)
-    //         const md = readMarkdown(pp)
-    //         if (md) {
-    //             // console.log(pp, md);
-    //             return {
-    //                 major: +r[2] || 0,
-    //                 minor: +r[3] || 0,
-    //                 patch: +r[4] || 0,
-    //                 fix: +r[6] || 0,
-    //                 version,
-    //                 build: +r[8] || 0,
-    //                 md,
-    //                 filename
-    //             }
-    //         }
-    //     })
-    //     .filter(o => !!o)
-    //     .sort((a, b) => {
-    //         let r
-    //         r = a.build - b.build
-    //         if (r === 0) {
-    //             r = a.major - b.major
-    //             if (r === 0) {
-    //                 r = a.minor - b.minor
-    //                 if (r === 0) {
-    //                     r = a.patch - b.patch
-    //                     if (r === 0) {
-    //                         r = a.fix - b.fix
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //         return r
-    //     })
-    //     .reverse()
-    //
-    // // console.log('[makeDownloads.makeDownloads]', DOWNLOADS)
-    //
-    // // ----------- URLS --------------
-    //
+
     // const APP_VERSION = DOWNLOADS[0].version
     // const DOWNLOAD_URL_DIRECT = `/download/${DOWNLOADS[0].filename}`
     //

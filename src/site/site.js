@@ -131,7 +131,6 @@ export class SeaSite {
                 fs.copyFileSync(src, dst)
 
                 // let data = fs.readFileSync(src)
-
                 // // log.debug(`  cloned ... ${dst}`)
                 // fs.writeFileSync(dst, data, {
                 //     mode: 0o644,
