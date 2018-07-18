@@ -16,18 +16,17 @@
  */
 
 // (C)opyright Dirk Holtwick, 2016-09-02 <dirk.holtwick@gmail.com>
-// @jsx html
 // @flow
 
 const cheerio = require('cheerio')
 
-import {jsx, HTML} from './jsx'
+import {HTML} from './jsx'
 
-export function isDOM(obj:any):boolean {
+export function isDOM(obj: any): boolean {
     return obj && typeof obj === 'function' && typeof obj.html === 'function'
 }
 
-export function toString(obj:any):string {
+export function toString(obj: any): string {
     if (obj) {
         if (obj instanceof Buffer) {
             return toString('utf8')
@@ -56,6 +55,8 @@ export function dom(value: string | Buffer | Function, opt: Object = {
     // FLOW:2018-02-23
     let $: Function = value
 
+    $.xmlMode = opt.xmlMode === true
+
     $.applyPlugins = function (plugins: Array<Function>, ...opts) {
         for (let plugin of plugins) {
             plugin($, ...opts)
@@ -73,5 +74,36 @@ export function dom(value: string | Buffer | Function, opt: Object = {
         $.root().empty().html($.load(html).root())
     }
 
+    $.markup = function () {
+        if ($.xmlMode) {
+            return '<?xml version="1.0" encoding="utf-8"?>\n' + $.xml()
+        }
+        let html = $.html()
+        if (html.trim().toLowerCase().indexOf('<!doctype ') !== 0) {
+            return '<!doctype html>\n' + html
+        }
+        return html
+    }
+
+    $.bodyMarkup = function () {
+        return $.xmlMode ? $.xml() : $('body').html()
+    }
+
+    // Fix for cheerio bug
+    // let xmlFn = $.xml
+    // $.xml = function () {
+    //     let content = xmlFn.call($)
+    //     content = content.replace(/<\!--\[CDATA\[([\s\S]*?)\]\]-->/g, '<![CDATA[$1]]>')
+    //     return content
+    // }
+
     return $
+}
+
+export function xml(value: string | Buffer | Function) {
+    return dom(value || '', {xmlMode: true})
+}
+
+export function html(value: string | Buffer | Function) {
+    return dom(value || '')
 }

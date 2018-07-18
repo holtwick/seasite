@@ -20,6 +20,8 @@
 // 2. Attribute name '__' gets transformed to ':' for namespace emulation
 // 3. Emulate CDATA by <cdata> element
 
+import {isDOM} from './dom'
+
 export function escapeHTML(s) {
     return s
         .replace(/&/g, '&amp;')
@@ -36,9 +38,8 @@ export function unescapeHTML(s) {
         .replace(/&amp;/gi, '&')
 }
 
-
 let USED_JSX = [] // HACK:dholtwick:2016-08-23
-var __xmlMode = false // HACK:2017-12-29
+// var __xmlMode = false // HACK:2017-12-29
 
 export function CDATA(s) {
     s = '<![CDATA[' + s + ']]>'
@@ -57,6 +58,7 @@ export function prependXMLIdentifier(s) {
 
 export function jsx(tag, attrs, ...children) {
     let s = ''
+    tag = tag.replace(/__/g, ':')
     if (tag !== 'noop') {
         if (tag !== 'cdata') {
             s += `<${tag}`
@@ -94,12 +96,12 @@ export function jsx(tag, attrs, ...children) {
             s += `>`
         }
 
-        if (!__xmlMode) {
-            if (['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr'].indexOf(tag) !== -1) {
-                USED_JSX.push(s)
-                return s
-            }
-        }
+        // if (!__xmlMode) {
+        //     if (['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr'].indexOf(tag) !== -1) {
+        //         USED_JSX.push(s)
+        //         return s
+        //     }
+        // }
     }
 
     // Append children
@@ -112,7 +114,11 @@ export function jsx(tag, attrs, ...children) {
                 if (USED_JSX.indexOf(c) !== -1) {
                     s += c
                 } else {
-                    s += escapeHTML(c.toString())
+                    if (isDOM(c)) {
+                        s += c.bodyMarkup()
+                    } else {
+                        s += escapeHTML(c.toString())
+                    }
                 }
             }
         }
@@ -127,9 +133,4 @@ export function jsx(tag, attrs, ...children) {
     }
     USED_JSX.push(s)
     return s
-}
-
-// HACK:2017-12-29
-export function setXMLMode(value) {
-    __xmlMode = value
 }

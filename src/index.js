@@ -15,8 +15,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+export {log} from './log'
+
 import * as plugin from './plugins'
 import * as task from './tasks'
 
 export * from './site'
+
 export {plugin, task}

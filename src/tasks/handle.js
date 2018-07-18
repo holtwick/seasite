@@ -20,6 +20,7 @@
 
 import {SeaSite} from '../index'
 import {isDOM, pathMatchesPatterns, isPattern} from '../site'
+import log from '../log'
 
 function pathToHTMLPath(path) {
     return path.replace(/\..+?$/, '.html').replace(/\/-/, '/')
@@ -53,6 +54,7 @@ export function handle(site: SeaSite, gopt: Object = {}): Array<Object> {
         }
 
         if (!opt.handler || opt.handler($, path) === false) {
+            log.warn('[task.handle] Will not write', path)
             return false // don't write
         }
 

@@ -19,7 +19,7 @@
 // @jsx jsx
 
 import {jsx} from './jsx'
-import {dom} from './dom'
+import {dom, xml, html} from './dom'
 import {example} from '../plugins/index'
 
 describe('DOM', () => {
@@ -31,9 +31,20 @@ describe('DOM', () => {
         $.applyPlugins([
             example('test'),
         ], {
-            value: 123
+            value: 123,
         })
 
         expect($.html()).toBe('<html><head><meta name="test" value="123"></head><body><div><b>Bold</b></div></body></html>')
     })
+
+    it('should know about XML', () => {
+        let x = xml(<div></div>)
+        expect(x.xmlMode).toBe(true)
+        expect(x.markup()).toBe('<?xml version="1.0" encoding="utf-8"?>\n<div/>')
+
+        let h = html(<div></div>)
+        expect(h.xmlMode).toBe(false)
+        expect(h.markup()).toBe('<!doctype html>\n<html><head></head><body><div></div></body></html>')
+    })
+
 })

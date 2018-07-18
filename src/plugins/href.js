@@ -25,6 +25,7 @@ const defaults = {
     handleURL(url) {
         return url
     },
+    ignore: null
 }
 
 export function href(gopt: Object = {}) {
@@ -39,6 +40,12 @@ export function href(gopt: Object = {}) {
         }
 
         handleLinks($, href => {
+            if (opt.ignore) {
+                if (opt.ignore.test(href)) {
+                    return href
+                }
+            }
+
             if (opt.relative) {
                 const toUrl = url.resolve('/', href)
                 const fromUrl = url.resolve('/', baseURL)

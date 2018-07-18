@@ -51,17 +51,17 @@ The third parameter will hold options:
 - `baseURL`
 - `publicURL(path)`: Override for [`site.publicURL()`](#publicURL)
 
-### Paths
+### Paths {#paths}
 
 For the following features it is important to understand what `path` refers to. So after the instantiation of `SeaSite` all work is happening on the copy in the destination folder. A path like `index.html` will than map to `dist/index.html` in our previous example. **Todo: Slash requirements?!**
 
-### Patterns
+### Patterns {#patterns}
 
 The **path pattern** (referred to as `pattern`) that is used in some of the following methods, can be either a simple string representing the full path, like `contact/index.html` or a regular expression like `.*\.md` which would retrieve all Markdown files, even those in sub directories. The last option is to pass an `Array` with a list of strings or regular expressions as described before.
 
 ### DOM {#dom}
 
-The real magic is in the jQuery like manipulation of the contents. `Cheerio` is used to provide the functionality. In SeaSite the `dom()` helper converts input like strings to a jQuery like DOM environment. It also adds some more functionalities, like support for [plugins](#plugins).
+The real magic is in the jQuery like manipulation of the contents. [Cheerio](https://cheerio.js.org) is used to provide the functionality. In SeaSite the `dom()` helper converts input like strings to a jQuery like DOM environment. It also adds some more functionalities, like support for [plugins](#plugins).
 
 ```jsx
 let $ = dom('<b>Hello World</b>')
@@ -78,6 +78,30 @@ Make all files matching `pattern` go through `fn`. For HTML and XML files the pa
 ```js
 site.handle(/.*\.html/, ($, path) => {
     $('title').text(path)
+})
+```
+
+Usually the DOM is manipulated and written back to replace the source file. You can also return a `string` to be written as the file content.
+
+In case no file should be written at all, return `false`.
+
+For more flexibility you can also return an object describing details about the output. The available properties:
+
+- `path`: The new destination path
+- `content`: Override the `$` and use this as the file's content. It can be of type DOM or string
+- `mode`: The mode which should be used to write out the DOM, default is `html` but also `xml` is supported.
+- `ignore`: Set to `true` is the same as returning `false`.
+
+An example:
+
+```js
+site.handle('/en/help', $ => {
+    $.applyPlugins([plugin.localize({
+        lang: 'de'
+    })])
+    return {
+        path: '/de/help'
+    }
 })
 ```
 
@@ -103,7 +127,7 @@ Writes `data` to `path` overwriting existing files without asking for confirmati
 
 ### site.paths(pattern, excludePattern):paths
 
-Returns all paths that match `pattern`. Optionally matches can be excluded via `excludePattern`.
+Returns all paths that match `pattern`. Optionally matches can be excluded via `excludePattern`. Set [patterns](#patterns) section to learn more about which patterns are supported.
 
 ### site.url(path):url
 
@@ -121,7 +145,14 @@ Copies subfolder of an NPM module into the site's public space. This can be usef
 site.copyNOPM('jquery', 'dist', 'js/jquery')
 ```
 
+### site.log
 
+The logger used by `site`. Example:
+
+```js
+site.log.info('Start')
+site.log.warn('Missing', missing)
+```
 
 ## Tasks {#tasks}
 
@@ -137,8 +168,8 @@ Walk through all files.
 
 Options:
 
-- `pattern`: Patterns to be included
-- `exclude`: Patterns to be excluded
+- `pattern`: [Patterns](#patterns) to be included
+- `exclude`: [Patterns](#patterns) to be excluded
 - `plugins`: Plugins to be applied if file is DOM compatible
 - `handler($, path)`: Will be called for each HTML file handled and not excluded.
 
@@ -148,8 +179,8 @@ Walk through all HTML files.
 
 Options:
 
-- `pattern`: Pattern is preset to filter files ending on `.html` or `.htm`
-- Other options as in [task.handle()](#taskhandle)
+- `pattern`: [Patterns](#patterns) to be included. Preset to filter files ending on `.html` or `.htm`
+- `exclude`: [Patterns](#patterns) to be excluded
 
 ### task.markdown(site, options)
 
@@ -173,7 +204,34 @@ Options:
 
 - `exclude`: List of patterns to exclude. Strings also match if they are at the beginning. For example `['private/']` will exclude all files in folder `private`
 
-  ​
+### task.release(site, options)
+
+Task for (macOS) software distribution, where the release statement is written in Markdown. 
+
+The files need to follow specific naming patterns. The download files end on `.zip` and the description files on `.md`. Before the suffix there has to be the **version** string and optionally the **build** number. Examples:
+
+```
+Receipts-1.2.3.md
+Receipts-1.2.3-888.zip
+Receipts-1.2.4.md
+Receipts-1.2.4.zip
+```
+
+The version string always has to be of the following structure: **major.minor.patch.fix** where `.fix` is optional. The build number is just an integer. Learn more about versioning at <https://semver.org>.
+
+- `folder` where download files and descriptions are
+- `pattern` to override `folder` with specific requirements for download file collection
+
+Returns a sorted list of release infos, where the newest is the first entry:
+
+- `path` to download file
+- `descPath` to the file containing the description
+- `version` in human readable form like `1.2.3`
+- `build` number if available
+- `date` of the file creation
+- ... and some more for your convenience like `minor`, `major` etc
+
+Please note that only those download files are listed which also have a matching `.md` file.
 
 ## Plugins {#plugins}
 
@@ -217,6 +275,7 @@ Normalize links to the needs of the current site.
 
 - `relative` will transform links to be relative to the basePath of the current file
 - `handleURL(url)` allows final modifications for the resulting URL like stripping the `.html` part etc. 
+- `ignore`: Regular expression
 
 ### plugin.img(opt) {#plugin.img}
 
@@ -262,6 +321,25 @@ doSomethingWithPlugin(
 console.log('These strings are missing:', 
             JSON.stringify(missing, null, 2))
 ```
+
+Additionally to that it is also possible to set the language on a **per element level** by setting `data-lang`.
+
+```html
+<span data-lang="en">Hello World</span>
+<span data-lang="de">Hallo Welt</span>
+```
+
+If an element has a `data-lang` attribute it will be removed if it does not match the current language. For testing in your template you might like add something like the following to only see on language version:
+
+```html
+<style>
+    *[data-lang=de] {
+        display: none;
+    }
+</style>
+```
+
+
 
 ### plugin.youtube(opt)
 
