@@ -56,6 +56,8 @@ export function dom(value: string | Buffer | Function, opt: Object = {
     // FLOW:2018-02-23
     let $: Function = value
 
+    $.xmlMode = opt.xmlMode === true
+
     $.applyPlugins = function (plugins: Array<Function>, ...opts) {
         for (let plugin of plugins) {
             plugin($, ...opts)
@@ -71,6 +73,17 @@ export function dom(value: string | Buffer | Function, opt: Object = {
 
     $.reload = function (html) {
         $.root().empty().html($.load(html).root())
+    }
+
+    $.markup = function () {
+        if ($.xmlMode) {
+            return '<?xml version="1.0" encoding="utf-8"?>\n' + $.xml()
+        }
+        let html = $.html()
+        if (html.trim().toLowerCase().indexOf('<!doctype ') !== 0) {
+            return '<!doctype html>\n' + html
+        }
+        return html
     }
 
     // Fix for cheerio bug
