@@ -198,3 +198,10 @@ export function parseMarkdown(content: string | Buffer, opt: Object = {
 //     const md = fs.readFileSync(p, 'utf8')
 //     return marked(md).toString()
 // }
+
+export function markdown(content: string | Buffer, opt: Object = {
+    outline: false,
+    bs4: false
+}) {
+    return parseMarkdown(content, opt)
+}
