@@ -94,7 +94,7 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
                 <copyright>{opt.copyright}</copyright>
                 <pubDate>{dateformat(new Date(), 'isoDateTime')}</pubDate>
             </channel>
-        </rss>, {xmlMode: true})
+        </rss>)
     for (let post of entries) {
         let atomEntry =
             <item>
@@ -108,8 +108,8 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
         atomContent('channel').append(atomEntry)
     }
 
-    site.writeDOM(`${opt.folder}/atom.xml`, atomContent)
-    site.writeDOM(`/atom.xml`, atomContent)
+    site.writeDOM(atomContent, `${opt.folder}/atom.xml`)
+    site.writeDOM(atomContent, `/atom.xml`)
 
     // Blog Archive
     let $ = dom(opt.template(site))

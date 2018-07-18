@@ -21,6 +21,7 @@
 const cheerio = require('cheerio')
 
 import {HTML} from './jsx'
+import log from '../log'
 
 export function isDOM(obj: any): boolean {
     return obj && typeof obj === 'function' && typeof obj.html === 'function'
@@ -71,6 +72,7 @@ export function dom(value: string | Buffer | Function, opt: Object = {
     }
 
     $.reload = function (html) {
+        // log.warn('Reload HTML', html)
         $.root().empty().html($.load(html).root())
     }
 

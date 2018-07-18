@@ -279,7 +279,14 @@ export class SeaSite {
 
     // DEPRECATED:2018-02-23
     writeDOM($: Function, urlPath: string) {
-        let content = $.markup()
+        let content
+
+        try {
+            content = $.markup()
+        } catch (e) {
+            log.error('Problem writing to', urlPath, 'with', $)
+            throw e
+        }
 
         // Strip comments
         // TODO:2018-02-23 migrate!
