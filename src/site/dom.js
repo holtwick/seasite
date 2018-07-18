@@ -23,11 +23,11 @@ const cheerio = require('cheerio')
 
 import {jsx, HTML} from './jsx'
 
-export function isDOM(obj:any):boolean {
+export function isDOM(obj: any): boolean {
     return obj && typeof obj === 'function' && typeof obj.html === 'function'
 }
 
-export function toString(obj:any):string {
+export function toString(obj: any): string {
     if (obj) {
         if (obj instanceof Buffer) {
             return toString('utf8')
@@ -73,9 +73,21 @@ export function dom(value: string | Buffer | Function, opt: Object = {
         $.root().empty().html($.load(html).root())
     }
 
+    // Fix for cheerio bug
+    // let xmlFn = $.xml
+    // $.xml = function () {
+    //     let content = xmlFn.call($)
+    //     content = content.replace(/<\!--\[CDATA\[([\s\S]*?)\]\]-->/g, '<![CDATA[$1]]>')
+    //     return content
+    // }
+
     return $
 }
 
 export function xml(value: string | Buffer | Function) {
-    return dom(value, {xmlMode: true})
+    return dom(value || '', {xmlMode: true})
+}
+
+export function html(value: string | Buffer | Function) {
+    return dom(value || '')
 }

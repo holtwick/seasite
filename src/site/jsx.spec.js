@@ -29,16 +29,64 @@ describe('JSX', () => {
     })
 
     it('link xml', () => {
-        let r = <div>
+        let markup = <div>
             <link>myLink</link>
             <link href="123"/>
         </div>
-        expect(r).toBe('<div><link>myLink</link><link href="123"></link></div>')
+        expect(markup).toBe('<div><link>myLink</link><link href="123"></link></div>')
 
-        let x = xml(r).xml()
-        expect(x).toBe('<div><link>myLink</link><link href="123"/></div>')
+        expect(
+            xml(markup).xml()
+        ).toBe('<div><link>myLink</link><link href="123"/></div>')
 
-        let h = dom(r).html()
-        expect(h).toBe('<html><head></head><body><div><link>myLink<link href="123"></div></body></html>')
+        expect(
+            dom(markup).html()
+        ).toBe('<html><head></head><body><div><link>myLink<link href="123"></div></body></html>')
+
+        expect(
+            dom(markup)('body').html()
+        ).toBe('<div><link>myLink<link href="123"></div>')
     })
+
+    it('cdata', () => {
+        let markup = <div>
+            <cdata>
+                {' This is < & > messed up! '}
+            </cdata>
+        </div>
+        expect(markup).toBe('<div><![CDATA[ This is &lt; &amp; &gt; messed up! ]]></div>')
+
+        expect(
+            xml(markup).xml()
+        ).toBe('<div><![CDATA[ This is &lt; &amp; &gt; messed up! ]]></div>')
+
+        // Correct?
+        expect(
+            dom(markup)('body').html()
+        ).toBe('<div><!--[CDATA[ This is &lt; &amp; &gt; messed up! ]]--></div>')
+    })
+
+    it('ns', () => {
+        let markup = <div>
+            <x__y x__a="b">
+                Test
+            </x__y>
+        </div>
+        expect(markup).toBe(
+            '<div><x:y x:a="b">Test</x:y></div>'
+        )
+
+        expect(
+            xml(markup).xml()
+        ).toBe(
+            '<div><x:y x:a="b">Test</x:y></div>'
+        )
+
+        // // Correct?
+        // expect(
+        //     dom(markup)('body').html()
+        // ).toBe('<div><!--[CDATA[ This is &lt; &amp; &gt; messed up! ]]--></div>')
+    })
+
+
 })

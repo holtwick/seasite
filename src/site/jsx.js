@@ -36,7 +36,6 @@ export function unescapeHTML(s) {
         .replace(/&amp;/gi, '&')
 }
 
-
 let USED_JSX = [] // HACK:dholtwick:2016-08-23
 var __xmlMode = false // HACK:2017-12-29
 
@@ -57,11 +56,12 @@ export function prependXMLIdentifier(s) {
 
 export function jsx(tag, attrs, ...children) {
     let s = ''
+    tag = tag.replace(/__/g, ':')
     if (tag !== 'noop') {
         if (tag !== 'cdata') {
             s += `<${tag}`
         } else {
-            s += '<!--[CDATA['
+            s += '<![CDATA['
         }
 
         // Add attributes
@@ -122,7 +122,7 @@ export function jsx(tag, attrs, ...children) {
         if (tag !== 'cdata') {
             s += `</${tag}>`
         } else {
-            s += ']]-->'
+            s += ']]>'
         }
     }
     USED_JSX.push(s)
