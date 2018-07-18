@@ -204,7 +204,34 @@ Options:
 
 - `exclude`: List of patterns to exclude. Strings also match if they are at the beginning. For example `['private/']` will exclude all files in folder `private`
 
-  ​
+### task.release(site, options)
+
+Task for (macOS) software distribution, where the release statement is written in Markdown. 
+
+The files need to follow specific naming patterns. The download files end on `.zip` and the description files on `.md`. Before the suffix there has to be the **version** string and optionally the **build** number. Examples:
+
+```
+Receipts-1.2.3.md
+Receipts-1.2.3-888.zip
+Receipts-1.2.4.md
+Receipts-1.2.4.zip
+```
+
+The version string always has to be of the following structure: **major.minor.patch.fix** where `.fix` is optional. The build number is just an integer. Learn more about versioning at <https://semver.org>.
+
+- `folder` where download files and descriptions are
+- `pattern` to override `folder` with specific requirements for download file collection
+
+Returns a sorted list of release infos, where the newest is the first entry:
+
+- `path` to download file
+- `descPath` to the file containing the description
+- `version` in human readable form like `1.2.3`
+- `build` number if available
+- `date` of the file creation
+- ... and some more for your convenience like `minor`, `major` etc
+
+Please note that only those download files are listed which also have a matching `.md` file.
 
 ## Plugins {#plugins}
 

@@ -127,12 +127,15 @@ export class SeaSite {
             for (let file of files) {
                 let src = path.join(srcPath, file)
                 let dst = path.join(basePath, file)
-                let data = fs.readFileSync(src)
                 mkdir(path.dirname(dst))
-                // log.debug(`  cloned ... ${dst}`)
-                fs.writeFileSync(dst, data, {
-                    mode: 0o644,
-                })
+                fs.copyFileSync(src, dst)
+
+                // let data = fs.readFileSync(src)
+
+                // // log.debug(`  cloned ... ${dst}`)
+                // fs.writeFileSync(dst, data, {
+                //     mode: 0o644,
+                // })
             }
             //     // Paths
             //     let pages = [];
@@ -252,7 +255,7 @@ export class SeaSite {
             let inPath = path.join(this.basePath, urlPath)
             return fs.readFileSync(inPath)
         } catch (ex) {
-            console.error('Failed to .read file:', urlPath)
+            log.error('Failed to .read file:', urlPath)
         }
         return null
     }
@@ -350,9 +353,9 @@ export class SeaSite {
 }
 
 process.on('unhandledRejection', function (reason, p) {
-    console.log('Possibly Unhandled Rejection at: Promise ', p, ' reason: ', reason)
+    log.warn('Possibly Unhandled Rejection at: Promise ', p, ' reason: ', reason)
 })
 
 process.on('handledRejection', function (reason, p) {
-    console.log('Possibly Unhandled Rejection at: Promise ', p, ' reason: ', reason)
+    log.warn('Possibly Unhandled Rejection at: Promise ', p, ' reason: ', reason)
 })

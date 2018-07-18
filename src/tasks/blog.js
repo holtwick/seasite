@@ -48,7 +48,7 @@ let defaults = {
 export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
 
     opt = Object.assign({}, defaults, opt)
-    let posts = []
+    let entries = []
 
     if (!opt.pattern && opt.folder) {
         opt.pattern = new RegExp(opt.folder + '\/.*\.md$')
@@ -68,7 +68,7 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
         if (hidden || path.indexOf('/-') > 0) {
             return
         }
-        posts.push({
+        entries.push({
             html,
             props,
             title,
@@ -81,7 +81,7 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
     })
 
     // Sort the posts
-    posts = _.sortBy(posts, 'date').reverse()
+    entries = _.sortBy(entries, 'date').reverse()
 
     // RSS
     setXMLMode(true)
@@ -96,7 +96,7 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
                 <pubDate>{dateformat(new Date(), 'isoDateTime')}</pubDate>
             </channel>
         </rss>, {xmlMode: true})
-    for (let post of posts) {
+    for (let post of entries) {
         let atomEntry =
             <item>
                 <title>{post.title}</title>
@@ -123,7 +123,7 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
             <div>
                 <h1 className="blog-post-title">Blog</h1>
                 <ul>
-                    {posts.map(post => <li>
+                    {entries.map(post => <li>
                         <a href={site.url(pathToHTMLPath(post.path))}>
                             {post.title}
                         </a>
@@ -137,5 +137,5 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
         site.write(`${opt.folder}/index.html`, $.html())
     }
 
-    return posts
+    return entries
 }
