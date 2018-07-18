@@ -16,12 +16,11 @@
  */
 
 // (C)opyright Dirk Holtwick, 2016-09-02 <dirk.holtwick@gmail.com>
-// @jsx html
 // @flow
 
 const cheerio = require('cheerio')
 
-import {jsx, HTML} from './jsx'
+import {HTML} from './jsx'
 
 export function isDOM(obj: any): boolean {
     return obj && typeof obj === 'function' && typeof obj.html === 'function'
@@ -84,6 +83,10 @@ export function dom(value: string | Buffer | Function, opt: Object = {
             return '<!doctype html>\n' + html
         }
         return html
+    }
+
+    $.bodyMarkup = function () {
+        return $.xmlMode ? $.xml() : $('body').html()
     }
 
     // Fix for cheerio bug

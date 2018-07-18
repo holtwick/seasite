@@ -18,7 +18,7 @@
 // @flow
 // @jsx jsx
 
-import {SeaSite, parseMarkdown, prependXMLIdentifier, setXMLMode, dom} from '../index'
+import {SeaSite, parseMarkdown, dom, xml} from '../index'
 import {pathMatchesPatterns} from '../site'
 import {jsx} from '../site/jsx'
 import dateformat from 'dateformat'
@@ -84,8 +84,7 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
     entries = _.sortBy(entries, 'date').reverse()
 
     // RSS
-    setXMLMode(true)
-    let atomContent = dom(
+    let atomContent = xml(
         <rss version="2.0" xmlns__atom="http://www.w3.org/2005/Atom">
             <channel>
                 <title>{opt.title}</title>
@@ -108,11 +107,9 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
             </item>
         atomContent('channel').append(atomEntry)
     }
-    setXMLMode(false)
 
-    const xml = prependXMLIdentifier(atomContent.xml())
-    site.write(`${opt.folder}/atom.xml`, xml)
-    site.write(`/atom.xml`, xml)
+    site.writeDOM(`${opt.folder}/atom.xml`, atomContent)
+    site.writeDOM(`/atom.xml`, atomContent)
 
     // Blog Archive
     let $ = dom(opt.template(site))

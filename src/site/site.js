@@ -21,11 +21,9 @@
 const fs = require('fs')
 const fsx = require('fs-extra')
 const path = require('path')
-// const process = require('process')
 
 import {dom, isDOM} from './dom'
-import {jsx, prependXMLIdentifier} from './jsx'
-// import {absoluteLinks} from './relativeurls'
+import {jsx} from './jsx'
 import {rmdir, mkdir, walkSync} from './fileutil'
 
 import log from '../log'
@@ -280,16 +278,8 @@ export class SeaSite {
     }
 
     // DEPRECATED:2018-02-23
-    writeDOM($: Function, urlPath: string, mode: ?string = null) {
-        let content
-        if (mode === 'xml') {
-            content = prependXMLIdentifier($.xml())
-            // HACK:dholtwick:2016-08-23 Workaround cheerio bug
-            // content = content.replace(/<\!--\[CDATA\[>([\s\S]*?)]]-->/g, '<![CDATA[$1]]>')
-        } else {
-            // absoluteLinks($, '/' + urlPath)
-            content = $.html()
-        }
+    writeDOM($: Function, urlPath: string) {
+        let content = $.markup()
 
         // Strip comments
         // TODO:2018-02-23 migrate!
@@ -329,7 +319,6 @@ export class SeaSite {
             if (/\.(html?|xml)$/i.test(urlPath)) {
                 let xmlMode = /\.xml$/i.test(urlPath)
                 let $ = dom(content, {xmlMode})
-                result.mode = xmlMode ? 'xml' : 'html'
                 result.content = $
                 ret = handler($, urlPath)
             } else {
@@ -346,10 +335,7 @@ export class SeaSite {
                     let p = ret.path || urlPath
                     let content = ret.content || result.content
                     if (isDOM(content)) {
-                        let mode = ret.mode || result.mode
-                        if (mode === 'html') {
-                            this.writeDOM(content, p, mode)
-                        }
+                        this.writeDOM(content, p)
                     } else if (content) {
                         this.write(p, content)
                     } else {

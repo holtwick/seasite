@@ -19,7 +19,7 @@
 // @jsx jsx
 
 import {jsx} from './jsx'
-import {dom, xml} from './dom'
+import {dom, xml, html} from './dom'
 
 describe('JSX', () => {
 
@@ -36,15 +36,15 @@ describe('JSX', () => {
         expect(markup).toBe('<div><link>myLink</link><link href="123"></link></div>')
 
         expect(
-            xml(markup).xml()
+            xml(markup).xml(),
         ).toBe('<div><link>myLink</link><link href="123"/></div>')
 
         expect(
-            dom(markup).html()
+            dom(markup).html(),
         ).toBe('<html><head></head><body><div><link>myLink<link href="123"></div></body></html>')
 
         expect(
-            dom(markup)('body').html()
+            dom(markup)('body').html(),
         ).toBe('<div><link>myLink<link href="123"></div>')
     })
 
@@ -57,12 +57,12 @@ describe('JSX', () => {
         expect(markup).toBe('<div><![CDATA[ This is &lt; &amp; &gt; messed up! ]]></div>')
 
         expect(
-            xml(markup).xml()
+            xml(markup).xml(),
         ).toBe('<div><![CDATA[ This is &lt; &amp; &gt; messed up! ]]></div>')
 
         // Correct?
         expect(
-            dom(markup)('body').html()
+            dom(markup)('body').html(),
         ).toBe('<div><!--[CDATA[ This is &lt; &amp; &gt; messed up! ]]--></div>')
     })
 
@@ -73,13 +73,13 @@ describe('JSX', () => {
             </x__y>
         </div>
         expect(markup).toBe(
-            '<div><x:y x:a="b">Test</x:y></div>'
+            '<div><x:y x:a="b">Test</x:y></div>',
         )
 
         expect(
-            xml(markup).xml()
+            xml(markup).xml(),
         ).toBe(
-            '<div><x:y x:a="b">Test</x:y></div>'
+            '<div><x:y x:a="b">Test</x:y></div>',
         )
 
         // // Correct?
@@ -88,5 +88,30 @@ describe('JSX', () => {
         // ).toBe('<div><!--[CDATA[ This is &lt; &amp; &gt; messed up! ]]--></div>')
     })
 
+    it('should accept DOM', () => {
+
+        let markup = <div>
+            {xml(<hr/>)}
+        </div>
+
+        expect(
+            markup,
+        ).toBe(
+            '<div><hr/></div>',
+        )
+
+        expect(
+            html(markup).html(),
+        ).toBe(
+            '<html><head></head><body><div><hr></div></body></html>',
+        )
+
+        expect(
+            xml(markup).xml(),
+        ).toBe(
+            '<div><hr/></div>',
+        )
+
+    })
 
 })

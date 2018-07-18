@@ -18,19 +18,9 @@
 // (C)opyright Dirk Holtwick, 2016-08-20 <dirk.holtwick@gmail.com>
 // @jsx html
 
-import {SeaSite, parseMarkdown, prependXMLIdentifier, setXMLMode, dom} from '../index'
-import {pathMatchesPatterns} from '../site'
+import {SeaSite} from '../index'
 import {jsx} from '../site/jsx'
-import dateformat from 'dateformat'
-import _ from 'lodash'
 import {statSync, existsSync} from 'fs'
-
-// interface ReleaseInfo {
-//     version: string,
-//     build: string,
-//     downloadPath: string,
-//     content: string
-// }
 
 let defaults = {
     folder: 'blog',
@@ -102,73 +92,6 @@ export function release(site: SeaSite, opt: Object = {}): Array<Object> {
 
     // const APP_VERSION = DOWNLOADS[0].version
     // const DOWNLOAD_URL_DIRECT = `/download/${DOWNLOADS[0].filename}`
-    //
-    // // ------- SPARKLE ----------------
-    //
-    // site.handle('sparklecast.xml', $ => {
-    //     setXMLMode(true)
-    //     let downloadTexts = DOWNLOADS.map(info => {
-    //         const fileName = info.filename
-    //         const distPath = path.join(BUILDSPATH, fileName)
-    //         // const projectRoot = normalizeTilde(`~/work/receipts`);
-    //         const stat = fs.statSync(distPath)
-    //         if (!stat) {
-    //             throw `File ${distPath} does not exist!`
-    //         }
-    //         /*const date = new Date(stat.ctime);*/
-    //         // console.log(date);
-    //         // const dsaSignature = execSync(`${projectRoot}/Scripts/sign_update ${distPath} ${projectRoot}/License/dsa_priv.pem`);
-    //         /*sparkle__dsaSignature={dsaSignature}*/
-    //         return <item>
-    //             <title>Version {info.version}</title>
-    //             <description>
-    //                 <cdata>
-    //                     {HTML(info.md)}
-    //                     <hr/>
-    //                     <p>For details about previous changes visit <a
-    //                         href={site.absoluteURL('changelog.html')}>{site.absoluteURL('changelog.html')}</a>.
-    //                     </p>
-    //                     <p>
-    //                         <b>In case of update problems please download the current version directly from <a
-    //                             href="https://www.receipts-app.com">https://www.receipts-app.com</a> or contact <a
-    //                             href="https://www.receipts-app.com/support.html">support</a>.</b>
-    //                     </p>
-    //                 </cdata>
-    //             </description>
-    //             {/* <pubDate>Sat, 26 Jul 2014 15:20:11 +0000</pubDate> */}
-    //             <pubDate>{stat.ctime.toGMTString()}</pubDate>
-    //             <enclosure url={`https://www.receipts-app.com/update/download/${fileName}`}
-    //                        length={stat.size.toString()}
-    //                        type="application/octet-stream"
-    //                        sparkle__version={info.build}
-    //                        sparkle__shortVersionString={info.version}
-    //                        sparkle__minimumSystemVersion="10.10"
-    //             />
-    //         </item>
-    //     })
-    //
-    //     let content = <rss xmlns__sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle"
-    //                        xmlns__dc="http://purl.org/dc/elements/1.1/"
-    //                        version="2.0">
-    //         <channel>
-    //             <title>Receipts App Changelog</title>
-    //             <link>
-    //                 {site.absoluteURL('sparklecast.xml')}
-    //             </link>
-    //             <description>Most recent changes with links to updates.</description>
-    //             <language>en</language>
-    //             {
-    //                 downloadTexts[0]
-    //             }
-    //         </channel>
-    //     </rss>
-    //     // console.log('XML:', content)
-    //     $.root().append(content)
-    //     setXMLMode(false)
-    //     return 'xml'
-    // })
-    //
-    // // ---
     //
     // site.handle('track/ho_variables.php', content => {
     //     // console.log(content)
