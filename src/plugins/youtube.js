@@ -24,7 +24,7 @@ import {join} from 'path'
 import {existsSync} from 'fs'
 
 const OPT = {
-    videoTitle: 'Served by youtube.com',
+    videoTitle: 'Video is provided by youtube.com',
 }
 
 export function youtube(gopt: Object = {}) {
@@ -50,11 +50,12 @@ export function youtube(gopt: Object = {}) {
                     }
                     let staticLink = `https://youtu.be/${key}`
                     let onClick = `this.parentNode.innerHTML = '<iframe src="https://www.youtube.com/embed/${key}?autoplay=1" frameBorder="0" allowFullScreen class="embed-responsive-item"></iframe>'; return false;`
+                    let thumbnailURL = `https://i.ytimg.com/vi/${key}/0.jpg`
                     root.replaceWith(
                         <div className="video-wrapper embed-video-container embed-responsive embed-responsive-16by9">
-                            <a href={staticLink} onClick={onClick}>
-                                <img src={`https://i.ytimg.com/vi/${key}/0.jpg`} width="100%"
-                                     className='youtube-placeholder'/>
+                            <a href={staticLink} onClick={onClick} style={ `background-image:url("${thumbnailURL}");`}>
+                                {/*<img src={`https://i.ytimg.com/vi/${key}/0.jpg`} width="100%"*/}
+                                {/*className='youtube-placeholder embed-responsive-item'/>*/}
                             </a>
                             <div className="video-overlay-content">
                                 <div className="video-overlay-inner">

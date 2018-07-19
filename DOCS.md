@@ -36,7 +36,7 @@ npm start
 
 ## Basic Concepts
 
-The central piece of the engine is the `SeaSite` object. In the most simple setup a source and a destination folder will be defined. The first action that will happen is to close the destination to the source folder. All following actions will operate on this clone.
+The central piece of the engine is the `SeaSite` object. In the most simple setup a source and a destination folder will be defined. **The first action that will happen is to clone the destination to the source folder**. All following actions will operate on this clone.
 
 ```js
 import {SeaSite} from 'seasite'
@@ -53,7 +53,7 @@ The third parameter will hold options:
 
 ### Paths {#paths}
 
-For the following features it is important to understand what `path` refers to. So after the instantiation of `SeaSite` all work is happening on the copy in the destination folder. A path like `index.html` will than map to `dist/index.html` in our previous example. **Todo: Slash requirements?!**
+For the following features it is important to understand what `path` refers to. So after the instantiation of `SeaSite` all work is happening on the copy in the destination folder. A path like `index.html` will than map to `dist/index.html` in our previous example.
 
 ### Patterns {#patterns}
 
@@ -68,6 +68,47 @@ let $ = dom('<b>Hello World</b>')
 $(b).text('Hallo Welt')
 expect($.html()).toEqual('<b>Hallo Welt</b>')
 ```
+
+If you need to be more specific about the content there are also `xml()` and `html()` DOM shortcuts available. To store the changes into a file you can use `site.writeDOM($, path)` or get it as a string like `$.markup()`.
+
+### JSX
+
+SeaSite also comes with support for JSX built in. All you need to do is to let the environment know about it, like this: 
+
+```jsx
+// @jsx jsx
+import {jsx} from 'seasite'
+```
+
+This is setting the function called by JSX to `jsx` which is part of the package. You can now use it together with DOM:
+
+```jsx
+let $ = html(<div id="content"></div>)
+$.append(<p>Lorem ipsum {ctr}</p>)
+let output = $.markup()
+```
+
+It is even possible to use DOM inside of JSX:
+
+```jsx
+let content = html(site.read('content.html'))
+let $ = html(<div>{ content }</div>)
+```
+
+### Markdown
+
+Full support for Markdown is also integrated. A file or string can easily be parsed:
+
+```js
+import {markdown} from 'seasite'
+let md = markdown(site.read('content.md'))
+```
+
+The resulting object contains the following data:
+
+- `html` of the content
+- `props` contains the parsed *YAML Front Matter* section
+- `outline` of the headers in the content (only available if `opt.outline` has been set like `markdown(path, {outline: true})` or if the YAML value `outline` is set to `true`)
 
 ## Site {#site}
 
@@ -89,7 +130,6 @@ For more flexibility you can also return an object describing details about the 
 
 - `path`: The new destination path
 - `content`: Override the `$` and use this as the file's content. It can be of type DOM or string
-- `mode`: The mode which should be used to write out the DOM, default is `html` but also `xml` is supported.
 - `ignore`: Set to `true` is the same as returning `false`.
 
 An example:
@@ -356,8 +396,7 @@ Commenting provided by [disqus.com](https://disqus.com). The integration is done
 
 To be documented:
 
-- plugin.href()
-- plugin.tidy()
+- `plugin.tidy()`
 
 ## Appendix
 
