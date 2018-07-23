@@ -287,11 +287,6 @@ export class SeaSite {
             log.error('Problem writing to', urlPath, 'with', $)
             throw e
         }
-
-        // Strip comments
-        // TODO:2018-02-23 migrate!
-        content = content.replace(/<!--(.*?)-->/g, '')
-
         // log.debug($.html());
         this.write(urlPath, content)
     }

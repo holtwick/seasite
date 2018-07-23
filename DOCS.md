@@ -379,7 +379,12 @@ If an element has a `data-lang` attribute it will be removed if it does not matc
 </style>
 ```
 
+### plugin.tidy(opt) {#plugin.tidy}
 
+Cleans up the markup a little bit:
+
+- Removes comments
+- Adds `\n` to end of common block and non closing elements 
 
 ### plugin.youtube(opt)
 
@@ -391,13 +396,7 @@ Commenting provided by [disqus.com](https://disqus.com). The integration is done
 
 - `selector` defining the containers where the code should be added to (Default `.disqus`)
 - `disqusURL` is the JS code URL provided by disqus to be used [for embedding](https://disqus.com/admin/install/platforms/universalcode/) 
-
-### More Plugins
-
-To be documented:
-
-- `plugin.tidy()`
-
+ 
 ## Appendix
 
 ### License
