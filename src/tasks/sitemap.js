@@ -19,6 +19,7 @@
 // @jsx jsx
 
 import {SeaSite} from '../site/site'
+import log from '../log'
 
 let defaults = {
     exclude: [
@@ -30,6 +31,7 @@ let defaults = {
 export function sitemap(site: SeaSite, opt: Object = {}) {
     opt = Object.assign({}, defaults, opt)
 
+    // log.info(opt.pattern, opt.exclude)
     let sitemap = site
         .paths(opt.pattern, opt.exclude)
         .map(path => site.publicURL(path))
