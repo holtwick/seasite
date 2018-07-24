@@ -92,7 +92,8 @@ export function dom(value: string | Buffer | Function, opt: Object = {
         }
 
         if (!opt.stripPHP) {
-            markup = markup.replace(/<!--\?(php)?(.*?)\?-->/g, '<?php $2 ?>')
+            markup = markup.replace(/%3C\?(php)?(.*?)\?%3E/g, (m, p1 , p2) => `<?php${decodeURIComponent(p2)}?>`)
+            markup = markup.replace(/<!--\?(php)?(.*?)\?-->/g, '<?php$2?>')
         }
 
         if (opt.stripComments) {
