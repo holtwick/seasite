@@ -58,6 +58,7 @@ export function localize(gopt: Object = {}) {
 
             html = html.replace(/(>\s*)(__?([^<]+))/gm, fn)
             html = html.replace(/(")(__?([^"]+))/gm, fn)
+            html = html.replace(/(')(__?([^']+))/gm, fn)
             html = html.replace(/(&apos;)(__?([^&]+))/gm, fn) // quoted when inside an attribute like onclick="setLang('_lang')"
 
             $.reload(html)
