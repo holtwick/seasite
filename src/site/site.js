@@ -41,35 +41,39 @@ export function isPattern(pattern: ?SeaSitePattern): boolean {
 }
 
 export function pathMatchesPatterns(path: string, patterns: SeaSitePattern): boolean {
-    if (!Array.isArray(patterns)) {
-        patterns = [patterns]
-    }
-    for (let pattern of patterns) {
-        if (typeof pattern === 'string') {
+    let result = (() => {
+        if (!Array.isArray(patterns)) {
+            patterns = [patterns]
+        }
+        for (let pattern of patterns) {
+            if (typeof pattern === 'string') {
 
-            // Strip leading /
-            if (pattern.indexOf('/') === 0) {
-                pattern = pattern.substring(1)
-            }
+                // Strip leading /
+                if (pattern.indexOf('/') === 0) {
+                    pattern = pattern.substring(1)
+                }
 
-            // Match folder ?
-            if (pattern[pattern.length - 1] === '/') {
-                if (path.indexOf(pattern) === 0) {
+                // Match folder ?
+                if (pattern[pattern.length - 1] === '/') {
+                    if (path.indexOf(pattern) === 0) {
+                        return true
+                    }
+                }
+                else if (path === pattern) {
                     return true
                 }
             }
-            else if (path === pattern) {
-                return true
+            else if (pattern instanceof RegExp) {
+                pattern.lastIndex = 0
+                if (pattern.test(path)) {
+                    return true
+                }
             }
         }
-        else if (pattern instanceof RegExp) {
-            pattern.lastIndex = 0
-            if (pattern.test(path)) {
-                return true
-            }
-        }
-    }
-    return false
+        return false
+    })()
+    // log.info(result, path, patterns)
+    return result
 }
 
 export function filterByPatterns(paths: ?Array<string>, patterns: ?SeaSitePattern, exclude: ?SeaSitePattern): Array<string> {
@@ -278,17 +282,18 @@ export class SeaSite {
     }
 
     // DEPRECATED:2018-02-23
-    writeDOM($: Function, urlPath: string) {
-        let content
+    writeDOM($: Function, urlPath: string, opt: ?any) {
+        let markup:string
 
         try {
-            content = $.markup()
+            markup = $.markup(opt)
         } catch (e) {
             log.error('Problem writing to', urlPath, 'with', $)
             throw e
         }
+
         // log.debug($.html());
-        this.write(urlPath, content)
+        this.write(urlPath, markup)
     }
 
     handle(pattern: SeaSitePattern | Object, handler: (any, string) => ?any) {

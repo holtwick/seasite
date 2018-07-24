@@ -1,4 +1,4 @@
-# SeaSite
+# <img src="example/public/img/apple-touch-icon.png" align="right">SeaSite
 
 Static web site builder inspired by jQuery:
 <https://holtwick.de/blog/static-jquery>

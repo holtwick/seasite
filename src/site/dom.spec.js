@@ -47,4 +47,10 @@ describe('DOM', () => {
         expect(h.markup()).toBe('<!doctype html>\n<html><head></head><body><div></div></body></html>')
     })
 
+    it('should decode URI for PHP', () => {
+        const sample = "/buy-fallback?coupon=%3C?%20echo%20$_GET[%27coupon%27]);?%3E";
+        let markup = sample.replace(/%3C\?(php)?(.*?)\?%3E/g, (m, p1 , p2) => `<?php${decodeURIComponent(p2)}?>`)
+        expect(markup).toBe("/buy-fallback?coupon=<?php echo $_GET['coupon']);?>")
+    })
+
 })

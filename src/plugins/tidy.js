@@ -24,9 +24,8 @@ export function tidy(gopt: Object = {}) {
 
     return ($: Function, opt: Object = {}) => {
         let html = $.html()
-        html = html.replace(/<!--(.*?)-->/g, '')
-        html = html.replace(/(<(meta|link|script|img|hr|br)[^>]*>)(\s*\n)*/gi, '$1\n')
-        html = html.replace(/(<\/(p|h1|h2|h3|h4|h5|h6|blockquote|div|ul|ol|li|article|section|footer)>)(\s*\n)*/gi, '$1\n')
+        html = html.replace(/(<(meta|link|script|img|hr|br)[^>]*>)(\s*\n)*/gi, '$1 \n')
+        html = html.replace(/(<\/(p|h1|h2|h3|h4|h5|h6|blockquote|div|ul|ol|li|article|section|footer)>)(\s*\n)*/gi, '$1 \n')
         $.reload(html)
     }
 
