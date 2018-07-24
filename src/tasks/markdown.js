@@ -53,7 +53,9 @@ export function markdown(site: SeaSite, gopt: Object = {}): Array<Object> {
             return false // don't write
         }
 
-        let md = parseMarkdown(content)
+        let md = parseMarkdown(content, {
+            bs4: gopt.bs4
+        })
         let props = md.props
         let html = md.html
 

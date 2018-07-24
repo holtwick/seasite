@@ -18,7 +18,7 @@
 // @flow
 // @jsx jsx
 
-import {SeaSite, parseMarkdown, prependXMLIdentifier, setXMLMode, dom} from '../index'
+import {SeaSite, parseMarkdown, dom, xml} from '../index'
 import {pathMatchesPatterns} from '../site'
 import {jsx} from '../site/jsx'
 import dateformat from 'dateformat'
@@ -29,7 +29,8 @@ function pathToHTMLPath(path) {
 }
 
 let defaults = {
-    pattern: /blog\/.*\.md$/,
+    folder: 'blog',
+    pattern: null,
     handler: null,
     title: 'Blog',
     url: '',
@@ -47,7 +48,11 @@ let defaults = {
 export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
 
     opt = Object.assign({}, defaults, opt)
-    let posts = []
+    let entries = []
+
+    if (!opt.pattern && opt.folder) {
+        opt.pattern = new RegExp(opt.folder + '\/.*\.md$')
+    }
 
     // Collect post data
     site.handle(opt.pattern, (content, path) => {
@@ -63,7 +68,7 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
         if (hidden || path.indexOf('/-') > 0) {
             return
         }
-        posts.push({
+        entries.push({
             html,
             props,
             title,
@@ -76,11 +81,10 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
     })
 
     // Sort the posts
-    posts = _.sortBy(posts, 'date').reverse()
+    entries = _.sortBy(entries, 'date').reverse()
 
     // RSS
-    setXMLMode(true)
-    let atomContent = dom(
+    let atomContent = xml(
         <rss version="2.0" xmlns__atom="http://www.w3.org/2005/Atom">
             <channel>
                 <title>{opt.title}</title>
@@ -90,8 +94,8 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
                 <copyright>{opt.copyright}</copyright>
                 <pubDate>{dateformat(new Date(), 'isoDateTime')}</pubDate>
             </channel>
-        </rss>, {xmlMode: true})
-    for (let post of posts) {
+        </rss>)
+    for (let post of entries) {
         let atomEntry =
             <item>
                 <title>{post.title}</title>
@@ -103,11 +107,9 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
             </item>
         atomContent('channel').append(atomEntry)
     }
-    setXMLMode(false)
 
-    const xml = prependXMLIdentifier(atomContent.xml())
-    site.write(`/blog/atom.xml`, xml)
-    site.write(`/atom.xml`, xml)
+    site.writeDOM(atomContent, `${opt.folder}/atom.xml`)
+    site.writeDOM(atomContent, `/atom.xml`)
 
     // Blog Archive
     let $ = dom(opt.template(site))
@@ -118,7 +120,7 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
             <div>
                 <h1 className="blog-post-title">Blog</h1>
                 <ul>
-                    {posts.map(post => <li>
+                    {entries.map(post => <li>
                         <a href={site.url(pathToHTMLPath(post.path))}>
                             {post.title}
                         </a>
@@ -129,8 +131,8 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
         )
         $('title').text(opt.title)
         $('#recent-posts-container').remove()
-        site.write('/blog/index.html', $.html())
+        site.write(`${opt.folder}/index.html`, $.html())
     }
 
-    return posts
+    return entries
 }

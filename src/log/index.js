@@ -12,11 +12,12 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this prog ram.  If not, see <https://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export * from './site'
-export * from './markdown'
-export * from './jsx'
-export * from './dom'
-export * from './relativeurls'
+//export * from './logger'
+
+import {log} from './logger'
+
+export default log
+export {log}

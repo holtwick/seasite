@@ -40,7 +40,7 @@ export function meta(gopt: Object = {}) {
         }
 
         // Language
-        if (!opt.lang) {
+        if (opt.lang) {
             $('html').attr('lang', opt.lang)
             // $('head').append(<link rel="alternate" hreflang="de" href="/help_de/index.html"/>)
         }
@@ -55,10 +55,10 @@ export function meta(gopt: Object = {}) {
         }
 
         // Description
-        if (opt.description) {
+        if (opt.description || opt.desc) {
             $('meta[name="description"]').remove()
             $('meta[property="og:description"]').remove()
-            $('head').append(<meta name='description' property="og:description" content={opt.description}/>)
+            $('head').append(<meta name='description' property="og:description" content={opt.description || opt.desc}/>)
         }
 
         // Keywords

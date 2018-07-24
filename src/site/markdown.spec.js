@@ -15,12 +15,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {parseMarkdown} from './markdown'
+import {markdown} from './markdown'
 
 describe('Markdown', () => {
 
     it('parses correctly', () => {
-        let r = parseMarkdown('Hello **world**')
+        let r = markdown('Hello **world**')
         expect(r).toEqual({
             'content': 'Hello **world**',
             'html': '<p>Hello <strong>world</strong></p>\n',
@@ -29,7 +29,7 @@ describe('Markdown', () => {
     })
 
     it('parses properties', () => {
-        let r = parseMarkdown(`---
+        let r = markdown(`---
 title: One World
 ---
 

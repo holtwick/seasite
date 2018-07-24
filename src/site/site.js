@@ -21,12 +21,12 @@
 const fs = require('fs')
 const fsx = require('fs-extra')
 const path = require('path')
-const process = require('process')
 
 import {dom, isDOM} from './dom'
-import {jsx, prependXMLIdentifier} from './jsx'
-// import {absoluteLinks} from './relativeurls'
+import {jsx} from './jsx'
 import {rmdir, mkdir, walkSync} from './fileutil'
+
+import log from '../log'
 
 type SeaSitePattern = string | RegExp | Array<string | RegExp>
 
@@ -41,28 +41,39 @@ export function isPattern(pattern: ?SeaSitePattern): boolean {
 }
 
 export function pathMatchesPatterns(path: string, patterns: SeaSitePattern): boolean {
-    if (!Array.isArray(patterns)) {
-        patterns = [patterns]
-    }
-    for (let pattern of patterns) {
-        if (typeof pattern === 'string') {
-            if (pattern[pattern.length - 1] === '/') {
-                if (path.indexOf(pattern) === 0) {
+    let result = (() => {
+        if (!Array.isArray(patterns)) {
+            patterns = [patterns]
+        }
+        for (let pattern of patterns) {
+            if (typeof pattern === 'string') {
+
+                // Strip leading /
+                if (pattern.indexOf('/') === 0) {
+                    pattern = pattern.substring(1)
+                }
+
+                // Match folder ?
+                if (pattern[pattern.length - 1] === '/') {
+                    if (path.indexOf(pattern) === 0) {
+                        return true
+                    }
+                }
+                else if (path === pattern) {
                     return true
                 }
             }
-            else if (path === pattern) {
-                return true
+            else if (pattern instanceof RegExp) {
+                pattern.lastIndex = 0
+                if (pattern.test(path)) {
+                    return true
+                }
             }
         }
-        else if (pattern instanceof RegExp) {
-            pattern.lastIndex = 0
-            if (pattern.test(path)) {
-                return true
-            }
-        }
-    }
-    return false
+        return false
+    })()
+    // log.info(result, path, patterns)
+    return result
 }
 
 export function filterByPatterns(paths: ?Array<string>, patterns: ?SeaSitePattern, exclude: ?SeaSitePattern): Array<string> {
@@ -86,12 +97,17 @@ export class SeaSite {
 
     opt: Object
     basePath: string
+    log: Function
 
     constructor(srcPath: string, basePath: ?string = null, opt: Object = {
         excludePatterns: null,
         includePatterns: null,
         baseURL: '',
     }) {
+
+        log.setLevel(opt.logLevel || log.INFO)
+        this.log = log
+
         this.opt = opt
         if (basePath == null) {
             this.basePath = srcPath
@@ -109,16 +125,18 @@ export class SeaSite {
             mkdir(basePath)
 
             // Copy site
-            this.log(`cloning ... ${srcPath} -> ${basePath}`)
+            log.info(`Site creation ... ${srcPath} -> ${basePath}`)
             for (let file of files) {
                 let src = path.join(srcPath, file)
                 let dst = path.join(basePath, file)
-                let data = fs.readFileSync(src)
                 mkdir(path.dirname(dst))
-                // this.log(`  cloned ... ${dst}`)
-                fs.writeFileSync(dst, data, {
-                    mode: 0o644,
-                })
+                fs.copyFileSync(src, dst)
+
+                // let data = fs.readFileSync(src)
+                // // log.debug(`  cloned ... ${dst}`)
+                // fs.writeFileSync(dst, data, {
+                //     mode: 0o644,
+                // })
             }
             //     // Paths
             //     let pages = [];
@@ -135,10 +153,6 @@ export class SeaSite {
             //         pages.push(page);
             //     }
         }
-    }
-
-    log(...args: Array<any>) {
-        console.log(...args)
     }
 
     // Paths
@@ -191,29 +205,32 @@ export class SeaSite {
     // File Actions
 
     move(fromPath: string, toPath: string) {
-        this.log(`move ... ${fromPath} -> ${toPath}`)
+        log.debug(`move ... ${fromPath} -> ${toPath}`)
         fs.renameSync(
             this.path(fromPath),
             this.path(toPath))
     }
 
     copy(fromPath: string, toPath: string) {
-        this.log(`copy ... ${fromPath} -> ${toPath}`)
+        log.debug(`copy ... ${fromPath} -> ${toPath}`)
         fs.copyFileSync(
             this.path(fromPath),
             this.path(toPath))
     }
 
     copyNPM(moduleName: string, fromRelativePath: string = '', toPath: string = 'npm') {
-        this.log(`copy npm module ${moduleName}/${fromRelativePath} -> ${toPath}`)
+        log.debug(`copy npm module ${moduleName}/${fromRelativePath} -> ${toPath}`)
         let p = require.resolve(moduleName, {
-            paths: [this.basePath]
+            paths: [process.cwd()],
         })
+        log.assert(!!p, `[site.copyNPM] Could not resolve module ${moduleName}`)
         let rx = /^.*\/node_modules\/[^\/]+/gi
         let m = rx.exec(p)
+        log.assert(!!m, `[site.copyNPM] Could not resolve main path ${p} / ${this.basePath}`)
         if (m) {
             p = m[0]
             p = path.join(p, fromRelativePath)
+            log.assert(fs.existsSync(p), `[site.copyNPM] Path ${p} does not exist`)
             let d = this.path(toPath)
             mkdir(d)
             fsx.copySync(
@@ -224,7 +241,7 @@ export class SeaSite {
 
     remove(pattern: SeaSitePattern) {
         for (let p of this.paths(pattern)) {
-            this.log(`remove ... ${p}`)
+            log.debug(`remove ... ${p}`)
             fs.unlinkSync(this.path(p))
         }
     }
@@ -239,7 +256,7 @@ export class SeaSite {
             let inPath = path.join(this.basePath, urlPath)
             return fs.readFileSync(inPath)
         } catch (ex) {
-            console.error('Failed to .read file:', urlPath)
+            log.error('Failed to .read file:', urlPath)
         }
         return null
     }
@@ -250,7 +267,7 @@ export class SeaSite {
         }
         let outPath = path.join(this.basePath, urlPath)
         mkdir(path.dirname(outPath))
-        this.log(`write ... ${outPath}`)
+        log.debug(`write ... ${outPath}`)
 
         if (typeof content !== 'string') {
             if (isDOM(content)) {
@@ -265,57 +282,82 @@ export class SeaSite {
     }
 
     // DEPRECATED:2018-02-23
-    writeDOM($: Function, urlPath: string, mode: ?string = null) {
-        let content
-        if (mode === 'xml') {
-            content = prependXMLIdentifier($.xml())
-            // HACK:dholtwick:2016-08-23 Workaround cheerio bug
-            content = content.replace(/<!--\[CDATA\[>([\s\S]*?)]]-->/g, '<![CDATA[$1]]>')
-        } else {
-            // absoluteLinks($, '/' + urlPath)
-            content = $.html()
+    writeDOM($: Function, urlPath: string, opt: ?any) {
+        let markup:string
+
+        try {
+            markup = $.markup(opt)
+        } catch (e) {
+            log.error('Problem writing to', urlPath, 'with', $)
+            throw e
         }
 
-        // Strip comments
-        // TODO:2018-02-23 migrate!
-        content = content.replace(/<!--(.*?)-->/g, '')
-
-        // this.log($.html());
-        this.write(urlPath, content)
+        // log.debug($.html());
+        this.write(urlPath, markup)
     }
 
     handle(pattern: SeaSitePattern | Object, handler: (any, string) => ?any) {
+        // let urlPaths = []
+        // if (typeof pattern === 'string') {
+        //     urlPaths = [pattern]
+        // } else {
         let urlPaths = this.paths(pattern)
+        if (!urlPaths || urlPaths.length <= 0) {
+            log.warn('Did not match any file for', pattern)
+        }
+        // }
+
         for (let urlPath of urlPaths) {
-            // this.log(`handle ... ${urlPath}`)
-            let content = this.read(urlPath) || ''
+            log.debug(`handle ... ${urlPath}`)
+
+            let content = ''
+            if (this.exists(urlPath)) {
+                content = this.read(urlPath)
+            }
+
+            let result = {
+                path: urlPath,
+                mode: null,
+                content: null,
+                ignore: false,
+            }
+
+            let ret = null
             if (/\.(html?|xml)$/i.test(urlPath)) {
                 let xmlMode = /\.xml$/i.test(urlPath)
-                // let normalizeWhitespace = false
                 let $ = dom(content, {xmlMode})
-                let ret = handler($, urlPath)
-                if (ret !== false) {
-                    if (typeof ret === 'string' && ret !== 'xml') {
-                        this.write(urlPath, ret)
-                    } else {
-                        this.writeDOM($, urlPath, ret)
-                    }
-                }
+                result.content = $
+                ret = handler($, urlPath)
             } else {
-                let ret = handler(content, urlPath)
-                if (ret !== false && ret != null) {
-                    this.write(urlPath, ret)
+                result.content = content
+                ret = handler(content, urlPath)
+            }
+
+            if (ret !== false) {
+                if (typeof ret === 'string') {
+                    ret = {content: ret}
+                }
+                ret = ret || result || {}
+                if (ret.ignore !== true) {
+                    let p = ret.path || urlPath
+                    let content = ret.content || result.content
+                    if (isDOM(content)) {
+                        this.writeDOM(content, p)
+                    } else if (content) {
+                        this.write(p, content)
+                    } else {
+                        log.error('Unknow content type for', p, '=>', content)
+                    }
                 }
             }
         }
     }
-
 }
 
 process.on('unhandledRejection', function (reason, p) {
-    console.log('Possibly Unhandled Rejection at: Promise ', p, ' reason: ', reason)
+    log.warn('Possibly Unhandled Rejection at: Promise ', p, ' reason: ', reason)
 })
 
 process.on('handledRejection', function (reason, p) {
-    console.log('Possibly Unhandled Rejection at: Promise ', p, ' reason: ', reason)
+    log.warn('Possibly Unhandled Rejection at: Promise ', p, ' reason: ', reason)
 })

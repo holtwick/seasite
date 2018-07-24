@@ -17,12 +17,16 @@
 
 // @flow
 
+import log from '../log'
+
 // Support for Google Analytics integration, respecting do not track
 
 export function googleAnalytics(key:string) {
     return ($:Function) => {
         // https://developers.google.com/analytics/devguides/collection/gtagjs/
         // Avoid document.write https://developers.google.com/web/tools/lighthouse/audits/document-write
+
+        log.assert(key, '[plugin.ga] key required')
 
         $('body').append(`<script> 
 var disableStr = 'ga-disable-${key}';

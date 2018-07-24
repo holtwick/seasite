@@ -24,7 +24,7 @@ import {join} from 'path'
 import {existsSync} from 'fs'
 
 const OPT = {
-    videoTitle: 'Served by youtube.com',
+    videoTitle: 'Video is provided by youtube.com',
 }
 
 export function youtube(gopt: Object = {}) {
@@ -41,31 +41,38 @@ export function youtube(gopt: Object = {}) {
                 let iframe = $(el)
                 let src = iframe.attr('src')
                 let m = /^https:\/\/www.youtube.com\/embed\/(.*?)$/.exec(src)
-                let key = m[1]
-                if (key && key.length) {
-                    let root = iframe
-                    let div = iframe.parent('div.embed-video-container,div.embed-responsive')
-                    if (div.html()) {
-                        root = div
-                    }
-                    let staticLink = `https://youtu.be/${key}`
-                    let onClick = `this.parentNode.innerHTML = '<iframe src="https://www.youtube.com/embed/${key}?autoplay=1" frameBorder="0" allowFullScreen class="embed-responsive-item"></iframe>'; return false;`
-                    root.replaceWith(
-                        <div className="video-wrapper embed-video-container embed-responsive embed-responsive-16by9">
-                            <a href={staticLink} onClick={onClick}>
-                                <img src={`https://i.ytimg.com/vi/${key}/0.jpg`} width="100%"
-                                     className='youtube-placeholder'/>
-                            </a>
-                            <div className="video-overlay-content">
-                                <div className="video-overlay-inner">
-                                    <svg className="video-overlay-play-button" viewBox="0 0 200 200" alt="Play video">
-                                        <circle cx="100" cy="100" r="90" fill="none" stroke-width="15" stroke="#fff"/>
-                                        <polygon points="70, 55 70, 145 145, 100" fill="#fff"/>
-                                    </svg>
-                                    <div>{opt.videoTitle}</div>
+                if (m && m.length) {
+                    let key = m[1]
+                    if (key && key.length) {
+                        let root = iframe
+                        let div = iframe.parent('div.embed-video-container,div.embed-responsive')
+                        if (div.html()) {
+                            root = div
+                        }
+                        let staticLink = `https://youtu.be/${key}`
+                        let onClick = `this.parentNode.innerHTML = '<iframe src="https://www.youtube.com/embed/${key}?autoplay=1" frameBorder="0" allowFullScreen class="embed-responsive-item"></iframe>'; return false;`
+                        let thumbnailURL = `https://i.ytimg.com/vi/${key}/0.jpg`
+                        root.replaceWith(
+                            <div
+                                className="video-wrapper embed-video-container embed-responsive embed-responsive-16by9">
+                                <a href={staticLink} onClick={onClick}
+                                   style={`background-image:url("${thumbnailURL}");`}>
+                                    {/*<img src={`https://i.ytimg.com/vi/${key}/0.jpg`} width="100%"*/}
+                                    {/*className='youtube-placeholder embed-responsive-item'/>*/}
+                                </a>
+                                <div className="video-overlay-content">
+                                    <div className="video-overlay-inner">
+                                        <svg className="video-overlay-play-button" viewBox="0 0 200 200"
+                                             alt="Play video">
+                                            <circle cx="100" cy="100" r="90" fill="none" stroke-width="15"
+                                                    stroke="#fff"/>
+                                            <polygon points="70, 55 70, 145 145, 100" fill="#fff"/>
+                                        </svg>
+                                        <div>{opt.videoTitle}</div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>)
+                            </div>)
+                    }
                 }
             })
         }
