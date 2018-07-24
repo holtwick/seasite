@@ -76,15 +76,30 @@ export function dom(value: string | Buffer | Function, opt: Object = {
         $.root().empty().html($.load(html).root())
     }
 
-    $.markup = function () {
+    $.markup = function (opt? = {
+        stripComments: true,
+        stripPHP: false
+    }) {
+        let markup:string
         if ($.xmlMode) {
-            return '<?xml version="1.0" encoding="utf-8"?>\n' + $.xml()
+            markup = '<?xml version="1.0" encoding="utf-8"?>\n' + $.xml()
         }
-        let html = $.html()
-        if (html.trim().toLowerCase().indexOf('<!doctype ') !== 0) {
-            return '<!doctype html>\n' + html
+        else {
+            markup = $.html()
+            if (markup.trim().toLowerCase().indexOf('<!doctype ') !== 0) {
+                markup = '<!doctype html>\n' + markup
+            }
         }
-        return html
+
+        if (!opt.stripPHP) {
+            markup = markup.replace(/<!--\?(php)?(.*?)\?-->/g, '<?php $2 ?>')
+        }
+
+        if (opt.stripComments) {
+            markup = markup.replace(/<!--(.*?)-->/g, '')
+        }
+
+        return markup
     }
 
     $.bodyMarkup = function () {

@@ -381,10 +381,7 @@ If an element has a `data-lang` attribute it will be removed if it does not matc
 
 ### plugin.tidy(opt) {#plugin.tidy}
 
-Cleans up the markup a little bit:
-
-- Removes comments
-- Adds `\n` to end of common block and non closing elements 
+Adds `\n` to end of common block and non closing elements to make it more readable. 
 
 ### plugin.youtube(opt)
 

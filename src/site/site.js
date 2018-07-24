@@ -278,17 +278,18 @@ export class SeaSite {
     }
 
     // DEPRECATED:2018-02-23
-    writeDOM($: Function, urlPath: string) {
-        let content
+    writeDOM($: Function, urlPath: string, opt: ?any) {
+        let markup:string
 
         try {
-            content = $.markup()
+            markup = $.markup(opt)
         } catch (e) {
             log.error('Problem writing to', urlPath, 'with', $)
             throw e
         }
+
         // log.debug($.html());
-        this.write(urlPath, content)
+        this.write(urlPath, markup)
     }
 
     handle(pattern: SeaSitePattern | Object, handler: (any, string) => ?any) {
