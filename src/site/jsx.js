@@ -27,6 +27,7 @@ export function escapeHTML(s) {
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
+        .replace(/'/g, '&apos;')
         .replace(/"/g, '&quot;')
 }
 
@@ -35,6 +36,7 @@ export function unescapeHTML(s) {
         .replace(/&lt;/gi, '<')
         .replace(/&gt;/gi, '>')
         .replace(/&quot;/gi, '"')
+        .replace(/&apos;/gi, '\'')
         .replace(/&amp;/gi, '&')
 }
 

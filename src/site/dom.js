@@ -20,7 +20,7 @@
 
 const cheerio = require('cheerio')
 
-import {HTML} from './jsx'
+import {HTML, unescapeHTML} from './jsx'
 import log from '../log'
 
 export function isDOM(obj: any): boolean {
@@ -36,6 +36,11 @@ export function toString(obj: any): string {
         }
     }
     return (obj || '').toString()
+}
+
+interface MarkupOptions {
+    stripComments?: boolean;
+    stripPHP?: boolean;
 }
 
 export function dom(value: string | Buffer | Function, opt: Object = {
@@ -76,11 +81,26 @@ export function dom(value: string | Buffer | Function, opt: Object = {
         $.root().empty().html($.load(html).root())
     }
 
-    $.markup = function (opt? = {
+    function postProcessMarkup(markup: string, opt: ?MarkupOptions = {
         stripComments: true,
-        stripPHP: false
+        stripPHP: false,
     }) {
-        let markup:string
+        if (opt) {
+            if (!opt.stripPHP) {
+                markup = markup.replace(/&lt;\?(php)?([\s\S]*?)\??&gt;/g, (m, p1, p2) => `<?php${unescapeHTML(p2)}?>`)
+                markup = markup.replace(/%3C\?(php)?([\s\S]*?)\?%3E/g, (m, p1, p2) => `<?php${decodeURIComponent(p2)}?>`)
+                markup = markup.replace(/<!--\?(php)?([\s\S]*?)\?-->/g, '<?php$2?>')
+            }
+
+            if (opt.stripComments) {
+                markup = markup.replace(/<!--([\s\S]*?)-->/g, '')
+            }
+        }
+        return markup
+    }
+
+    $.markup = function (opt: ?MarkupOptions) {
+        let markup: string
         if ($.xmlMode) {
             markup = '<?xml version="1.0" encoding="utf-8"?>\n' + $.xml()
         }
@@ -90,21 +110,12 @@ export function dom(value: string | Buffer | Function, opt: Object = {
                 markup = '<!doctype html>\n' + markup
             }
         }
-
-        if (!opt.stripPHP) {
-            markup = markup.replace(/%3C\?(php)?([\s\S]*?)\?%3E/g, (m, p1 , p2) => `<?php${decodeURIComponent(p2)}?>`)
-            markup = markup.replace(/<!--\?(php)?([\s\S]*?)\?-->/g, '<?php$2?>')
-        }
-
-        if (opt.stripComments) {
-            markup = markup.replace(/<!--([\s\S]*?)-->/g, '')
-        }
-
-        return markup
+        return postProcessMarkup(markup, opt)
     }
 
-    $.bodyMarkup = function () {
-        return $.xmlMode ? $.xml() : $('body').html()
+    $.bodyMarkup = function (opt: ?MarkupOptions) {
+        let markup = $.xmlMode ? $.xml() : $('body').html()
+        return postProcessMarkup(markup, opt)
     }
 
     // Fix for cheerio bug

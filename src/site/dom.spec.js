@@ -48,9 +48,15 @@ describe('DOM', () => {
     })
 
     it('should decode URI for PHP', () => {
-        const sample = "/buy-fallback?coupon=%3C?%20echo%20$_GET[%27coupon%27]);?%3E";
-        let markup = sample.replace(/%3C\?(php)?(.*?)\?%3E/g, (m, p1 , p2) => `<?php${decodeURIComponent(p2)}?>`)
-        expect(markup).toBe("/buy-fallback?coupon=<?php echo $_GET['coupon']);?>")
+        const sample = '/buy-fallback?coupon=%3C?%20echo%20$_GET[%27coupon%27]);?%3E'
+        let markup = sample.replace(/%3C\?(php)?(.*?)\?%3E/g, (m, p1, p2) => `<?php${decodeURIComponent(p2)}?>`)
+        expect(markup).toBe('/buy-fallback?coupon=<?php echo $_GET[\'coupon\']);?>')
+    })
+
+    it('should decode HTML for PHP', () => {
+        const sample = '<a href="?coupon=&lt;?php echo $_GET[&apos;coupon&apos;] ?? &apos;&apos;;?&gt;">Buy</a>'
+        const markup = html(sample).bodyMarkup()
+        expect(markup).toBe('<a href="?coupon=<?php echo $_GET[\'coupon\'] ?? \'\';?>">Buy</a>')
     })
 
 })
