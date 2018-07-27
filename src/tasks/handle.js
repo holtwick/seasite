@@ -53,9 +53,13 @@ export function handle(site: SeaSite, gopt: Object = {}): Array<Object> {
             $.applyPlugins(plugins, opt)
         }
 
-        if (!opt.handler || opt.handler($, path) === false) {
+        if (!opt.handler) {
             log.warn('[task.handle] Will not write', path)
             return false // don't write
+        }
+
+        if (opt.handler($, path) === false) {
+            return false
         }
 
         pages.push(opt)

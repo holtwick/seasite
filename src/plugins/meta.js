@@ -45,6 +45,13 @@ export function meta(gopt: Object = {}) {
             // $('head').append(<link rel="alternate" hreflang="de" href="/help_de/index.html"/>)
         }
 
+        // Alternate
+        if (opt.alternate) {
+            for (let lang of Object.keys(opt.alternate)) {
+                $('head').append(<link rel="alternate" hrefLang={lang} href={opt.alternate[lang]}/>)
+            }
+        }
+
         // Title
         if (opt.title) {
             $('title').text(opt.title)
