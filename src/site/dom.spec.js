@@ -59,4 +59,17 @@ describe('DOM', () => {
         expect(markup).toBe('<a href="?coupon=<?php echo $_GET[\'coupon\'] ?? \'\';?>">Buy</a>')
     })
 
+    it('should ignore script contents', () => {
+        const sample =
+            <div>'Test'
+                <script>{`
+                document.getElementById('disqus_thread').style.display = 'block'
+                `}</script>
+            </div>
+        expect(sample).toBe(`<div>&apos;Test&apos;<script>
+                document.getElementById('disqus_thread').style.display = 'block'
+                </script></div>`)
+    })
+
+
 })
