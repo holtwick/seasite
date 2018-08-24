@@ -47,6 +47,8 @@ export function dom(value: string | Buffer | Function, opt: Object = {
     normalizeWhitespace: true,
 }): Function {
 
+    const xmlMode = opt.xmlMode === true
+
     if (value instanceof Buffer) {
         value = value.toString('utf8')
     }
@@ -54,6 +56,9 @@ export function dom(value: string | Buffer | Function, opt: Object = {
     if (!isDOM(value)) {
         if (typeof value !== 'string') {
             value = ''
+        } else if (!xmlMode) {
+            // Fix non closing tags
+            value = value.replace(/<\/(area|base|br|col|embed|hr|img|input|keygen|link|meta|param|source|track|wbr)>/gi, '')
         }
         value = cheerio.load(value, opt)
     }
@@ -61,7 +66,7 @@ export function dom(value: string | Buffer | Function, opt: Object = {
     // FLOW:2018-02-23
     let $: Function = value
 
-    $.xmlMode = opt.xmlMode === true
+    $.xmlMode = xmlMode
 
     $.applyPlugins = function (plugins: Array<Function>, ...opts) {
         for (let plugin of plugins) {
