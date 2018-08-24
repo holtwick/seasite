@@ -23,7 +23,7 @@ import {jsx} from '../site/jsx'
 import {statSync, existsSync} from 'fs'
 
 let defaults = {
-    folder: 'blog',
+    folder: 'release',
     pattern: null,
 }
 

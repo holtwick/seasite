@@ -27,6 +27,7 @@ export function escapeHTML(s) {
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
+        .replace(/'/g, '&apos;')
         .replace(/"/g, '&quot;')
 }
 
@@ -35,6 +36,7 @@ export function unescapeHTML(s) {
         .replace(/&lt;/gi, '<')
         .replace(/&gt;/gi, '>')
         .replace(/&quot;/gi, '"')
+        .replace(/&apos;/gi, '\'')
         .replace(/&amp;/gi, '&')
 }
 
@@ -111,7 +113,7 @@ export function jsx(tag, attrs, ...children) {
                 child = [child]
             }
             for (let c of child) {
-                if (USED_JSX.indexOf(c) !== -1) {
+                if (USED_JSX.indexOf(c) !== -1 || tag === 'script' || tag === 'style') {
                     s += c
                 } else {
                     if (isDOM(c)) {

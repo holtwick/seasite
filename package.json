@@ -1,6 +1,6 @@
 {
   "name": "seasite",
-  "version": "0.4.2",
+  "version": "0.4.11",
   "description": "Static Site Builder",
   "main": "lib/index.js",
   "scripts": {
@@ -24,19 +24,20 @@
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
-    "flow-bin": "^0.76.0"
+    "flow-bin": "^0.79.1"
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
+    "critical": "^1.3.4",
     "dateformat": "^3.0.3",
     "fs-extra": "^7.0.0",
     "highlight.js": "^9.12.0",
-    "html-minifier": "^3.5.18",
+    "html-minifier": "^3.5.20",
     "image-size": "^0.6.2",
-    "jest": "^23.1.0",
-    "less": "^3.7.0",
+    "jest": "^23.5.0",
+    "less": "^3.8.1",
     "lodash": "^4.17.10",
-    "marked": "^0.4.0",
+    "marked": "^0.5.0",
     "uglify-js": "^3.4.0",
     "uglifycss": "0.0.29",
     "yamljs": "^0.3.0",
