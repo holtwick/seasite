@@ -48,10 +48,12 @@ export function disqus(gopt: Object = {}) {
                 <div id="disqus_thread" style="display: none;">
                     <blockquote>
                         <p>
-                            The comment functionality is provided by <a href="https://disqus.com">Disqus</a>. Learn
-                            more about it in our <a href={opt.privacyURL}>Privacy Policy</a>.
+                            The comment functionality is provided by <a href="https://disqus.com">Disqus</a>.
+                            <br/>
+                            Learn more about it in our <a href={opt.privacyURL}>Privacy Policy</a>.
                         </p>
                         <p>
+                            <br/>
                             <button onClick="showComments();return false;" className="btn btn-default">
                                 Open Comments
                             </button>
