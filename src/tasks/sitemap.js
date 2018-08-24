@@ -39,5 +39,7 @@ export function sitemap(site: SeaSite, opt: Object = {}) {
     sitemap.sort()
     site.write('sitemap.txt', sitemap.join('\n'))
 
-    site.write('robots.txt', `User-agent: *\nSitemap: ${site.publicURL('sitemap.txt')}`)
+    if (!site.exists('robots.txt')) {
+        site.write('robots.txt', `User-agent: *\nSitemap: ${site.publicURL('sitemap.txt')}`)
+    }
 }
