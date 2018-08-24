@@ -20,7 +20,7 @@
 
 import {jsx} from './jsx'
 import {dom, xml, html} from './dom'
-import {example} from '../plugins/index'
+import {example, tidy} from '../plugins/index'
 
 describe('DOM', () => {
 
@@ -57,6 +57,29 @@ describe('DOM', () => {
         const sample = '<a href="?coupon=&lt;?php echo $_GET[&apos;coupon&apos;] ?? &apos;&apos;;?&gt;">Buy</a>'
         const markup = html(sample).bodyMarkup()
         expect(markup).toBe('<a href="?coupon=<?php echo $_GET[\'coupon\'] ?? \'\';?>">Buy</a>')
+    })
+
+    it('should not duplicate <br>', () => {
+        const sample = <div>A <br/> B </div>
+        expect(sample).toBe(`<div>A <br></br> B </div>`)
+        let $ = html(sample)
+        expect($.bodyMarkup()).toBe(`<div>A <br> B </div>`)
+        $.reload('<div>A <br/> C </div>')
+        expect($.bodyMarkup()).toBe(`<div>A <br> C </div>`)
+        // $.applyPlugins([tidy()])
+        // expect($.bodyMarkup()).toBe(`<div>A <br>\n C </div>\n`)
+
+        $('div').html(<b>X<br/>Y</b>)
+        expect($.bodyMarkup()).toBe(`<div><b>X<br>Y</b></div>`)
+    })
+
+    it('should understand different input types', () => {
+        const sample = <div>lorem</div>
+        expect(sample).toBe(`<div>lorem</div>`)
+        expect(html(sample).bodyMarkup()).toBe(`<div>lorem</div>`)
+        expect(html(Buffer.from(sample)).bodyMarkup()).toBe(`<div>lorem</div>`)
+        expect(html(html(sample)).bodyMarkup()).toBe(`<div>lorem</div>`)
+        expect(html(new Date()).bodyMarkup()).toBe(``)
     })
 
 })

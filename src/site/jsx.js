@@ -113,7 +113,7 @@ export function jsx(tag, attrs, ...children) {
                 child = [child]
             }
             for (let c of child) {
-                if (USED_JSX.indexOf(c) !== -1) {
+                if (USED_JSX.indexOf(c) !== -1 || tag === 'script' || tag === 'style') {
                     s += c
                 } else {
                     if (isDOM(c)) {

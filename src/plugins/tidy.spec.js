@@ -15,18 +15,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @flow
+// (C)opyright Dirk Holtwick, 2017-01-19 <dirk.holtwick@gmail.com>
+// @jsx jsx
 
-const defaults = {}
+import {jsx} from '../site/jsx'
+import {dom, xml, html} from '../site/dom'
+import {tidy} from '../plugins/tidy'
 
-export function tidy(gopt: Object = {}) {
-    gopt = Object.assign({}, defaults, gopt)
+describe('pugin.tidy', () => {
 
-    return ($: Function, opt: Object = {}) => {
-        let html = $.html()
-        html = html.replace(/(<(meta|link|script|img|hr|br)[^>]*>)(\s*\n)*/gi, '$1\n')
-        html = html.replace(/(<\/(p|h1|h2|h3|h4|h5|h6|blockquote|div|ul|ol|li|article|section|footer)>)(\s*\n)*/gi, '$1\n')
-        $.reload(html)
-    }
+    it('should add breaks', () => {
+        const sample = <div>A <br/> B </div>
+        let $ = html(sample)
+        $.applyPlugins([tidy()])
+        expect($.bodyMarkup()).toBe(`<div>A <br>\n B </div>\n`)
+    })
 
-}
+})

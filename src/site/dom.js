@@ -20,6 +20,29 @@
 
 const cheerio = require('cheerio')
 
+{
+    let originalHtmlFn = cheerio.prototype.html;
+    cheerio.prototype.html = function (value) {
+        // console.log('[cheerio.html]', value)
+        if (typeof value === 'string') {
+            value = fixNonClosingTags(value)
+        }
+        return originalHtmlFn.call(this, value)
+    }
+}
+
+{
+    let originalHtmlFn = cheerio.prototype.replaceWith;
+    cheerio.prototype.replaceWith = function (value) {
+        // console.log('[cheerio.html]', value)
+        if (typeof value === 'string') {
+            value = fixNonClosingTags(value)
+        }
+        return originalHtmlFn.call(this, value)
+    }
+}
+
+
 import {HTML, unescapeHTML} from './jsx'
 import log from '../log'
 
@@ -43,9 +66,15 @@ interface MarkupOptions {
     stripPHP?: boolean;
 }
 
+function fixNonClosingTags(value) {
+    return value.replace(/<\/(area|base|br|col|embed|hr|img|input|keygen|link|meta|param|source|track|wbr)>/gi, '')
+}
+
 export function dom(value: string | Buffer | Function, opt: Object = {
     normalizeWhitespace: true,
 }): Function {
+
+    const xmlMode = opt.xmlMode === true
 
     if (value instanceof Buffer) {
         value = value.toString('utf8')
@@ -54,6 +83,8 @@ export function dom(value: string | Buffer | Function, opt: Object = {
     if (!isDOM(value)) {
         if (typeof value !== 'string') {
             value = ''
+        } else if (!xmlMode) {
+            value = fixNonClosingTags(value)
         }
         value = cheerio.load(value, opt)
     }
@@ -61,7 +92,7 @@ export function dom(value: string | Buffer | Function, opt: Object = {
     // FLOW:2018-02-23
     let $: Function = value
 
-    $.xmlMode = opt.xmlMode === true
+    $.xmlMode = xmlMode
 
     $.applyPlugins = function (plugins: Array<Function>, ...opts) {
         for (let plugin of plugins) {
