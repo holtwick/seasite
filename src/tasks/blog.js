@@ -72,11 +72,10 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
             return
         }
 
+        // Extract the date from the filename, format: 2018-08-31-title
         let m = /(\d\d\d\d)-(\d\d)-(\d\d)/.exec(path)
-        site.log.info('[m.]', path, m)
         if (m) {
             date = new Date(+m[1], +m[2] - 1, +m[3], 12, 0)
-            site.log.info('date', date)
         }
 
         // Get date from file systemproperties
@@ -85,6 +84,7 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
             date = stat.mtime
         }
 
+        // Identify newest date
         if (!maxDate || maxDate.getTime() < date.getTime()) {
             maxDate = date
         }
