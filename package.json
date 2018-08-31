@@ -1,6 +1,6 @@
 {
   "name": "seasite",
-  "version": "0.4.15",
+  "version": "0.5.0",
   "description": "Static Site Builder",
   "main": "lib/index.js",
   "scripts": {
@@ -9,7 +9,9 @@
     "watch": "babel src --watch -d lib",
     "test": "jest src",
     "docs": "(cd example && npm run production)",
-    "prepare": "npm run build && npm version patch -m 'Upgrade to %s'"
+    "prepare": "npm run build",
+    "postpublish": "npm version patch -m 'Upgrade to %s'",
+    "postinstall": "npm link"
   },
   "bin": {
     "seasite": "lib/cli.js"
@@ -21,12 +23,16 @@
     "url": "https://github.com/holtwick/seasite.git"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
-    "flow-bin": "^0.79.1"
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-flow": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/plugin-proposal-class-properties": "^7.0.0",
+    "flow-bin": "^0.80.0"
   },
   "dependencies": {
+    "babel-core": "^7.0.0-bridge.0",
     "cheerio": "^1.0.0-rc.2",
     "critical": "^1.3.4",
     "dateformat": "^3.0.3",
