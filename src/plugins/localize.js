@@ -86,6 +86,7 @@ export function localize(gopt: Object = {}) {
 
             // On element level
             $(`*[data-lang]:not([data-lang=${lang}])`).remove()
+            $(`*[data-lang]`).removeAttr('data-lang')
         }
     }
 
