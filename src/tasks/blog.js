@@ -72,12 +72,22 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
             return
         }
 
-        // Extract the date from the filename, format: 2018-08-31-title
-        let m = /(\d\d\d\d)-(\d\d)-(\d\d)/.exec(path)
-        if (m) {
-            date = new Date(+m[1], +m[2] - 1, +m[3], 12, 0)
+        // Extract the date from the Markdown property string
+        if (typeof date === 'string') {
+            let m = /(\d\d\d\d)-(\d\d)-(\d\d)/.exec(date)
+            if (m) {
+                date = new Date(+m[1], +m[2] - 1, +m[3], 12, 0)
+            }
         }
 
+        // Extract the date from the filename, format: 2018-08-31-title
+        if (!date) {
+            let m = /(\d\d\d\d)-(\d\d)-(\d\d)/.exec(path)
+            if (m) {
+                date = new Date(+m[1], +m[2] - 1, +m[3], 12, 0)
+            }
+        }
+ 
         // Get date from file systemproperties
         if (!date) {
             const stat = statSync(site.path(path)) || {}
@@ -85,8 +95,13 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
         }
 
         // Identify newest date
-        if (!maxDate || maxDate.getTime() < date.getTime()) {
-            maxDate = date
+        try {
+            if (!date || !maxDate || maxDate.getTime() < date.getTime()) {
+                maxDate = date
+            }
+        }
+        catch (e) {
+            site.log.error(e.toString(), date.constructor.name)
         }
 
         entries.push({
