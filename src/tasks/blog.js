@@ -18,6 +18,7 @@
 // @flow
 // @jsx jsx
 
+import {statSync} from 'fs'
 import {SeaSite, parseMarkdown, dom, xml} from '../index'
 import {pathMatchesPatterns} from '../site'
 import {jsx} from '../site/jsx'
@@ -54,11 +55,13 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
         opt.pattern = new RegExp(opt.folder + '\/.*\.md$')
     }
 
+    let maxDate: ?Date
+
     // Collect post data
     site.handle(opt.pattern, (content, path) => {
 
         if (pathMatchesPatterns(path, opt.exclude)) {
-            return;
+            return
         }
 
         let md = parseMarkdown(content)
@@ -68,6 +71,24 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
         if (hidden || path.indexOf('/-') > 0) {
             return
         }
+
+        let m = /(\d\d\d\d)-(\d\d)-(\d\d)/.exec(path)
+        site.log.info('[m.]', path, m)
+        if (m) {
+            date = new Date(+m[1], +m[2] - 1, +m[3], 12, 0)
+            site.log.info('date', date)
+        }
+
+        // Get date from file systemproperties
+        if (!date) {
+            const stat = statSync(site.path(path)) || {}
+            date = stat.mtime
+        }
+
+        if (!maxDate || maxDate.getTime() < date.getTime()) {
+            maxDate = date
+        }
+
         entries.push({
             html,
             props,
@@ -76,6 +97,7 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
             hidden,
             path,
             htmlPath: pathToHTMLPath(path),
+            url: site.publicURL(pathToHTMLPath(path)),
         })
         return false
     })
@@ -92,7 +114,7 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
                 <description>{opt.description}</description>
                 <language>{opt.language}</language>
                 <copyright>{opt.copyright}</copyright>
-                <pubDate>{dateformat(new Date(), 'isoDateTime')}</pubDate>
+                <pubDate>{dateformat(maxDate || new Date(), 'isoDateTime')}</pubDate>
             </channel>
         </rss>)
     for (let post of entries) {
