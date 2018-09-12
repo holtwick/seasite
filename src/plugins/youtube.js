@@ -40,7 +40,7 @@ export function youtube(gopt: Object = {}) {
             $('iframe[src]').each((i, el) => {
                 let iframe = $(el)
                 let src = iframe.attr('src')
-                let m = /^https:\/\/www.youtube.com\/embed\/(.*?)$/.exec(src)
+                let m = /^https:\/\/www.youtube(?:-nocookie)?.com\/embed\/(.*?)$/.exec(src)
                 if (m && m.length) {
                     let key = m[1]
                     if (key && key.length) {

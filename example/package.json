@@ -5,15 +5,17 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "start": "babel-node --presets=env,react index.js",
+    "start": "babel-node --presets=@babel/env,@babel/react index.js",
     "production": "npm start && cp -r dist/* ../../github/seasite-website/ && (cd ../../github/seasite-website/ && git commit -a -m Update && git push)"
   },
   "author": "Dirk Holtwick <dirk.holtwick@gmail.com>",
   "license": "GPLv3",
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/node": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
     "seasite": "^0.4.12"
   }
 }
