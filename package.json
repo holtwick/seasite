@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npm run watch",
     "build": "rm -rf lib && babel src -d lib",
-    "watch": "babel src --watch -d lib",
+    "watch": "babel src  --verbose --watch -d lib",
     "test": "jest src",
     "docs": "(cd example && npm run production)",
     "prepare": "npm run build",
@@ -24,10 +24,11 @@
   "devDependencies": {
     "@babel/cli": "^7.0.0",
     "@babel/core": "^7.0.0",
+    "@babel/plugin-proposal-class-properties": "^7.0.0",
+    "@babel/plugin-transform-runtime": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
-    "@babel/plugin-proposal-class-properties": "^7.0.0",
     "flow-bin": "^0.80.0"
   },
   "dependencies": {
