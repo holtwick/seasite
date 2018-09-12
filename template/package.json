@@ -5,12 +5,14 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "start": "babel-node --presets=env,react index.js"
+    "start": "babel-node --presets=@babel/env,@babel/react index.js"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-react": "^6.24.1",
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/node": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
     "seasite": "^0.4.12"
   },
   "dependencies": {}
