@@ -47,42 +47,74 @@ export function img(gopt: Object = {}) {
                     return
                 }
 
-                if (!isAbsoluteURL(src)) {
+                let srcset = img.attr('srcset')
+                if (srcset) {
+                    let images = srcset.split(',')
+                    let result = []
+                    for (let imgsrc of images) {
+                        let [src, scale] = imgsrc.trim().split(' ')
 
-                    // Get generic path to file location
-                    let p
-                    if (src[0] === '/') {
-                        src = src.substr(1)
-                        p = join(basePath, src)
-                    } else {
-                        p = join(basePath, path, '..', src)
-                    }
-
-                    // Does it exist?
-                    if (!existsSync(p)) {
-                        log.warn(`[plugin.image] Image at ${p} is referenced in ${path} but is missing!`)
-                        return
-                    }
-
-                    // Is there a higher resolution available? Use that.
-                    if (src.indexOf('@2x.') <= 0) {
-                        let p2 = p.replace(/\.([a-z0-9]+)$/, '@2x.$1')
-                        if (existsSync(p2)) {
-                            src = img.attr('src')
-                            src = src.replace(/\.([a-z0-9]+)$/, '@2x.$1')
-                            img.attr('src', src)
-                            p = p2
+                        let p
+                        if (src[0] === '/') {
+                            src = src.substr(1)
+                            p = join(basePath, src)
+                        } else {
+                            p = join(basePath, path, '..', src)
                         }
+
+                        // Does it exist?
+                        if (!existsSync(p)) {
+                            log.warn(`[plugin.image] Image at ${p} is referenced in ${path} but is missing!`)
+                            continue
+                        }
+
+                        result.push(`${src} ${scale}`)
                     }
 
-                    // Adjust the width and height for best experience
-                    if (!(img.attr('width') || img.attr('height'))) {
-                        let size = sizeOf(p)
-                        if (src.indexOf('@2x.') > 0) {
-                            size.width /= 2
-                            size.height /= 2
+                    srcset =  result.join(', ')
+                    // img.attr('srcset', srcset)
+                    // console.log('New src',result.join(', '))
+                }
+
+                else {
+
+                    if (!isAbsoluteURL(src)) {
+
+                        // Get generic path to file location
+                        let p
+                        if (src[0] === '/') {
+                            src = src.substr(1)
+                            p = join(basePath, src)
+                        } else {
+                            p = join(basePath, path, '..', src)
                         }
-                        img.attr('width', size.width.toString())
+
+                        // Does it exist?
+                        if (!existsSync(p)) {
+                            log.warn(`[plugin.image] Image at ${p} is referenced in ${path} but is missing!`)
+                            return
+                        }
+
+                        // Is there a higher resolution available? Use that.
+                        if (src.indexOf('@2x.') <= 0) {
+                            let p2 = p.replace(/\.([a-z0-9]+)$/, '@2x.$1')
+                            if (existsSync(p2)) {
+                                src = img.attr('src')
+                                src = src.replace(/\.([a-z0-9]+)$/, '@2x.$1')
+                                img.attr('src', src)
+                                p = p2
+                            }
+                        }
+
+                        // Adjust the width and height for best experience
+                        if (!(img.attr('width') || img.attr('height'))) {
+                            let size = sizeOf(p)
+                            if (src.indexOf('@2x.') > 0) {
+                                size.width /= 2
+                                size.height /= 2
+                            }
+                            img.attr('width', size.width.toString())
+                        }
                     }
                 }
 
