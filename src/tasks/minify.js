@@ -16,12 +16,36 @@
  */
 
 // @flow
+// @jsx jsx
 
 // https://github.com/mishoo/UglifyJS2
-// var UglifyJS = require("uglify-js");
 
-export function js() {
-    return ($: Function) => {
-        // var result = UglifyJS.minify(code);
+var UglifyJS = require("uglify-js");
+
+import {SeaSite} from '../site/site'
+import log from '../log'
+
+let defaults = {
+    jsopts: {},
+    cssopts: {},
+}
+
+export function minify(site: SeaSite, opt: Object = {}) {
+    opt = Object.assign({}, defaults, opt)
+
+    // log.info(opt.pattern, opt.exclude)
+    let sitemap = site
+        .paths(opt.pattern, opt.exclude)
+        .map(path => site.publicURL(path))
+
+
+
+            var result = UglifyJS.minify(code);
+
+    sitemap.sort()
+    site.write('sitemap.txt', sitemap.join('\n'))
+
+    if (!site.exists('robots.txt')) {
+        site.write('robots.txt', `User-agent: *\nSitemap: ${site.publicURL('sitemap.txt')}`)
     }
 }
