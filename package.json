@@ -29,7 +29,7 @@
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
-    "flow-bin": "^0.82.0"
+    "flow-bin": "^0.83.0"
   },
   "dependencies": {
     "@babel/runtime": "^7.1.2",
@@ -37,7 +37,7 @@
     "cheerio": "^1.0.0-rc.2",
     "dateformat": "^3.0.3",
     "fs-extra": "^7.0.0",
-    "highlight.js": "^9.12.0",
+    "highlight.js": "^9.13.1",
     "html-minifier": "^3.5.20",
     "image-size": "^0.6.2",
     "jest": "^23.6.0",
