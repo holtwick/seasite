@@ -94,6 +94,17 @@ export function handleLinks($, handle) {
             if (newHref) {
                 e.attr(info.attr, newHref)
             }
+
+            if (info.tag === 'img') {
+                let srcset = e.attr('srcset')
+                if (srcset) {
+                    srcset = srcset.split(',').map(line => {
+                        let [href, scale] = line.trim().split(/[ \t]+/)
+                        return `${handle(href)} ${scale}`
+                    }).join(', ')
+                    e.attr('srcset', srcset)
+                }
+            }
         })
     }
 }

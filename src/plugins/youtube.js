@@ -24,7 +24,7 @@ import {join} from 'path'
 import {existsSync} from 'fs'
 
 const OPT = {
-    videoTitle: 'Video is provided by youtube.com',
+    videoTitle: 'Play video',
 }
 
 export function youtube(gopt: Object = {}) {
@@ -55,17 +55,15 @@ export function youtube(gopt: Object = {}) {
                         root.replaceWith(
                             <div
                                 className="video-wrapper embed-video-container embed-responsive embed-responsive-16by9">
-                                <a href={staticLink} onClick={onClick}
-                                   style={`background-image:url("${thumbnailURL}");`}>
+                                <a href={staticLink} onClick={onClick} style={`background-image:url("${thumbnailURL}");`} title={opt.videoTitle}>
                                     {/*<img src={`https://i.ytimg.com/vi/${key}/0.jpg`} width="100%"*/}
                                     {/*className='youtube-placeholder embed-responsive-item'/>*/}
+                                    {opt.videoTitle}
                                 </a>
                                 <div className="video-overlay-content">
                                     <div className="video-overlay-inner">
-                                        <svg className="video-overlay-play-button" viewBox="0 0 200 200"
-                                             alt="Play video">
-                                            <circle cx="100" cy="100" r="90" fill="none" stroke-width="15"
-                                                    stroke="#fff"/>
+                                        <svg className="video-overlay-play-button" viewBox="0 0 200 200">
+                                            <circle cx="100" cy="100" r="90" fill="none" stroke-width="15" stroke="#fff"/>
                                             <polygon points="70, 55 70, 145 145, 100" fill="#fff"/>
                                         </svg>
                                         <div>{opt.videoTitle}</div>

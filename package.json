@@ -1,6 +1,6 @@
 {
   "name": "seasite",
-  "version": "0.5.1",
+  "version": "0.6.1",
   "description": "Static Site Builder",
   "main": "lib/index.js",
   "scripts": {
@@ -22,30 +22,31 @@
     "url": "https://github.com/holtwick/seasite.git"
   },
   "devDependencies": {
-    "@babel/cli": "^7.0.0",
-    "@babel/core": "^7.0.0",
-    "@babel/plugin-proposal-class-properties": "^7.0.0",
-    "@babel/plugin-transform-runtime": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.1.2",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/plugin-transform-runtime": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
-    "flow-bin": "^0.80.0"
+    "flow-bin": "^0.83.0"
   },
   "dependencies": {
+    "@babel/runtime": "^7.1.2",
     "babel-core": "^7.0.0-bridge.0",
     "cheerio": "^1.0.0-rc.2",
     "dateformat": "^3.0.3",
     "fs-extra": "^7.0.0",
-    "highlight.js": "^9.12.0",
+    "highlight.js": "^9.13.1",
     "html-minifier": "^3.5.20",
     "image-size": "^0.6.2",
-    "jest": "^23.5.0",
+    "jest": "^23.6.0",
     "less": "^3.8.1",
-    "lodash": "^4.17.10",
-    "marked": "^0.5.0",
+    "lodash": "^4.17.11",
+    "marked": "^0.5.1",
     "uglify-js": "^3.4.0",
     "uglifycss": "0.0.29",
     "yamljs": "^0.3.0",
-    "yargs": "^12.0.1"
+    "yargs": "^12.0.2"
   }
 }

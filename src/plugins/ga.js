@@ -47,6 +47,7 @@ if (!((window.navigator && window.navigator['doNotTrack'] == 1) || (document.coo
     
     var script = document.createElement('script');
     script.setAttribute('async', 'async');
+    script.setAttribute('defer', 'defer');
     script.setAttribute('src', "https://www.googletagmanager.com/gtag/js?id=${key}")
     document.body.appendChild(script)
 
