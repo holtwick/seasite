@@ -17,8 +17,11 @@
 
 // @flow
 
+// https://github.com/mishoo/UglifyJS2
+// var UglifyJS = require("uglify-js");
+
 export function js() {
     return ($: Function) => {
-
+        // var result = UglifyJS.minify(code);
     }
 }
