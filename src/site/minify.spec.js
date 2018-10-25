@@ -15,12 +15,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {minifyJS, minifyLESSAsync} from './minify'
+import {minifyJS, minifyLESS, minifyLESSAsync} from './minify'
 
 describe('Minify', () => {
 
-    it('should do LESS', async () => {
+    it('should do LESS Async', async () => {
         let r = await minifyLESSAsync('body { color: red } ')
+        expect(r).toEqual('body{color:red}')
+    })
+
+    it('should do LESS', () => {
+        let r = minifyLESS('body { color: red } ')
         expect(r).toEqual('body{color:red}')
     })
 

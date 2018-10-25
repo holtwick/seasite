@@ -25,8 +25,8 @@ var UglifyJS = require('uglify-js')
 var less = require('less')
 var LessPluginCleanCSS = require('less-plugin-clean-css')
 
-import {SeaSite} from '../site/site'
-import log from '../log'
+import {SeaSite} from './site'
+import log from '../log/index'
 
 let defaults = {}
 
@@ -38,31 +38,27 @@ export async function minifyLESSAsync(s: string) {
     return r.css
 }
 
+if (!less.renderSync) {
+    less.renderSync = function (input, options) {
+        if (!options || typeof options != 'object') options = {}
+        options.sync = true
+        var css
+        this.render(input, options, function (err, result) {
+            if (err) throw err
+            css = result.css
+        })
+        return css
+    }
+}
+
+export function minifyLESS(s: string) {
+    let cleanCSSPlugin = new LessPluginCleanCSS({advanced: true})
+    return less.renderSync(s, {
+        plugins: [cleanCSSPlugin],
+    })
+}
+
 export function minifyJS(s: string) {
     var result = UglifyJS.minify(s)
     return result.code
-}
-
-export function minify(site: SeaSite, opt: Object = {}) {
-    opt = Object.assign({}, defaults, opt)
-
-    // // log.info(opt.pattern, opt.exclude)
-    // let sitemap = site
-    //     .paths(opt.pattern, opt.exclude)
-    //     .map(path => site.publicURL(path))
-    //
-    //
-    // var result = UglifyJS.minify(code)
-    //
-    // sitemap.sort()
-    // site.write('sitemap.txt', sitemap.join('\n'))
-    //
-    // if (!site.exists('robots.txt')) {
-    //     site.write('robots.txt', `User-agent: *\nSitemap: ${site.publicURL('sitemap.txt')}`)
-    // }
-    //
-    // if (opt.mode === 'css') {
-    //
-    // }
-
 }
