@@ -20,32 +20,49 @@
 
 // https://github.com/mishoo/UglifyJS2
 
-var UglifyJS = require("uglify-js");
+var UglifyJS = require('uglify-js')
+
+var less = require('less')
+var LessPluginCleanCSS = require('less-plugin-clean-css')
 
 import {SeaSite} from '../site/site'
 import log from '../log'
 
-let defaults = {
-    jsopts: {},
-    cssopts: {},
+let defaults = {}
+
+export async function minifyLESSAsync(s: string) {
+    let cleanCSSPlugin = new LessPluginCleanCSS({advanced: true})
+    let r = await less.render(s, {
+        plugins: [cleanCSSPlugin],
+    })
+    return r.css
+}
+
+export function minifyJS(s: string) {
+    var result = UglifyJS.minify(s)
+    return result.code
 }
 
 export function minify(site: SeaSite, opt: Object = {}) {
     opt = Object.assign({}, defaults, opt)
 
-    // log.info(opt.pattern, opt.exclude)
-    let sitemap = site
-        .paths(opt.pattern, opt.exclude)
-        .map(path => site.publicURL(path))
+    // // log.info(opt.pattern, opt.exclude)
+    // let sitemap = site
+    //     .paths(opt.pattern, opt.exclude)
+    //     .map(path => site.publicURL(path))
+    //
+    //
+    // var result = UglifyJS.minify(code)
+    //
+    // sitemap.sort()
+    // site.write('sitemap.txt', sitemap.join('\n'))
+    //
+    // if (!site.exists('robots.txt')) {
+    //     site.write('robots.txt', `User-agent: *\nSitemap: ${site.publicURL('sitemap.txt')}`)
+    // }
+    //
+    // if (opt.mode === 'css') {
+    //
+    // }
 
-
-
-            var result = UglifyJS.minify(code);
-
-    sitemap.sort()
-    site.write('sitemap.txt', sitemap.join('\n'))
-
-    if (!site.exists('robots.txt')) {
-        site.write('robots.txt', `User-agent: *\nSitemap: ${site.publicURL('sitemap.txt')}`)
-    }
 }
