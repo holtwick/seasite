@@ -25,40 +25,33 @@ var UglifyJS = require('uglify-js')
 var less = require('less')
 var LessPluginCleanCSS = require('less-plugin-clean-css')
 
-import {SeaSite} from './site'
-import log from '../log/index'
+import log from '../log'
 
-let defaults = {}
-
-export async function minifyLESSAsync(s: string) {
+export function minifyLESS(css: string, opt: Object = {}): ?string {
     let cleanCSSPlugin = new LessPluginCleanCSS({advanced: true})
-    let r = await less.render(s, {
+    let options = {
+        ...opt,
+        sync: true,
+        syncImport: true,
         plugins: [cleanCSSPlugin],
-    })
-    return r.css
-}
-
-if (!less.renderSync) {
-    less.renderSync = function (input, options) {
-        if (!options || typeof options != 'object') options = {}
-        options.sync = true
-        var css
-        this.render(input, options, function (err, result) {
-            if (err) throw err
-            css = result.css
-        })
-        return css
     }
-}
-
-export function minifyLESS(s: string) {
-    let cleanCSSPlugin = new LessPluginCleanCSS({advanced: true})
-    return less.renderSync(s, {
-        plugins: [cleanCSSPlugin],
+    var out = null
+    less.render(css, options, function (err, result) {
+        if (err) {
+            log.error('LESS minification error: ' + err.toString())
+            throw err
+        }
+        out = result.css
     })
+    return out
 }
 
-export function minifyJS(s: string) {
-    var result = UglifyJS.minify(s)
+export function minifyJS(...code: [string]): ?string {
+    let codeString = code.join('\n')
+    var result = UglifyJS.minify(codeString)
+    if (result == null || result.error) {
+        log.error('JS minification error: ' + result.error.toString())
+        throw result.error
+    }
     return result.code
 }
