@@ -12,12 +12,21 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this prog ram.  If not, see <https://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export * from './site'
-export * from './markdown'
-export * from './jsx'
-export * from './dom'
-export * from './relativeurls'
-export * from './minify'
+import {minifyJS, minifyLESS, minifyLESSAsync} from './minify'
+
+describe('Minify', () => {
+
+    it('should do LESS', () => {
+        let r = minifyLESS('body { color: red } ')
+        expect(r).toEqual('body{color:red}')
+    })
+
+    it('should do JS', () => {
+        let r = minifyJS('var aa = 1+2', 'aa += 4')
+        expect(r).toEqual('var aa=3;aa+=4;')
+    })
+
+})

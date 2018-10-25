@@ -261,6 +261,10 @@ export class SeaSite {
         return null
     }
 
+    // readAsString(urlPath: string): ?string {
+    //
+    // }
+
     write(urlPath: string, content: string | Buffer | Function) {
         if (urlPath[0] === '/') {
             urlPath = urlPath.substring(1)
