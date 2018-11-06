@@ -27,6 +27,11 @@ var LessPluginCleanCSS = require('less-plugin-clean-css')
 
 import log from '../log'
 
+export function stripComments(code: ?string): ?string {
+    if (!code) return null
+    return code.replace(/\/\*[\s\S]*?\*\//g, '')
+}
+
 export function minifyLESS(css: string, opt: Object = {}): ?string {
     let cleanCSSPlugin = new LessPluginCleanCSS({advanced: true})
     let options = {
@@ -43,7 +48,7 @@ export function minifyLESS(css: string, opt: Object = {}): ?string {
         }
         out = result.css
     })
-    return out
+    return stripComments(out)
 }
 
 export function minifyJS(...code: [string]): ?string {
@@ -53,5 +58,5 @@ export function minifyJS(...code: [string]): ?string {
         log.error('JS minification error: ' + result.error.toString())
         throw result.error
     }
-    return result.code
+    return stripComments(result.code)
 }
