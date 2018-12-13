@@ -52,9 +52,7 @@ export function youtube(gopt: Object = {}) {
               <div
                 className="video-wrapper embed-video-container embed-responsive embed-responsive-16by9">
                 <a href={staticLink} onClick={onClick} style={`background-image:url("${thumbnailURL}");`} title={opt.videoTitle}>
-                  {/*<img src={`https://i.ytimg.com/vi/${key}/0.jpg`} width="100%"*/}
-                  {/*className='youtube-placeholder embed-responsive-item'/>*/}
-                  {opt.videoTitle}
+                  &nbsp;
                 </a>
                 <div className="video-overlay-content">
                   <div className="video-overlay-inner">
