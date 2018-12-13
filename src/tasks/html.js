@@ -22,11 +22,11 @@ import {SeaSite} from '../index'
 import {handle} from './handle'
 
 const defaults = {
-    pattern: /\.html?$/,
-    exclude: null
+  pattern: /\.html?$/,
+  exclude: null
 }
 
 export function html(site: SeaSite, gopt: Object = {}): Array<Object> {
-    gopt = Object.assign({}, defaults, gopt)
-    return handle(site, gopt)
+  gopt = Object.assign({}, defaults, gopt)
+  return handle(site, gopt)
 }

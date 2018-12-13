@@ -20,13 +20,13 @@
 const defaults = {}
 
 export function tidy(gopt: Object = {}) {
-    gopt = Object.assign({}, defaults, gopt)
+  gopt = Object.assign({}, defaults, gopt)
 
-    return ($: Function, opt: Object = {}) => {
-        let html = $.html()
-        html = html.replace(/(<(meta|link|script|img|hr|br)[^>]*>)(\s*\n)*/gi, '$1\n')
-        html = html.replace(/(<\/(p|h1|h2|h3|h4|h5|h6|blockquote|div|ul|ol|li|article|section|footer)>)(\s*\n)*/gi, '$1\n')
-        $.reload(html)
-    }
+  return ($: Function, opt: Object = {}) => {
+    let html = $.html()
+    html = html.replace(/(<(meta|link|script|img|hr|br)[^>]*>)(\s*\n)*/gi, '$1\n')
+    html = html.replace(/(<\/(p|h1|h2|h3|h4|h5|h6|blockquote|div|ul|ol|li|article|section|footer)>)(\s*\n)*/gi, '$1\n')
+    $.reload(html)
+  }
 
 }

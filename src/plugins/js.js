@@ -21,7 +21,7 @@
 // var UglifyJS = require("uglify-js");
 
 export function js() {
-    return ($: Function) => {
-        // var result = UglifyJS.minify(code);
-    }
+  return ($: Function) => {
+    // var result = UglifyJS.minify(code);
+  }
 }

@@ -19,53 +19,53 @@
 // @jsx jsx
 
 import {SeaSite} from '../index'
-import {isDOM, pathMatchesPatterns, isPattern} from '../site'
 import log from '../log'
+import {isDOM, isPattern, pathMatchesPatterns} from '../site'
 
 function pathToHTMLPath(path) {
-    return path.replace(/\..+?$/, '.html').replace(/\/-/, '/')
+  return path.replace(/\..+?$/, '.html').replace(/\/-/, '/')
 }
 
 const defaults = {
-    pattern: /.*/,
-    plugins: []
+  pattern: /.*/,
+  plugins: []
 }
 
 export function handle(site: SeaSite, gopt: Object = {}): Array<Object> {
 
-    let pages = []
+  let pages = []
 
-    const plugins = gopt.plugins
+  const plugins = gopt.plugins
 
-    gopt = Object.assign({}, defaults, gopt)
+  gopt = Object.assign({}, defaults, gopt)
 
-    site.handle(gopt.pattern, ($, path) => {
-        if (isPattern(gopt.exclude) && pathMatchesPatterns(path, gopt.exclude)) {
-            return false // don't write
-        }
+  site.handle(gopt.pattern, ($, path) => {
+    if (isPattern(gopt.exclude) && pathMatchesPatterns(path, gopt.exclude)) {
+      return false // don't write
+    }
 
-        let opt = Object.assign({}, defaults, gopt, {
-            site,
-            path,
-        })
-
-        if (isDOM($) && plugins && plugins.length) {
-            $.applyPlugins(plugins, opt)
-        }
-
-        if (!opt.handler) {
-            log.warn('[task.handle] Will not write', path)
-            return false // don't write
-        }
-
-        if (opt.handler($, path) === false) {
-            return false
-        }
-
-        pages.push(opt)
+    let opt = Object.assign({}, defaults, gopt, {
+      site,
+      path
     })
 
-    return pages
+    if (isDOM($) && plugins && plugins.length) {
+      $.applyPlugins(plugins, opt)
+    }
+
+    if (!opt.handler) {
+      log.warn('[task.handle] Will not write', path)
+      return false // don't write
+    }
+
+    if (opt.handler($, path) === false) {
+      return false
+    }
+
+    pages.push(opt)
+  })
+
+  return pages
 }
 
 

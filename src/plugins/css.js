@@ -18,7 +18,7 @@
 // @flow
 
 export function css() {
-    return ($: Function) => {
+  return ($: Function) => {
 
-    }
+  }
 }

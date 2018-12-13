@@ -18,71 +18,71 @@
 // @flow
 // @jsx jsx
 
-import {parseMarkdown, plugin, jsx, dom, SeaSite} from '../index'
+import {jsx, dom, parseMarkdown, plugin, SeaSite} from '../index'
 import {pathMatchesPatterns} from '../site'
 
 function pathToHTMLPath(path) {
-    return path.replace(/\..+?$/, '.html').replace(/\/-/, '/')
+  return path.replace(/\..+?$/, '.html').replace(/\/-/, '/')
 }
 
 const defaults = {
-    pattern: /.*\.md$/,
-    template(site) {
-        return <div>
-            <div id="content"/>
-        </div>
-    },
-    handle($, opt) {
+  pattern: /.*\.md$/,
+  template(site) {
+    return <div>
+      <div id="content"/>
+    </div>
+  },
+  handle($, opt) {
 
-    },
+  }
 }
 
 export function markdown(site: SeaSite, gopt: Object = {}): Array<Object> {
 
-    let pages = []
-    gopt = Object.assign({}, defaults, gopt)
+  let pages = []
+  gopt = Object.assign({}, defaults, gopt)
 
-    const plugins = [
-        plugin.href(),
-        plugin.meta(),
-    ]
+  const plugins = [
+    plugin.href(),
+    plugin.meta()
+  ]
 
-    site.handle(gopt.pattern, (content, path) => {
+  site.handle(gopt.pattern, (content, path) => {
 
-        if (pathMatchesPatterns(path, gopt.exclude)) {
-            return false // don't write
-        }
+    if (pathMatchesPatterns(path, gopt.exclude)) {
+      return false // don't write
+    }
 
-        let md = parseMarkdown(content, {
-            bs4: gopt.bs4
-        })
-        let props = md.props
-        let html = md.html
+    let md = parseMarkdown(content, {
+      bs4: gopt.bs4
+    })
+    let props = md.props
+    let html = md.html
 
-        let opt = Object.assign({}, defaults, gopt, props, {
-            html,
-            content,
-            path,
-            outline: md.outline,
-        })
-
-        let $ = dom(gopt.template(site, opt))
-
-        opt.handle($, opt)
-
-        $.applyPlugins(plugins, Object.assign({}, opt, {
-            path,
-        }))
-
-        opt.html = $.html()
-        pages.push(opt)
-
-        if (gopt.cleanup === true) {
-            site.remove(path)
-        }
-
-        site.write(pathToHTMLPath(opt.path), opt.html)
+    let opt = Object.assign({}, defaults, gopt, props, {
+      html,
+      content,
+      path,
+      outline: md.outline
     })
 
-    return pages
+    let $ = dom(gopt.template(site, opt))
+
+    opt.handle($, opt)
+
+    $.applyPlugins(plugins, Object.assign({}, opt, {
+      path
+    }))
+
+    opt.html = $.html()
+    pages.push(opt)
+
+    if (gopt.cleanup === true) {
+      site.remove(path)
+    }
+
+    site.write(pathToHTMLPath(opt.path), opt.html)
+  })
+
+  return pages
 }

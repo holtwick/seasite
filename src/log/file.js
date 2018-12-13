@@ -7,23 +7,23 @@ import {createFormatter} from './logger'
 // npm-exec babel-node jslog.js
 
 export function createFileHandler(path, opt = {
-    date: true,
-    name: true,
-    level: true,
-    pretty: true,
+  date: true,
+  name: true,
+  level: true,
+  pretty: true
 }) {
-    let stream
-    let formatter = createFormatter(opt)
-    return (messages, context) => {
-        if (!stream) {
-            stream = createWriteStream(path, {
-                flags: 'a',
-            })
-        }
-
-        messages = Array.prototype.slice.call(messages)
-        formatter(messages, context)
-        stream.write(messages.join(' ') + EOL || '\n')
+  let stream
+  let formatter = createFormatter(opt)
+  return (messages, context) => {
+    if (!stream) {
+      stream = createWriteStream(path, {
+        flags: 'a'
+      })
     }
+
+    messages = Array.prototype.slice.call(messages)
+    formatter(messages, context)
+    stream.write(messages.join(' ') + EOL || '\n')
+  }
 }
 

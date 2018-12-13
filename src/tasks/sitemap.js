@@ -19,27 +19,26 @@
 // @jsx jsx
 
 import {SeaSite} from '../site/site'
-import log from '../log'
 
 let defaults = {
-    exclude: [
-        '404.html',
-    ],
-    pattern: /\.html?$/,
+  exclude: [
+    '404.html'
+  ],
+  pattern: /\.html?$/
 }
 
 export function sitemap(site: SeaSite, opt: Object = {}) {
-    opt = Object.assign({}, defaults, opt)
+  opt = Object.assign({}, defaults, opt)
 
-    // log.info(opt.pattern, opt.exclude)
-    let sitemap = site
-        .paths(opt.pattern, opt.exclude)
-        .map(path => site.publicURL(path))
+  // log.info(opt.pattern, opt.exclude)
+  let sitemap = site
+    .paths(opt.pattern, opt.exclude)
+    .map(path => site.publicURL(path))
 
-    sitemap.sort()
-    site.write('sitemap.txt', sitemap.join('\n'))
+  sitemap.sort()
+  site.write('sitemap.txt', sitemap.join('\n'))
 
-    if (!site.exists('robots.txt')) {
-        site.write('robots.txt', `User-agent: *\nSitemap: ${site.publicURL('sitemap.txt')}`)
-    }
+  if (!site.exists('robots.txt')) {
+    site.write('robots.txt', `User-agent: *\nSitemap: ${site.publicURL('sitemap.txt')}`)
+  }
 }

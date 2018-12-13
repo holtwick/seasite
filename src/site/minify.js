@@ -28,35 +28,35 @@ var LessPluginCleanCSS = require('less-plugin-clean-css')
 import log from '../log'
 
 export function stripComments(code: ?string): ?string {
-    if (!code) return null
-    return code.replace(/\/\*[\s\S]*?\*\//g, '')
+  if (!code) return null
+  return code.replace(/\/\*[\s\S]*?\*\//g, '')
 }
 
 export function minifyLESS(css: string, opt: Object = {}): ?string {
-    let cleanCSSPlugin = new LessPluginCleanCSS({advanced: true})
-    let options = {
-        ...opt,
-        sync: true,
-        syncImport: true,
-        plugins: [cleanCSSPlugin],
+  let cleanCSSPlugin = new LessPluginCleanCSS({advanced: true})
+  let options = {
+    ...opt,
+    sync: true,
+    syncImport: true,
+    plugins: [cleanCSSPlugin]
+  }
+  var out = null
+  less.render(css, options, function (err, result) {
+    if (err) {
+      log.error('LESS minification error: ' + err.toString())
+      throw err
     }
-    var out = null
-    less.render(css, options, function (err, result) {
-        if (err) {
-            log.error('LESS minification error: ' + err.toString())
-            throw err
-        }
-        out = result.css
-    })
-    return stripComments(out)
+    out = result.css
+  })
+  return stripComments(out)
 }
 
 export function minifyJS(...code: [string]): ?string {
-    let codeString = code.join('\n')
-    var result = UglifyJS.minify(codeString)
-    if (result == null || result.error) {
-        log.error('JS minification error: ' + result.error.toString())
-        throw result.error
-    }
-    return stripComments(result.code)
+  let codeString = code.join('\n')
+  var result = UglifyJS.minify(codeString)
+  if (result == null || result.error) {
+    log.error('JS minification error: ' + result.error.toString())
+    throw result.error
+  }
+  return stripComments(result.code)
 }
