@@ -24,70 +24,69 @@ import log from '../log'
 const OPT = {}
 
 export function localize(gopt: Object = {}) {
-    gopt = Object.assign({}, OPT, gopt)
+  gopt = Object.assign({}, OPT, gopt)
 
-    var strings = {}
+  var strings = {}
 
-    function loadStrings(opt) {
-        const lang = opt.lang.toLowerCase()
-        log.assert(!!lang, '[plugin.localize] opt.lang required')
+  function loadStrings(opt) {
+    const lang = opt.lang.toLowerCase()
+    log.assert(!!lang, '[plugin.localize] opt.lang required')
 
-        if (lang) {
-            let stringsPath = path.join(process.cwd(), 'languages', `${lang}.json`)
+    if (lang) {
+      let stringsPath = path.join(process.cwd(), 'languages', `${lang}.json`)
 
-            try {
-                strings = opt.strings || JSON.parse(fs.readFileSync(stringsPath, {encoding: 'utf8'})) || {}
-            }
-            catch (e) {
-                log.warn('[plugin.localize] Error loading strings for', lang, '=>', e.toString())
-                strings = {}
-            }
-        }
+      try {
+        strings = opt.strings || JSON.parse(fs.readFileSync(stringsPath, {encoding: 'utf8'})) || {}
+      } catch (e) {
+        log.warn('[plugin.localize] Error loading strings for', lang, '=>', e.toString())
+        strings = {}
+      }
     }
+  }
 
-    return ($: Function | string, opt: Object = {}) => {
-        opt = Object.assign({}, gopt, opt)
+  return ($: Function | string, opt: Object = {}) => {
+    opt = Object.assign({}, gopt, opt)
 
-        const lang = opt.lang.toLowerCase()
-        log.assert(!!lang, '[plugin.localize] opt.lang required')
+    const lang = opt.lang.toLowerCase()
+    log.assert(!!lang, '[plugin.localize] opt.lang required')
 
-        if (lang) {
-            loadStrings(opt)
+    if (lang) {
+      loadStrings(opt)
 
-            let translateString = (s: string): string => {
-                let sr = strings[s] || strings[s.trim()]
-                if (!sr && opt.missing) {
-                    opt.missing[s.trim()] = s.trim()
-                }
-                return sr || s
-            }
-
-            if (typeof $ === 'string') {
-                let s = $
-                log.info('Translate', $)
-                while (s.indexOf('_') === 0) {
-                    s = s.substr(1)
-                }
-                return translateString(s)
-            }
-
-            let fn = (m, p, f, s) => {
-                if (s && f !== '_blank') {
-                    return p + translateString(s)
-                }
-            }
-
-            let html = $.html()
-            html = html.replace(/(>\s*)(__?([^<]+))/gm, fn)
-            html = html.replace(/(")(__?([^"]+))/gm, fn)
-            html = html.replace(/(')(__?([^']+))/gm, fn)
-            html = html.replace(/(&apos;)(__?([^&]+))/gm, fn) // quoted when inside an attribute like onclick="setLang('_lang')"
-            $.reload(html)
-
-            // On element level
-            $(`*[data-lang]:not([data-lang=${lang}])`).remove()
-            $(`*[data-lang]`).removeAttr('data-lang')
+      let translateString = (s: string): string => {
+        let sr = strings[s] || strings[s.trim()]
+        if (!sr && opt.missing) {
+          opt.missing[s.trim()] = s.trim()
         }
+        return sr || s
+      }
+
+      if (typeof $ === 'string') {
+        let s = $
+        log.info('Translate', $)
+        while (s.indexOf('_') === 0) {
+          s = s.substr(1)
+        }
+        return translateString(s)
+      }
+
+      let fn = (m, p, f, s) => {
+        if (s && f !== '_blank') {
+          return p + translateString(s)
+        }
+      }
+
+      let html = $.html()
+      html = html.replace(/(>\s*)(__?([^<]+))/gm, fn)
+      html = html.replace(/(")(__?([^"]+))/gm, fn)
+      html = html.replace(/(')(__?([^']+))/gm, fn)
+      html = html.replace(/(&apos;)(__?([^&]+))/gm, fn) // quoted when inside an attribute like onclick="setLang('_lang')"
+      $.reload(html)
+
+      // On element level
+      $(`*[data-lang]:not([data-lang=${lang}])`).remove()
+      $(`*[data-lang]`).removeAttr('data-lang')
     }
+  }
 
 }

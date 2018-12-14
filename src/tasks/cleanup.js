@@ -21,16 +21,16 @@
 import {SeaSite} from '../site/site'
 
 let defaults = {
-    patterns: [
-        /\.md/,
-        'template.html',
-    ],
+  patterns: [
+    /\.md/,
+    'template.html'
+  ]
 }
 
 export function cleanup(site: SeaSite, opt: Object = {}) {
-    opt = Object.assign({}, defaults, opt)
+  opt = Object.assign({}, defaults, opt)
 
-    for (let pattern of opt.patterns) {
-        site.remove(pattern)
-    }
+  for (let pattern of opt.patterns) {
+    site.remove(pattern)
+  }
 }

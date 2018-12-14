@@ -18,50 +18,49 @@
 // @flow
 // @jsx jsx
 
-import {isAbsoluteURL} from '../site'
 import {jsx} from '../site/jsx'
-
 import assert from 'assert'
+import {isAbsoluteURL} from '../site'
 
 const OPT = {
-    selector: '.disqus',
-    disqusURL: null, // 'https://xxx.disqus.com/embed.js',
-    privacyURL: '/privacy#comment',
+  selector: '.disqus',
+  disqusURL: null, // 'https://xxx.disqus.com/embed.js',
+  privacyURL: '/privacy#comment'
 }
 
 export function disqus(gopt: Object = {}) {
-    gopt = Object.assign({}, OPT, gopt)
+  gopt = Object.assign({}, OPT, gopt)
 
-    return ($: Function, opt: Object = {}) => {
-        opt = Object.assign({}, gopt, opt)
+  return ($: Function, opt: Object = {}) => {
+    opt = Object.assign({}, gopt, opt)
 
-        assert(opt.selector, '"selector" required')
-        assert(opt.path, '"path" required')
-        assert(isAbsoluteURL(opt.url), '"url" needs to be absolute')
+    assert(opt.selector, '"selector" required')
+    assert(opt.path, '"path" required')
+    assert(isAbsoluteURL(opt.url), '"url" needs to be absolute')
 
-        $(opt.selector).each((i, el) => {
-            let containerElement = $(el)
+    $(opt.selector).each((i, el) => {
+      let containerElement = $(el)
 
-            let id = opt.path.replace(/\..+?$/, '').replace(/\/-/, '/')
-            let url = opt.url
-            let html = <div>
-                <div id="disqus_thread" style="display: none;">
-                    <blockquote>
-                        <p>
-                            The comment functionality is provided by <a href="https://disqus.com">Disqus</a>.
-                            <br/>
-                            Learn more about it in our <a href={opt.privacyURL}>Privacy Policy</a>.
-                        </p>
-                        <p>
-                            <br/>
-                            <button onClick="showComments();return false;" className="btn btn-default">
-                                Open Comments
-                            </button>
-                        </p>
-                    </blockquote>
-                </div>
+      let id = opt.path.replace(/\..+?$/, '').replace(/\/-/, '/')
+      let url = opt.url
+      let html = <div>
+        <div id="disqus_thread" style="display: none;">
+          <blockquote>
+            <p>
+              The comment functionality is provided by <a href="https://disqus.com">Disqus</a>.
+              <br/>
+              Learn more about it in our <a href={opt.privacyURL}>Privacy Policy</a>.
+            </p>
+            <p>
+              <br/>
+              <button onClick="showComments();return false;" className="btn btn-default">
+                Open Comments
+              </button>
+            </p>
+          </blockquote>
+        </div>
 
-                <script>{`
+        <script>{`
                 document.getElementById('disqus_thread').style.display = 'block'
                 var disqus_config = function () {
                     this.page.url = '${url}'
@@ -77,9 +76,9 @@ export function disqus(gopt: Object = {}) {
                     })()
                 }
                 `}</script>
-            </div>
+      </div>
 
-            containerElement.replaceWith(html)
-        })
-    }
+      containerElement.replaceWith(html)
+    })
+  }
 }

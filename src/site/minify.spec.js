@@ -19,14 +19,14 @@ import {minifyJS, minifyLESS, minifyLESSAsync} from './minify'
 
 describe('Minify', () => {
 
-    it('should do LESS', () => {
-        let r = minifyLESS('body { color: red } ')
-        expect(r).toEqual('body{color:red}')
-    })
+  it('should do LESS', () => {
+    let r = minifyLESS('body { color: red } ')
+    expect(r).toEqual('body{color:red}')
+  })
 
-    it('should do JS', () => {
-        let r = minifyJS('var aa = 1+2', 'aa += 4')
-        expect(r).toEqual('var aa=3;aa+=4;')
-    })
+  it('should do JS', () => {
+    let r = minifyJS('var aa = 1+2', 'aa += 4')
+    expect(r).toEqual('var aa=3;aa+=4;')
+  })
 
 })
