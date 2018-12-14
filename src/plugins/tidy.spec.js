@@ -19,16 +19,16 @@
 // @jsx jsx
 
 import {jsx} from '../site/jsx'
-import {dom, xml, html} from '../site/dom'
 import {tidy} from '../plugins/tidy'
+import {html} from '../site/dom'
 
 describe('pugin.tidy', () => {
 
-    it('should add breaks', () => {
-        const sample = <div>A <br/> B </div>
-        let $ = html(sample)
-        $.applyPlugins([tidy()])
-        expect($.bodyMarkup()).toBe(`<div>A <br>\n B </div>\n`)
-    })
+  it('should add breaks', () => {
+    const sample = <div>A <br/> B </div>
+    let $ = html(sample)
+    $.applyPlugins([tidy()])
+    expect($.bodyMarkup()).toBe(`<div>A <br>\n B </div>\n`)
+  })
 
 })

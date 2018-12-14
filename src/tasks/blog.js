@@ -18,158 +18,157 @@
 // @flow
 // @jsx jsx
 
-import {statSync} from 'fs'
-import {SeaSite, parseMarkdown, dom, xml} from '../index'
-import {pathMatchesPatterns} from '../site'
 import {jsx} from '../site/jsx'
 import dateformat from 'dateformat'
+import {statSync} from 'fs'
 import _ from 'lodash'
+import {dom, parseMarkdown, SeaSite, xml} from '../index'
+import {pathMatchesPatterns} from '../site'
 
 function pathToHTMLPath(path) {
-    return path.replace(/\..+?$/, '.html').replace(/\/-/, '/')
+  return path.replace(/\..+?$/, '.html').replace(/\/-/, '/')
 }
 
 let defaults = {
-    folder: 'blog',
-    pattern: null,
-    handler: null,
-    title: 'Blog',
-    url: '',
-    description: '',
-    copyright: '',
-    author: '',
-    language: 'en-en',
-    template(site) {
-        return <div>
-            <div id="content"></div>
-        </div>
-    },
+  folder: 'blog',
+  pattern: null,
+  handler: null,
+  title: 'Blog',
+  url: '',
+  description: '',
+  copyright: '',
+  author: '',
+  language: 'en-en',
+  template(site) {
+    return <div>
+      <div id="content"></div>
+    </div>
+  }
 }
 
 export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
 
-    opt = Object.assign({}, defaults, opt)
-    let entries = []
+  opt = Object.assign({}, defaults, opt)
+  let entries = []
 
-    if (!opt.pattern && opt.folder) {
-        opt.pattern = new RegExp(opt.folder + '\/.*\.md$')
+  if (!opt.pattern && opt.folder) {
+    opt.pattern = new RegExp(opt.folder + '\/.*\.md$')
+  }
+
+  let maxDate: ?Date
+
+  // Collect post data
+  site.handle(opt.pattern, (content, path) => {
+
+    if (pathMatchesPatterns(path, opt.exclude)) {
+      return
     }
 
-    let maxDate: ?Date
+    let md = parseMarkdown(content)
+    let props = md.props
+    let html = md.html
+    let {title, date, hidden} = props
+    if (hidden || path.indexOf('/-') > 0) {
+      return
+    }
 
-    // Collect post data
-    site.handle(opt.pattern, (content, path) => {
+    // Extract the date from the Markdown property string
+    if (typeof date === 'string') {
+      let m = /(\d\d\d\d)-(\d\d)-(\d\d)/.exec(date)
+      if (m) {
+        date = new Date(+m[1], +m[2] - 1, +m[3], 12, 0)
+      }
+    }
 
-        if (pathMatchesPatterns(path, opt.exclude)) {
-            return
-        }
+    // Extract the date from the filename, format: 2018-08-31-title
+    if (!date) {
+      let m = /(\d\d\d\d)-(\d\d)-(\d\d)/.exec(path)
+      if (m) {
+        date = new Date(+m[1], +m[2] - 1, +m[3], 12, 0)
+      }
+    }
 
-        let md = parseMarkdown(content)
-        let props = md.props
-        let html = md.html
-        let {title, date, hidden} = props
-        if (hidden || path.indexOf('/-') > 0) {
-            return
-        }
+    // Get date from file systemproperties
+    if (!date) {
+      const stat = statSync(site.path(path)) || {}
+      date = stat.mtime
+    }
 
-        // Extract the date from the Markdown property string
-        if (typeof date === 'string') {
-            let m = /(\d\d\d\d)-(\d\d)-(\d\d)/.exec(date)
-            if (m) {
-                date = new Date(+m[1], +m[2] - 1, +m[3], 12, 0)
-            }
-        }
+    // Identify newest date
+    try {
+      if (!date || !maxDate || maxDate.getTime() < date.getTime()) {
+        maxDate = date
+      }
+    } catch (e) {
+      site.log.error(e.toString(), date.constructor.name)
+    }
 
-        // Extract the date from the filename, format: 2018-08-31-title
-        if (!date) {
-            let m = /(\d\d\d\d)-(\d\d)-(\d\d)/.exec(path)
-            if (m) {
-                date = new Date(+m[1], +m[2] - 1, +m[3], 12, 0)
-            }
-        }
- 
-        // Get date from file systemproperties
-        if (!date) {
-            const stat = statSync(site.path(path)) || {}
-            date = stat.mtime
-        }
-
-        // Identify newest date
-        try {
-            if (!date || !maxDate || maxDate.getTime() < date.getTime()) {
-                maxDate = date
-            }
-        }
-        catch (e) {
-            site.log.error(e.toString(), date.constructor.name)
-        }
-
-        entries.push({
-            html,
-            props,
-            title,
-            date,
-            hidden,
-            path,
-            htmlPath: pathToHTMLPath(path),
-            url: site.publicURL(pathToHTMLPath(path)),
-        })
-        return false
+    entries.push({
+      html,
+      props,
+      title,
+      date,
+      hidden,
+      path,
+      htmlPath: pathToHTMLPath(path),
+      url: site.publicURL(pathToHTMLPath(path))
     })
+    return false
+  })
 
-    // Sort the posts
-    entries = _.sortBy(entries, 'date').reverse()
+  // Sort the posts
+  entries = _.sortBy(entries, 'date').reverse()
 
-    // RSS
-    let atomContent = xml(
-        <rss version="2.0" xmlns__atom="http://www.w3.org/2005/Atom">
-            <channel>
-                <title>{opt.title}</title>
-                <link>{opt.url}/</link>
-                <description>{opt.description}</description>
-                <language>{opt.language}</language>
-                <copyright>{opt.copyright}</copyright>
-                <pubDate>{dateformat(maxDate || new Date(), 'isoDateTime')}</pubDate>
-            </channel>
-        </rss>)
-    for (let post of entries) {
-        let atomEntry =
-            <item>
-                <title>{post.title}</title>
-                <link>{site.publicURL(post.htmlPath)}</link>
-                <pubDate>{dateformat(post.date, 'isoDateTime')}</pubDate>
-                <author>{opt.author}</author>
-                <description>{post.html}</description>
-                <guid>{post.htmlPath}</guid>
-            </item>
-        atomContent('channel').append(atomEntry)
-    }
+  // RSS
+  let atomContent = xml(
+    <rss version="2.0" xmlns__atom="http://www.w3.org/2005/Atom">
+      <channel>
+        <title>{opt.title}</title>
+        <link>{opt.url}/</link>
+        <description>{opt.description}</description>
+        <language>{opt.language}</language>
+        <copyright>{opt.copyright}</copyright>
+        <pubDate>{dateformat(maxDate || new Date(), 'isoDateTime')}</pubDate>
+      </channel>
+    </rss>)
+  for (let post of entries) {
+    let atomEntry =
+      <item>
+        <title>{post.title}</title>
+        <link>{site.publicURL(post.htmlPath)}</link>
+        <pubDate>{dateformat(post.date, 'isoDateTime')}</pubDate>
+        <author>{opt.author}</author>
+        <description>{post.html}</description>
+        <guid>{post.htmlPath}</guid>
+      </item>
+    atomContent('channel').append(atomEntry)
+  }
 
-    site.writeDOM(atomContent, `${opt.folder}/atom.xml`)
-    site.writeDOM(atomContent, `/atom.xml`)
+  site.writeDOM(atomContent, `${opt.folder}/atom.xml`)
+  site.writeDOM(atomContent, `/atom.xml`)
 
-    // Blog Archive
-    let $ = dom(opt.template(site))
-    if ($) {
-        let group = 'blog'
-        $(`li[data-group="${group}"]`).addClass('active')
-        $('#content').html(
-            <div>
-                <h1 className="blog-post-title">Blog</h1>
-                <ul>
-                    {entries.map(post => <li>
-                        <a href={site.url(pathToHTMLPath(post.path))}>
-                            {post.title}
-                        </a>
-                        {/*({dateformat(post.date, 'longDate')})*/}
-                    </li>)}
-                </ul>
-            </div>,
-        )
-        $('title').text(opt.title)
-        $('#recent-posts-container').remove()
-        site.write(`${opt.folder}/index.html`, $.html())
-    }
+  // Blog Archive
+  let $ = dom(opt.template(site))
+  if ($) {
+    let group = 'blog'
+    $(`li[data-group="${group}"]`).addClass('active')
+    $('#content').html(
+      <div>
+        <h1 className="blog-post-title">Blog</h1>
+        <ul>
+          {entries.map(post => <li>
+            <a href={site.url(pathToHTMLPath(post.path))}>
+              {post.title}
+            </a>
+            {/*({dateformat(post.date, 'longDate')})*/}
+          </li>)}
+        </ul>
+      </div>
+    )
+    $('title').text(opt.title)
+    $('#recent-posts-container').remove()
+    site.write(`${opt.folder}/index.html`, $.html())
+  }
 
-    return entries
+  return entries
 }

@@ -21,14 +21,14 @@ import log from '../log'
 
 // Support for Google Analytics integration, respecting do not track
 
-export function googleAnalytics(key:string) {
-    return ($:Function) => {
-        // https://developers.google.com/analytics/devguides/collection/gtagjs/
-        // Avoid document.write https://developers.google.com/web/tools/lighthouse/audits/document-write
+export function googleAnalytics(key: string) {
+  return ($: Function) => {
+    // https://developers.google.com/analytics/devguides/collection/gtagjs/
+    // Avoid document.write https://developers.google.com/web/tools/lighthouse/audits/document-write
 
-        log.assert(key, '[plugin.ga] key required')
+    log.assert(key, '[plugin.ga] key required')
 
-        $('body').append(`<script> 
+    $('body').append(`<script> 
 var disableStr = 'ga-disable-${key}';
 
 function gaOptout() {
@@ -56,5 +56,5 @@ if (!((window.navigator && window.navigator['doNotTrack'] == 1) || (document.coo
     console.log('Visit has NOT been tracked by Google Analytics.');
 }
 </script>`)
-    }
+  }
 }

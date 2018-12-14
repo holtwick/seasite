@@ -21,149 +21,147 @@
 const cheerio = require('cheerio')
 
 {
-    let originalHtmlFn = cheerio.prototype.html;
-    cheerio.prototype.html = function (value) {
-        // console.log('[cheerio.html]', value)
-        if (typeof value === 'string') {
-            value = fixNonClosingTags(value)
-        }
-        return originalHtmlFn.call(this, value)
+  let originalHtmlFn = cheerio.prototype.html
+  cheerio.prototype.html = function (value) {
+    // console.log('[cheerio.html]', value)
+    if (typeof value === 'string') {
+      value = fixNonClosingTags(value)
     }
+    return originalHtmlFn.call(this, value)
+  }
 }
 
 {
-    let originalHtmlFn = cheerio.prototype.replaceWith;
-    cheerio.prototype.replaceWith = function (value) {
-        // console.log('[cheerio.html]', value)
-        if (typeof value === 'string') {
-            value = fixNonClosingTags(value)
-        }
-        return originalHtmlFn.call(this, value)
+  let originalHtmlFn = cheerio.prototype.replaceWith
+  cheerio.prototype.replaceWith = function (value) {
+    // console.log('[cheerio.html]', value)
+    if (typeof value === 'string') {
+      value = fixNonClosingTags(value)
     }
+    return originalHtmlFn.call(this, value)
+  }
 }
 
 
 import {HTML, unescapeHTML} from './jsx'
-import log from '../log'
 
 export function isDOM(obj: any): boolean {
-    return obj && typeof obj === 'function' && typeof obj.html === 'function'
+  return obj && typeof obj === 'function' && typeof obj.html === 'function'
 }
 
 export function toString(obj: any): string {
-    if (obj) {
-        if (obj instanceof Buffer) {
-            return toString('utf8')
-        } else if (isDOM(obj)) {
-            return obj.html()
-        }
+  if (obj) {
+    if (obj instanceof Buffer) {
+      return toString('utf8')
+    } else if (isDOM(obj)) {
+      return obj.html()
     }
-    return (obj || '').toString()
+  }
+  return (obj || '').toString()
 }
 
 interface MarkupOptions {
-    stripComments?: boolean;
-    stripPHP?: boolean;
+  stripComments?: boolean;
+  stripPHP?: boolean;
 }
 
 function fixNonClosingTags(value) {
-    return value.replace(/<\/(area|base|br|col|embed|hr|img|input|keygen|link|meta|param|source|track|wbr)>/gi, '')
+  return value.replace(/<\/(area|base|br|col|embed|hr|img|input|keygen|link|meta|param|source|track|wbr)>/gi, '')
 }
 
 export function dom(value: string | Buffer | Function, opt: Object = {
-    normalizeWhitespace: true,
+  normalizeWhitespace: true
 }): Function {
 
-    const xmlMode = opt.xmlMode === true
+  const xmlMode = opt.xmlMode === true
 
-    if (value instanceof Buffer) {
-        value = value.toString('utf8')
+  if (value instanceof Buffer) {
+    value = value.toString('utf8')
+  }
+
+  if (!isDOM(value)) {
+    if (typeof value !== 'string') {
+      value = ''
+    } else if (!xmlMode) {
+      value = fixNonClosingTags(value)
     }
+    value = cheerio.load(value, opt)
+  }
 
-    if (!isDOM(value)) {
-        if (typeof value !== 'string') {
-            value = ''
-        } else if (!xmlMode) {
-            value = fixNonClosingTags(value)
-        }
-        value = cheerio.load(value, opt)
+  // FLOW:2018-02-23
+  let $: Function = value
+
+  $.xmlMode = xmlMode
+
+  $.applyPlugins = function (plugins: Array<Function>, ...opts) {
+    for (let plugin of plugins) {
+      plugin($, ...opts)
     }
+  }
 
-    // FLOW:2018-02-23
-    let $: Function = value
+  $.decorate = function (selector, fn) {
+    $(selector).each((i, e) => {
+      e = $(e)
+      e.replaceWith(fn(HTML(e.html())))
+    })
+  }
 
-    $.xmlMode = xmlMode
+  $.reload = function (html) {
+    // log.warn('Reload HTML', html)
+    $.root().empty().html($.load(html).root())
+  }
 
-    $.applyPlugins = function (plugins: Array<Function>, ...opts) {
-        for (let plugin of plugins) {
-            plugin($, ...opts)
-        }
+  function postProcessMarkup(markup: string, opt: ?MarkupOptions = {
+    stripComments: true,
+    stripPHP: false
+  }) {
+    if (opt) {
+      if (!opt.stripPHP) {
+        markup = markup.replace(/&lt;\?(php)?([\s\S]*?)\??&gt;/g, (m, p1, p2) => `<?php${unescapeHTML(p2)}?>`)
+        markup = markup.replace(/%3C\?(php)?([\s\S]*?)\?%3E/g, (m, p1, p2) => `<?php${decodeURIComponent(p2)}?>`)
+        markup = markup.replace(/<!--\?(php)?([\s\S]*?)\?-->/g, '<?php$2?>')
+      }
+
+      if (opt.stripComments) {
+        markup = markup.replace(/<!--([\s\S]*?)-->/g, '')
+      }
     }
+    return markup
+  }
 
-    $.decorate = function (selector, fn) {
-        $(selector).each((i, e) => {
-            e = $(e)
-            e.replaceWith(fn(HTML(e.html())))
-        })
+  $.markup = function (opt: ?MarkupOptions) {
+    let markup: string
+    if ($.xmlMode) {
+      markup = '<?xml version="1.0" encoding="utf-8"?>\n' + $.xml()
+    } else {
+      markup = $.html()
+      if (markup.trim().toLowerCase().indexOf('<!doctype ') !== 0) {
+        markup = '<!doctype html>\n' + markup
+      }
     }
+    return postProcessMarkup(markup, opt)
+  }
 
-    $.reload = function (html) {
-        // log.warn('Reload HTML', html)
-        $.root().empty().html($.load(html).root())
-    }
+  $.bodyMarkup = function (opt: ?MarkupOptions) {
+    let markup = $.xmlMode ? $.xml() : $('body').html()
+    return postProcessMarkup(markup, opt)
+  }
 
-    function postProcessMarkup(markup: string, opt: ?MarkupOptions = {
-        stripComments: true,
-        stripPHP: false,
-    }) {
-        if (opt) {
-            if (!opt.stripPHP) {
-                markup = markup.replace(/&lt;\?(php)?([\s\S]*?)\??&gt;/g, (m, p1, p2) => `<?php${unescapeHTML(p2)}?>`)
-                markup = markup.replace(/%3C\?(php)?([\s\S]*?)\?%3E/g, (m, p1, p2) => `<?php${decodeURIComponent(p2)}?>`)
-                markup = markup.replace(/<!--\?(php)?([\s\S]*?)\?-->/g, '<?php$2?>')
-            }
+  // Fix for cheerio bug
+  // let xmlFn = $.xml
+  // $.xml = function () {
+  //     let content = xmlFn.call($)
+  //     content = content.replace(/<\!--\[CDATA\[([\s\S]*?)\]\]-->/g, '<![CDATA[$1]]>')
+  //     return content
+  // }
 
-            if (opt.stripComments) {
-                markup = markup.replace(/<!--([\s\S]*?)-->/g, '')
-            }
-        }
-        return markup
-    }
-
-    $.markup = function (opt: ?MarkupOptions) {
-        let markup: string
-        if ($.xmlMode) {
-            markup = '<?xml version="1.0" encoding="utf-8"?>\n' + $.xml()
-        }
-        else {
-            markup = $.html()
-            if (markup.trim().toLowerCase().indexOf('<!doctype ') !== 0) {
-                markup = '<!doctype html>\n' + markup
-            }
-        }
-        return postProcessMarkup(markup, opt)
-    }
-
-    $.bodyMarkup = function (opt: ?MarkupOptions) {
-        let markup = $.xmlMode ? $.xml() : $('body').html()
-        return postProcessMarkup(markup, opt)
-    }
-
-    // Fix for cheerio bug
-    // let xmlFn = $.xml
-    // $.xml = function () {
-    //     let content = xmlFn.call($)
-    //     content = content.replace(/<\!--\[CDATA\[([\s\S]*?)\]\]-->/g, '<![CDATA[$1]]>')
-    //     return content
-    // }
-
-    return $
+  return $
 }
 
 export function xml(value: string | Buffer | Function) {
-    return dom(value || '', {xmlMode: true})
+  return dom(value || '', {xmlMode: true})
 }
 
 export function html(value: string | Buffer | Function) {
-    return dom(value || '')
+  return dom(value || '')
 }

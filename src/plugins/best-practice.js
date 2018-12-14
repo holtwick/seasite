@@ -21,11 +21,11 @@
 
 export function bestPractice() {
 
-    return ($) => {
-        // https://developers.google.com/web/tools/lighthouse/audits/noopener
-        $('[target="_blank"]').attr('rel', 'noopener')
+  return ($) => {
+    // https://developers.google.com/web/tools/lighthouse/audits/noopener
+    $('[target="_blank"]').attr('rel', 'noopener')
 
-        // https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-blocking-css
-    }
+    // https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-blocking-css
+  }
 
 }
