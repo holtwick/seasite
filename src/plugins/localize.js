@@ -36,7 +36,7 @@ export function localize(gopt: Object = {}) {
       let stringsPath = path.join(process.cwd(), 'languages', `${lang}.json`)
 
       try {
-        strings = opt.strings || JSON.parse(fs.readFileSync(stringsPath, {encoding: 'utf8'})) || {}
+        strings = opt.strings || JSON.parse(fs.readFileSync(stringsPath, { encoding: 'utf8' })) || {}
       } catch (e) {
         log.warn('[plugin.localize] Error loading strings for', lang, '=>', e.toString())
         strings = {}
@@ -74,6 +74,7 @@ export function localize(gopt: Object = {}) {
         if (s && f !== '_blank') {
           return p + translateString(s)
         }
+        return m
       }
 
       let html = $.html()
