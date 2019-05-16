@@ -40,7 +40,7 @@ function gaOptout() {
 if (!((window.navigator && window.navigator['doNotTrack'] == 1) || (document.cookie && document.cookie.indexOf(disableStr + '=true') !== -1))) {    
     window.dataLayer = window.dataLayer || [];
     function gtag(){ 
-        dataLayer.push(arguments);
+        window.dataLayer.push(arguments);
     }
     gtag('js', new Date());
     gtag('config', '${key}', { 'anonymize_ip': true });
