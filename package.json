@@ -22,32 +22,32 @@
     "url": "https://github.com/holtwick/seasite.git"
   },
   "devDependencies": {
-    "@babel/cli": "^7.2.3",
-    "@babel/core": "^7.2.2",
-    "@babel/plugin-proposal-class-properties": "^7.3.0",
-    "@babel/plugin-transform-runtime": "^7.2.0",
-    "@babel/preset-env": "^7.3.1",
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.4",
+    "@babel/plugin-proposal-class-properties": "^7.4.4",
+    "@babel/plugin-transform-runtime": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
-    "flow-bin": "^0.93.0"
+    "flow-bin": "^0.98.1"
   },
   "dependencies": {
-    "@babel/runtime": "^7.3.1",
+    "@babel/runtime": "^7.4.4",
     "babel-core": "^7.0.0-bridge.0",
     "cheerio": "^1.0.0-rc.2",
     "dateformat": "^3.0.3",
-    "fs-extra": "^7.0.1",
-    "highlight.js": "^9.14.2",
-    "html-minifier": "^3.5.21",
-    "image-size": "^0.7.1",
-    "jest": "^24.1.0",
+    "fs-extra": "^8.0.1",
+    "highlight.js": "^9.15.6",
+    "html-minifier": "^4.0.0",
+    "image-size": "^0.7.4",
+    "jest": "^24.8.0",
     "less": "^3.9.0",
     "less-plugin-clean-css": "^1.5.1",
     "lodash": "^4.17.11",
     "marked": "^0.6.2",
-    "uglify-js": "^3.4.0",
+    "uglify-js": "^3.5.12",
     "uglifycss": "0.0.29",
     "yamljs": "^0.3.0",
-    "yargs": "^13.1.0"
+    "yargs": "^13.2.4"
   }
 }
