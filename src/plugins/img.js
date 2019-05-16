@@ -17,10 +17,10 @@
 
 // @flow
 
-import {existsSync} from 'fs'
-import {join} from 'path'
+import { existsSync } from 'fs'
+import { join } from 'path'
 import log from '../log'
-import {isAbsoluteURL} from '../site/relativeurls'
+import { isAbsoluteURL } from '../site/relativeurls'
 
 const sizeOf = require('image-size')
 
@@ -41,6 +41,9 @@ export function img(gopt: Object = {}) {
       $('img[src]').each((i, el) => {
         let img = $(el)
         let src = img.attr('src')
+
+        // Lazy loader by default https://css-tricks.com/native-lazy-loading/
+        img.attr('loading', 'auto')
 
         if (src.indexOf('data:') === 0) {
           log.debug('[plugin.image] Skip data image:', src)
