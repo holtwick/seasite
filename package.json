@@ -1,6 +1,6 @@
 {
   "name": "seasite",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "description": "Static Site Builder",
   "main": "lib/index.js",
   "scripts": {
@@ -44,7 +44,7 @@
     "less": "^3.9.0",
     "less-plugin-clean-css": "^1.5.1",
     "lodash": "^4.17.11",
-    "marked": "^0.6.0",
+    "marked": "^0.6.2",
     "uglify-js": "^3.4.0",
     "uglifycss": "0.0.29",
     "yamljs": "^0.3.0",
