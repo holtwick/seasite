@@ -22,10 +22,9 @@ const fs = require('fs')
 const fsx = require('fs-extra')
 const path = require('path')
 
-import {jsx} from './jsx'
 import log from '../log'
-import {dom, isDOM} from './dom'
-import {mkdir, rmdir, walkSync} from './fileutil'
+import { dom, isDOM } from './dom'
+import { mkdir, rmdir, walkSync } from './fileutil'
 
 type SeaSitePattern = string | RegExp | Array<string | RegExp>
 
@@ -99,7 +98,7 @@ export class SeaSite {
   constructor(srcPath: string, basePath: ?string = null, opt: Object = {
     excludePatterns: null,
     includePatterns: null,
-    baseURL: ''
+    baseURL: '',
   }) {
 
     log.setLevel(opt.logLevel || log.INFO)
@@ -217,7 +216,7 @@ export class SeaSite {
   copyNPM(moduleName: string, fromRelativePath: string = '', toPath: string = 'npm') {
     log.debug(`copy npm module ${moduleName}/${fromRelativePath} -> ${toPath}`)
     let p = require.resolve(moduleName, {
-      paths: [process.cwd()]
+      paths: [process.cwd()],
     })
     log.assert(!!p, `[site.copyNPM] Could not resolve module ${moduleName}`)
     let rx = /^.*\/node_modules\/[^\/]+/gi
@@ -277,7 +276,7 @@ export class SeaSite {
       }
     }
     fs.writeFileSync(outPath, content, {
-      mode: 0o644
+      mode: 0o644,
     })
   }
 
@@ -319,13 +318,13 @@ export class SeaSite {
         path: urlPath,
         mode: null,
         content: null,
-        ignore: false
+        ignore: false,
       }
 
       let ret = null
       if (/\.(html?|xml)$/i.test(urlPath)) {
         let xmlMode = /\.xml$/i.test(urlPath)
-        let $ = dom(content, {xmlMode})
+        let $ = dom(content, { xmlMode })
         result.content = $
         ret = handler($, urlPath)
       } else {
@@ -335,7 +334,7 @@ export class SeaSite {
 
       if (ret !== false) {
         if (typeof ret === 'string') {
-          ret = {content: ret}
+          ret = { content: ret }
         }
         ret = ret || result || {}
         if (ret.ignore !== true) {
@@ -346,7 +345,7 @@ export class SeaSite {
           } else if (content) {
             this.write(p, content)
           } else {
-            log.error('Unknow content type for', p, '=>', content)
+            log.error('Unknown content type for', p, '=>', content)
           }
         }
       }

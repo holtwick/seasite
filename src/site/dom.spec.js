@@ -18,9 +18,9 @@
 // (C)opyright Dirk Holtwick, 2017-01-19 <dirk.holtwick@gmail.com>
 // @jsx jsx
 
-import {jsx} from './jsx'
-import {example} from '../plugins/index'
-import {dom, html, xml} from './dom'
+import { example } from '../plugins/index'
+import { dom, html, xml } from './dom'
+import { jsx } from './jsx'
 
 describe('DOM', () => {
 
@@ -29,9 +29,9 @@ describe('DOM', () => {
     let $ = dom(r)
 
     $.applyPlugins([
-      example('test')
+      example('test'),
     ], {
-      value: 123
+      value: 123,
     })
 
     expect($.html()).toBe('<html><head><meta name="test" value="123"></head><body><div><b>Bold</b></div></body></html>')
@@ -81,5 +81,14 @@ describe('DOM', () => {
     expect(html(html(sample)).bodyMarkup()).toBe(`<div>lorem</div>`)
     expect(html(new Date()).bodyMarkup()).toBe(``)
   })
+
+  it('should handle target correctly', () => {
+    const sample = '<li><a class="text-muted" href="https://twitter.com/collectallapp" target="_blank">Twitter</a></li>'
+    let $ = html(sample)
+    $('[target="_blank"]').attr('rel', 'noopener')
+    const markup = $.bodyMarkup()
+    expect(markup).toBe('<li><a class="text-muted" href="https://twitter.com/collectallapp" target="_blank" rel="noopener">Twitter</a></li>')
+  })
+
 
 })
