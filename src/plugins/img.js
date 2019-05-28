@@ -115,6 +115,7 @@ export function img(gopt: Object = {}) {
                 size.height /= 2
               }
               img.attr('width', size.width.toString())
+              img.attr('height', size.height.toString())
             }
           }
         }
