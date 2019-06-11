@@ -1,6 +1,6 @@
 {
   "name": "seasite",
-  "version": "0.8.1",
+  "version": "0.8.3",
   "description": "Static Site Builder",
   "main": "lib/index.js",
   "scripts": {
@@ -23,21 +23,21 @@
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
-    "@babel/core": "^7.4.4",
+    "@babel/core": "^7.4.5",
     "@babel/plugin-proposal-class-properties": "^7.4.4",
     "@babel/plugin-transform-runtime": "^7.4.4",
-    "@babel/preset-env": "^7.4.4",
+    "@babel/preset-env": "^7.4.5",
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
-    "flow-bin": "^0.98.1"
+    "flow-bin": "^0.100.0"
   },
   "dependencies": {
-    "@babel/runtime": "^7.4.4",
+    "@babel/runtime": "^7.4.5",
     "babel-core": "^7.0.0-bridge.0",
     "cheerio": "^1.0.0-rc.2",
     "dateformat": "^3.0.3",
     "fs-extra": "^8.0.1",
-    "highlight.js": "^9.15.6",
+    "highlight.js": "^9.15.8",
     "html-minifier": "^4.0.0",
     "image-size": "^0.7.4",
     "jest": "^24.8.0",
@@ -45,7 +45,7 @@
     "less-plugin-clean-css": "^1.5.1",
     "lodash": "^4.17.11",
     "marked": "^0.6.2",
-    "uglify-js": "^3.5.14",
+    "uglify-js": "^3.6.0",
     "uglifycss": "0.0.29",
     "yamljs": "^0.3.0",
     "yargs": "^13.2.4"
