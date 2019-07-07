@@ -28,15 +28,14 @@ let defaults = {
 }
 
 export function release(site: SeaSite, opt: Object = {}): Array<Object> {
-
   opt = Object.assign({}, defaults, opt)
 
   if (!opt.pattern && opt.folder) {
-    opt.pattern = new RegExp(opt.folder + '\/.*\.zip$')
+    opt.pattern = new RegExp(opt.folder + '\/.*\.(zip|exe|dmg|AppImage)$')
   }
 
   let entries = site.paths(opt.pattern)
-    .filter(p => /\.\d+(-\d+)?\.zip$/.test(p))
+    .filter(p => /\.\d+(-\d+)?\.(zip|exe|dmg|AppImage)$/.test(p))
     .map(path => {
       const r = /(^.+)((\d+)\.(\d+)\.(\d+)(\.(\d+))?)(-(\d+))?\.[^\.]+$/.exec(path)
 
@@ -49,7 +48,7 @@ export function release(site: SeaSite, opt: Object = {}): Array<Object> {
       const build = +r[9] || 0
 
       const descPath = `${prefix}${version}.md`
-      if (existsSync(site.path(descPath))) {
+      if (opt.skipMD || existsSync(site.path(descPath))) {
         const stat = statSync(site.path(path)) || {}
         return {
           date: stat.mtime, // creation time
