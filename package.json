@@ -33,7 +33,6 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.6.0",
-    "babel-core": "^7.0.0-bridge.0",
     "cheerio": "^1.0.0-rc.2",
     "dateformat": "^3.0.3",
     "fs-extra": "^8.1.0",
