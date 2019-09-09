@@ -18,7 +18,7 @@
 // @flow
 // @jsx jsx
 
-import {jsx, unescapeHTML} from './jsx'
+import { jsx, unescapeHTML } from './jsx'
 
 const fs = require('fs')
 const marked = require('marked')
@@ -32,8 +32,8 @@ function buildOutline(headers, level = 1, opt = {
     '2': 'nav',
     '3': 'nav',
     '4': 'nav',
-    '5': 'nav'
-  }
+    '5': 'nav',
+  },
 }) {
   let list = ''
   while (headers && headers.length > 0) {
@@ -72,8 +72,8 @@ function buildOutlineBS4(headers, level = 1, opt = {
     '2': 'nav flex-column',
     '3': 'nav flex-column',
     '4': 'nav flex-column',
-    '5': 'nav flex-column'
-  }
+    '5': 'nav flex-column',
+  },
 }) {
   let list = ''
   while (headers && headers.length > 0) {
@@ -108,7 +108,7 @@ function buildOutlineBS4(headers, level = 1, opt = {
 
 export function parseMarkdown(content: string | Buffer, opt: Object = {
   outline: false,
-  bs4: false
+  bs4: false,
 }) {
   // Props
 
@@ -127,6 +127,7 @@ export function parseMarkdown(content: string | Buffer, opt: Object = {
 
   let headers = []
   let ctr = 0
+  let strippedTitle = false
 
   let renderer = new marked.Renderer()
   renderer.heading = function (text, level) {
@@ -135,6 +136,11 @@ export function parseMarkdown(content: string | Buffer, opt: Object = {
       anchor = a
       return ''
     })
+    let title = unescapeHTML(text)
+    if (!strippedTitle && title === props.title) {
+      strippedTitle = true // avoid multiple strips
+      return ''
+    }
     if (!props.title) {
       props.title = unescapeHTML(text)
       return ''
@@ -144,7 +150,7 @@ export function parseMarkdown(content: string | Buffer, opt: Object = {
       headers.push({
         level: +level,
         anchor,
-        text: text.replace(/<.*?>/g, '').trim()
+        text: text.replace(/<.*?>/g, '').trim(),
       })
     }
     if (props.inc) {
@@ -170,7 +176,7 @@ export function parseMarkdown(content: string | Buffer, opt: Object = {
     smartLists: true,
     smartypants: false,
     langPrefix: 'lang-',
-    renderer
+    renderer,
   })
   result.html = marked(result.content)
 
@@ -195,7 +201,7 @@ export function parseMarkdown(content: string | Buffer, opt: Object = {
 
 export function markdown(content: string | Buffer, opt: Object = {
   outline: false,
-  bs4: false
+  bs4: false,
 }) {
   return parseMarkdown(content, opt)
 }

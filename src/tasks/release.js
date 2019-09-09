@@ -18,13 +18,12 @@
 // (C)opyright Dirk Holtwick, 2016-08-20 <dirk.holtwick@gmail.com>
 // @jsx html
 
-import {existsSync, statSync} from 'fs'
-import {SeaSite} from '../index'
-import {jsx} from '../site/jsx'
+import { existsSync, statSync } from 'fs'
+import { SeaSite } from '../index'
 
 let defaults = {
   folder: 'release',
-  pattern: null
+  pattern: null,
 }
 
 export function release(site: SeaSite, opt: Object = {}): Array<Object> {
@@ -37,15 +36,15 @@ export function release(site: SeaSite, opt: Object = {}): Array<Object> {
   let entries = site.paths(opt.pattern)
     .filter(p => /\.\d+(-\d+)?\.(zip|exe|dmg|AppImage)$/.test(p))
     .map(path => {
-      const r = /(^.+)((\d+)\.(\d+)\.(\d+)(\.(\d+))?)(-(\d+))?\.[^\.]+$/.exec(path)
-
+      const r = /(^.+[^\d.])((\d+)\.(\d+)(\.(\d+))?(\.(\d+))?)(-(\d+))?\.[^\.]+$/.exec(path)
+      // console.log('r', r)
       const prefix = r[1]
       const version = r[2]
       const major = +r[3] || 0
       const minor = +r[4] || 0
-      const patch = +r[5] || 0
-      const fix = +r[7] || 0
-      const build = +r[9] || 0
+      const patch = +r[6] || 0
+      const fix = +r[8] || 0
+      const build = +r[10] || 0
 
       const descPath = `${prefix}${version}.md`
       if (opt.skipMD || existsSync(site.path(descPath))) {
@@ -62,7 +61,7 @@ export function release(site: SeaSite, opt: Object = {}): Array<Object> {
           // md,
           path,
           prefix,
-          descPath
+          descPath,
         }
       }
     })
@@ -86,6 +85,7 @@ export function release(site: SeaSite, opt: Object = {}): Array<Object> {
     })
     .reverse()
 
+  // console.log('entries', entries)
   return entries
 
 
