@@ -22,31 +22,31 @@
     "url": "https://github.com/holtwick/seasite.git"
   },
   "devDependencies": {
-    "@babel/cli": "^7.6.0",
-    "@babel/core": "^7.6.0",
+    "@babel/cli": "^7.6.3",
+    "@babel/core": "^7.6.3",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
-    "@babel/plugin-transform-runtime": "^7.6.0",
-    "@babel/preset-env": "^7.6.0",
+    "@babel/plugin-transform-runtime": "^7.6.2",
+    "@babel/preset-env": "^7.6.3",
     "@babel/preset-flow": "^7.0.0",
-    "@babel/preset-react": "^7.0.0",
-    "flow-bin": "^0.107.0"
+    "@babel/preset-react": "^7.6.3",
+    "flow-bin": "^0.109.0"
   },
   "dependencies": {
-    "@babel/runtime": "^7.6.0",
+    "@babel/runtime": "^7.6.3",
     "cheerio": "^1.0.0-rc.2",
     "dateformat": "^3.0.3",
     "fs-extra": "^8.1.0",
     "highlight.js": "^9.15.10",
     "html-minifier": "^4.0.0",
-    "image-size": "^0.7.4",
+    "image-size": "^0.8.3",
     "jest": "^24.9.0",
     "less": "^3.10.3",
     "less-plugin-clean-css": "^1.5.1",
     "lodash": "^4.17.15",
     "marked": "^0.7.0",
-    "uglify-js": "^3.6.0",
+    "uglify-js": "^3.6.1",
     "uglifycss": "0.0.29",
     "yamljs": "^0.3.0",
-    "yargs": "^14.0.0"
+    "yargs": "^14.2.0"
   }
 }
