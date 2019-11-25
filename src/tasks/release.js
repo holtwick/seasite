@@ -34,9 +34,9 @@ export function release(site: SeaSite, opt: Object = {}): Array<Object> {
   }
 
   let entries = site.paths(opt.pattern)
-    .filter(p => /\.\d+(-\d+)?\.(zip|exe|dmg|AppImage)$/.test(p))
+    .filter(p => /\.\d+(b\d+)?(-\d+)?\.(zip|exe|dmg|AppImage)$/.test(p))
     .map(path => {
-      const r = /(^.+[^\d.])((\d+)\.(\d+)(\.(\d+))?(\.(\d+))?)(-(\d+))?(b(\d+))?\.[^.]+$/.exec(path)
+      const r = /(^.+[^\d.])((\d+)\.(\d+)(\.(\d+))?(\.(\d+))?(b(\d+))?)(-(\d+))?\.[^.]+$/.exec(path)
       // console.log('r', r)
       const prefix = r[1]
       const version = r[2]
