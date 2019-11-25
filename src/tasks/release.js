@@ -47,8 +47,12 @@ export function release(site: SeaSite, opt: Object = {}): Array<Object> {
       const beta = +r[10] || 0
       const build = +r[12] || 0
 
-      const descPath = `${prefix}${version}.md`
-      if (opt.skipMD || existsSync(site.path(descPath))) {
+      let descPath = `${prefix}${version}.md`
+      if (!existsSync(site.path(descPath))) {
+        descPath = null
+      }
+
+      if (opt.skipMD || descPath) {
         const stat = statSync(site.path(path)) || {}
         return {
           date: stat.mtime, // creation time
