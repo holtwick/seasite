@@ -34,9 +34,9 @@ export function release(site: SeaSite, opt: Object = {}): Array<Object> {
   }
 
   let entries = site.paths(opt.pattern)
-    .filter(p => /\.\d+(-\d+)?\.(zip|exe|dmg|AppImage)$/.test(p))
+    .filter(p => /\.\d+(b\d+)?(-\d+)?\.(zip|exe|dmg|AppImage)$/.test(p))
     .map(path => {
-      const r = /(^.+[^\d.])((\d+)\.(\d+)(\.(\d+))?(\.(\d+))?)(-(\d+))?\.[^\.]+$/.exec(path)
+      const r = /(^.+[^\d.])((\d+)\.(\d+)(\.(\d+))?(\.(\d+))?(b(\d+))?)(-(\d+))?\.[^.]+$/.exec(path)
       // console.log('r', r)
       const prefix = r[1]
       const version = r[2]
@@ -44,10 +44,15 @@ export function release(site: SeaSite, opt: Object = {}): Array<Object> {
       const minor = +r[4] || 0
       const patch = +r[6] || 0
       const fix = +r[8] || 0
-      const build = +r[10] || 0
+      const beta = +r[10] || 0
+      const build = +r[12] || 0
 
-      const descPath = `${prefix}${version}.md`
-      if (opt.skipMD || existsSync(site.path(descPath))) {
+      let descPath = `${prefix}${version}.md`
+      if (!existsSync(site.path(descPath))) {
+        descPath = null
+      }
+
+      if (opt.skipMD || descPath) {
         const stat = statSync(site.path(path)) || {}
         return {
           date: stat.mtime, // creation time
@@ -56,6 +61,7 @@ export function release(site: SeaSite, opt: Object = {}): Array<Object> {
           minor,
           patch,
           fix,
+          beta,
           version,
           build,
           // md,
@@ -77,6 +83,9 @@ export function release(site: SeaSite, opt: Object = {}): Array<Object> {
             r = a.patch - b.patch
             if (r === 0) {
               r = a.fix - b.fix
+              if (r === 0) {
+                r = a.beta - b.beta
+              }
             }
           }
         }
