@@ -36,16 +36,17 @@ export function release(site: SeaSite, opt: Object = {}): Array<Object> {
   let entries = site.paths(opt.pattern)
     .filter(p => /\.\d+(b\d+)?(-\d+)?\.(zip|exe|dmg|AppImage)$/.test(p))
     .map(path => {
-      const r = /(^.+[^\d.])((\d+)\.(\d+)(\.(\d+))?(\.(\d+))?(b(\d+))?)(-(\d+))?\.[^.]+$/.exec(path)
+      const r = /(^.+[^\d.])(((\d+)\.(\d+)(\.(\d+))?(\.(\d+))?(b(\d+))?)(-(\d+))?)\.[^.]+$/.exec(path)
       // console.log('r', r)
       const prefix = r[1]
-      const version = r[2]
-      const major = +r[3] || 0
-      const minor = +r[4] || 0
-      const patch = +r[6] || 0
-      const fix = +r[8] || 0
-      const beta = +r[10] || 0
-      const build = +r[12] || 0
+      const fullVersion = r[2]
+      const version = r[3]
+      const major = +r[4] || 0
+      const minor = +r[5] || 0
+      const patch = +r[7] || 0
+      const fix = +r[9] || 0
+      const beta = +r[11] || 0
+      const build = +r[13] || 0
 
       let descPath = `${prefix}${version}.md`
       if (!existsSync(site.path(descPath))) {
@@ -63,6 +64,7 @@ export function release(site: SeaSite, opt: Object = {}): Array<Object> {
           fix,
           beta,
           version,
+          fullVersion,
           build,
           // md,
           path,
