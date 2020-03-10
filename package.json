@@ -1,6 +1,6 @@
 {
   "name": "seasite",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "Static Site Builder",
   "main": "lib/index.js",
   "scripts": {
@@ -22,31 +22,31 @@
     "url": "https://github.com/holtwick/seasite.git"
   },
   "devDependencies": {
-    "@babel/cli": "^7.7.4",
-    "@babel/core": "^7.7.4",
-    "@babel/plugin-proposal-class-properties": "^7.7.4",
-    "@babel/plugin-transform-runtime": "^7.7.4",
-    "@babel/preset-env": "^7.7.4",
-    "@babel/preset-flow": "^7.7.4",
-    "@babel/preset-react": "^7.7.4",
-    "flow-bin": "^0.112.0"
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.7",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-transform-runtime": "^7.8.3",
+    "@babel/preset-env": "^7.8.7",
+    "@babel/preset-flow": "^7.8.3",
+    "@babel/preset-react": "^7.8.3",
+    "flow-bin": "^0.120.1"
   },
   "dependencies": {
-    "@babel/runtime": "^7.7.4",
-    "cheerio": "^1.0.0-rc.2",
+    "@babel/runtime": "^7.8.7",
+    "cheerio": "^1.0.0-rc.3",
     "dateformat": "^3.0.3",
     "fs-extra": "^8.1.0",
-    "highlight.js": "^9.16.2",
+    "highlight.js": "^9.18.1",
     "html-minifier": "^4.0.0",
     "image-size": "^0.8.3",
-    "jest": "^24.9.0",
-    "less": "^3.10.3",
+    "jest": "^25.1.0",
+    "less": "^3.11.1",
     "less-plugin-clean-css": "^1.5.1",
     "lodash": "^4.17.15",
-    "marked": "^0.7.0",
-    "uglify-js": "^3.6.9",
+    "marked": "^0.8.0",
+    "uglify-js": "^3.8.0",
     "uglifycss": "0.0.29",
     "yamljs": "^0.3.0",
-    "yargs": "^15.0.2"
+    "yargs": "^15.3.0"
   }
 }
