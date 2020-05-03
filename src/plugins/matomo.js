@@ -28,6 +28,8 @@ export function matomoAnalytics(opt: Object) {
     log.assert(id, '[plugin.matomo] id required')
 
     $('body').append(`<script>
+var disableStr = 'ga-disable-${id}';
+
 function gaOptout() {
   document.cookie = disableStr + '=true; expires=Thu, 31 Dec 2099 23:59:59 UTC; path=/';
   window[disableStr] = true;
