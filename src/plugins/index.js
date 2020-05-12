@@ -20,6 +20,7 @@
 export * from './css'
 export * from './js'
 export * from './ga'
+export * from './matomo'
 export * from './example'
 export * from './meta'
 export * from './best-practice'
