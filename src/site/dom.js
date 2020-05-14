@@ -43,7 +43,7 @@ const cheerio = require('cheerio')
 }
 
 
-import {HTML, unescapeHTML} from './jsx'
+import { HTML, unescapeHTML } from './jsx'
 
 export function isDOM(obj: any): boolean {
   return obj && typeof obj === 'function' && typeof obj.html === 'function'
@@ -70,7 +70,7 @@ function fixNonClosingTags(value) {
 }
 
 export function dom(value: string | Buffer | Function, opt: Object = {
-  normalizeWhitespace: true
+  normalizeWhitespace: true,
 }): Function {
 
   const xmlMode = opt.xmlMode === true
@@ -99,6 +99,13 @@ export function dom(value: string | Buffer | Function, opt: Object = {
     }
   }
 
+  $.applyPluginsAsync = async function (plugins: Array<Function>, ...opts):Promise<void> {
+    for (let plugin of plugins) {
+      let result = plugin($, ...opts)
+      if (result && result.then) await result
+    }
+  }
+
   $.decorate = function (selector, fn) {
     $(selector).each((i, e) => {
       e = $(e)
@@ -113,7 +120,7 @@ export function dom(value: string | Buffer | Function, opt: Object = {
 
   function postProcessMarkup(markup: string, opt: ?MarkupOptions = {
     stripComments: true,
-    stripPHP: false
+    stripPHP: false,
   }) {
     if (opt) {
       if (!opt.stripPHP) {
@@ -159,7 +166,7 @@ export function dom(value: string | Buffer | Function, opt: Object = {
 }
 
 export function xml(value: string | Buffer | Function) {
-  return dom(value || '', {xmlMode: true})
+  return dom(value || '', { xmlMode: true })
 }
 
 export function html(value: string | Buffer | Function) {

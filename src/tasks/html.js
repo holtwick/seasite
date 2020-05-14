@@ -18,15 +18,24 @@
 // @flow
 // @jsx jsx
 
-import {SeaSite} from '../index'
-import {handle} from './handle'
+import { SeaSite } from '../index'
+import { handle } from './handle'
 
 const defaults = {
   pattern: /\.html?$/,
-  exclude: null
+  exclude: null,
 }
 
 export function html(site: SeaSite, gopt: Object = {}): Array<Object> {
   gopt = Object.assign({}, defaults, gopt)
   return handle(site, gopt)
+}
+
+export async function htmlAsync(site: SeaSite, gopt: Object = {}): Promise<Array<Object>> {
+  gopt = Object.assign({}, defaults, gopt)
+  let result: (any | Promise<any>) = handle(site, gopt)
+  if (result && result.then) {
+    return await result
+  }
+  return result
 }

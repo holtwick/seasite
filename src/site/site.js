@@ -295,7 +295,7 @@ export class SeaSite {
     this.write(urlPath, markup)
   }
 
-  handle(pattern: SeaSitePattern | Object, handler: (any, string) => ?any) {
+  handle(pattern: SeaSitePattern | Object, handler: (any, string) => ?(any | Promise<any>)) {
     // let urlPaths = []
     // if (typeof pattern === 'string') {
     //     urlPaths = [pattern]
@@ -332,22 +332,32 @@ export class SeaSite {
         ret = handler(content, urlPath)
       }
 
-      if (ret !== false) {
-        if (typeof ret === 'string') {
-          ret = { content: ret }
-        }
-        ret = ret || result || {}
-        if (ret.ignore !== true) {
-          let p = ret.path || urlPath
-          let content = ret.content || result.content
-          if (isDOM(content)) {
-            this.writeDOM(content, p)
-          } else if (content) {
-            this.write(p, content)
-          } else {
-            log.error('Unknown content type for', p, '=>', content)
+      let solve = (ret) => {
+        if (ret !== false) {
+          if (typeof ret === 'string') {
+            ret = { content: ret }
+          }
+          ret = ret || result || {}
+          if (ret.ignore !== true) {
+            let p = ret.path || urlPath
+            let content = ret.content || result.content
+            if (isDOM(content)) {
+              this.writeDOM(content, p)
+            } else if (content) {
+              this.write(p, content)
+            } else {
+              log.error('Unknown content type for', p, '=>', content)
+            }
           }
         }
+      }
+
+      if (ret && ret.then) {
+        ret.then(solve).catch(err => {
+          log.error('Promise error', err)
+        })
+      } else {
+        solve(ret)
       }
     }
   }
