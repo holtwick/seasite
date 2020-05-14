@@ -76,7 +76,7 @@ export async function handleAsync(site: SeaSite, gopt: Object = {}): Array<Objec
 
   gopt = Object.assign({}, defaults, gopt)
 
-  await site.handleAsync(gopt.pattern, async ($, path) => {
+  await site.handle(gopt.pattern, async ($, path) => {
     if (isPattern(gopt.exclude) && pathMatchesPatterns(path, gopt.exclude)) {
       return false // don't write
     }
@@ -95,7 +95,10 @@ export async function handleAsync(site: SeaSite, gopt: Object = {}): Array<Objec
       return false // don't write
     }
 
-    if (opt.handler($, path) === false) {
+    let r = opt.handler($, path)
+    if (r && r.then) await r
+
+    if (r === false) {
       return false
     }
 

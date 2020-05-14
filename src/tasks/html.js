@@ -19,7 +19,7 @@
 // @jsx jsx
 
 import { SeaSite } from '../index'
-import { handle } from './handle'
+import { handle, handleAsync } from './handle'
 
 const defaults = {
   pattern: /\.html?$/,
@@ -33,9 +33,5 @@ export function html(site: SeaSite, gopt: Object = {}): Array<Object> {
 
 export async function htmlAsync(site: SeaSite, gopt: Object = {}): Promise<Array<Object>> {
   gopt = Object.assign({}, defaults, gopt)
-  let result: (any | Promise<any>) = handle(site, gopt)
-  if (result && result.then) {
-    return await result
-  }
-  return result
+  return await handleAsync(site, gopt)
 }

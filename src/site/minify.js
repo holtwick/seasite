@@ -77,7 +77,7 @@ export async function purgeCSS(html: string, css: string, opt: Object = {}): Pro
   try {
     return result.map(r => r.css || '').join('\n')
   } catch (err) {
-    console.error('Exception:', err)
+    log.error('Exception:', err)
   }
   return ''
 }

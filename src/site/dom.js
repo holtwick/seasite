@@ -99,7 +99,7 @@ export function dom(value: string | Buffer | Function, opt: Object = {
     }
   }
 
-  $.applyPluginsAsync = async function (plugins: Array<Function>, ...opts):Promise<void> {
+  $.applyPluginsAsync = async function (plugins: Array<Function>, ...opts): Promise<void> {
     for (let plugin of plugins) {
       let result = plugin($, ...opts)
       if (result && result.then) await result
