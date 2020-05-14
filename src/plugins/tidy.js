@@ -51,7 +51,7 @@ export function tidyCSS(gopt: Object = {}) {
       // console.log('New CSS', r)
       $('head').append(`<style type="text/css">${r}</style>`)
     }
-    console.log(html.length, css.join('\n').length, r.length)
+    // console.log(html.length, css.join('\n').length, r.length)
   }
 
 }

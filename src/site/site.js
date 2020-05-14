@@ -321,7 +321,7 @@ export class SeaSite {
         ignore: false,
       }
 
-      let ret:any = null
+      let ret: any = null
       if (/\.(html?|xml)$/i.test(urlPath)) {
         let xmlMode = /\.xml$/i.test(urlPath)
         let $ = dom(content, { xmlMode })
@@ -332,10 +332,7 @@ export class SeaSite {
         ret = handler(content, urlPath)
       }
 
-      if (ret && ret.then) {
-        console.log('ret prom')
-        ret = await ret
-      }
+      if (ret && ret.then) ret = await ret
 
       if (ret !== false) {
         if (typeof ret === 'string') {
