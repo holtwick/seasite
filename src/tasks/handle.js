@@ -68,4 +68,45 @@ export function handle(site: SeaSite, gopt: Object = {}): Array<Object> {
   return pages
 }
 
+export async function handleAsync(site: SeaSite, gopt: Object = {}): Array<Object> {
+
+  let pages = []
+
+  const plugins = gopt.plugins
+
+  gopt = Object.assign({}, defaults, gopt)
+
+  await site.handle(gopt.pattern, async ($, path) => {
+    if (isPattern(gopt.exclude) && pathMatchesPatterns(path, gopt.exclude)) {
+      return false // don't write
+    }
+
+    let opt = Object.assign({}, defaults, gopt, {
+      site,
+      path
+    })
+
+    if (isDOM($) && plugins && plugins.length) {
+      await $.applyPluginsAsync(plugins, opt)
+    }
+
+    if (!opt.handler) {
+      log.warn('[task.handle] Will not write', path)
+      return false // don't write
+    }
+
+    let r = opt.handler($, path)
+    if (r && r.then) await r
+
+    if (r === false) {
+      return false
+    }
+
+    pages.push(opt)
+  })
+
+  return pages
+}
+
+
 

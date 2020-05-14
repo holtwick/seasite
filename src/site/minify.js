@@ -20,10 +20,12 @@
 
 // https://github.com/mishoo/UglifyJS2
 
-var UglifyJS = require('uglify-js')
+const UglifyJS = require('uglify-js')
 
-var less = require('less')
-var LessPluginCleanCSS = require('less-plugin-clean-css')
+const less = require('less')
+const LessPluginCleanCSS = require('less-plugin-clean-css')
+
+const { PurgeCSS } = require('purgecss')
 
 import log from '../log'
 
@@ -33,12 +35,12 @@ export function stripComments(code: ?string): ?string {
 }
 
 export function minifyLESS(css: string, opt: Object = {}): ?string {
-  let cleanCSSPlugin = new LessPluginCleanCSS({advanced: true})
+  let cleanCSSPlugin = new LessPluginCleanCSS({ advanced: true })
   let options = {
     ...opt,
     sync: true,
     syncImport: true,
-    plugins: [cleanCSSPlugin]
+    plugins: [cleanCSSPlugin],
   }
   var out = null
   less.render(css, options, function (err, result) {
@@ -59,4 +61,23 @@ export function minifyJS(...code: [string]): ?string {
     throw result.error
   }
   return stripComments(result.code)
+}
+
+//
+
+export async function purgeCSS(html: string, css: string, opt: Object = {}): Promise<string> {
+  const result = await new PurgeCSS().purge({
+    content: [{
+      raw: html,
+    }],
+    css: [{
+      raw: css,
+    }],
+  })
+  try {
+    return result.map(r => r.css || '').join('\n')
+  } catch (err) {
+    log.error('Exception:', err)
+  }
+  return ''
 }
