@@ -295,7 +295,7 @@ export class SeaSite {
     this.write(urlPath, markup)
   }
 
-  handle(pattern: SeaSitePattern | Object, handler: (any, string) => ?any) {
+  async handle(pattern: SeaSitePattern | Object, handler: (any, string) => ?(any | Promise<any>)): Promise<void> {
     // let urlPaths = []
     // if (typeof pattern === 'string') {
     //     urlPaths = [pattern]
@@ -321,7 +321,7 @@ export class SeaSite {
         ignore: false,
       }
 
-      let ret = null
+      let ret: any = null
       if (/\.(html?|xml)$/i.test(urlPath)) {
         let xmlMode = /\.xml$/i.test(urlPath)
         let $ = dom(content, { xmlMode })
@@ -331,6 +331,8 @@ export class SeaSite {
         result.content = content
         ret = handler(content, urlPath)
       }
+
+      if (ret && ret.then) ret = await ret
 
       if (ret !== false) {
         if (typeof ret === 'string') {

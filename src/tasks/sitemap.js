@@ -18,27 +18,38 @@
 // @flow
 // @jsx jsx
 
-import {SeaSite} from '../site/site'
+import { jsx, xml } from '../site'
+import { SeaSite } from '../site/site'
 
 let defaults = {
   exclude: [
-    '404.html'
+    '404.html',
   ],
-  pattern: /\.html?$/
+  pattern: /\.html?$/,
 }
 
 export function sitemap(site: SeaSite, opt: Object = {}) {
   opt = Object.assign({}, defaults, opt)
 
   // log.info(opt.pattern, opt.exclude)
-  let sitemap = site
+  let urls = site
     .paths(opt.pattern, opt.exclude)
     .map(path => site.publicURL(path))
 
-  sitemap.sort()
-  site.write('sitemap.txt', sitemap.join('\n'))
+  urls.sort()
+  site.write('sitemap.txt', urls.join('\n'))
+
+  let sitemapXML = xml(<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"/>)
+  for (let url of urls) {
+    let atomEntry =
+      <url>
+        <loc>{url}</loc>
+      </url>
+    sitemapXML('urlset').append(atomEntry)
+  }
+  site.writeDOM(sitemapXML, 'sitemap.xml')
 
   if (!site.exists('robots.txt')) {
-    site.write('robots.txt', `User-agent: *\nSitemap: ${site.publicURL('sitemap.txt')}`)
+    site.write('robots.txt', `User-agent: *\nSitemap: ${site.publicURL('sitemap.xml')}`)
   }
 }
