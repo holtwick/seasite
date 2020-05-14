@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {minifyJS, minifyLESS, minifyLESSAsync} from './minify'
+import { minifyJS, minifyLESS, minifyLESSAsync, purgeCSS } from './minify'
 
 describe('Minify', () => {
 
@@ -27,6 +27,12 @@ describe('Minify', () => {
   it('should do JS', () => {
     let r = minifyJS('var aa = 1+2', 'aa += 4')
     expect(r).toEqual('var aa=3;aa+=4;')
+  })
+
+  it('should purge CSS', async () => {
+    let r = await  purgeCSS('Hello <b>world</b>', 'b, u { color: red }\ni { color: blue }')
+    console.log(r)
+    expect(r).toEqual('b { color: red }')
   })
 
 })
