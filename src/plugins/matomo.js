@@ -16,10 +16,49 @@
  */
 
 // @flow
+// @jsx jsx
 
 import log from '../log'
+import { jsx } from '../site/jsx'
+import { html } from '../site'
 
 // Support for Matomo integration, respecting do not track
+
+export function matomoCampaignURL(url, opt = {}) {
+  const {
+    name = 'blog',
+    kw = '',
+    source = '',
+  } = opt
+  log.assert(url, '[plugin.matomo] url required')
+  let href = new URL(url)
+  name && href.searchParams.set('pk_campaign', name)
+  kw && href.searchParams.set('pk_kwd', kw)
+  source && href.searchParams.set('pk_source', source)
+  return href.toString()
+}
+
+export function matomoPixelImage(opt) {
+  const {
+    matomo,
+    url,
+    action,
+    name = 'blog',
+    kw = '',
+  } = opt
+  log.assert(matomo.id, '[plugin.matomo] matomo.id required')
+  log.assert(matomo.url, '[plugin.matomo] matomo.url required')
+  log.assert(url, '[plugin.matomo] url required')
+  let href = new URL(matomo.url + 'matomo.php')
+  href.searchParams.set('idsite', matomo.id.toString())
+  href.searchParams.set('rec', '1')
+  href.searchParams.set('bots', '1')
+  href.searchParams.set('url', url)
+  action && href.searchParams.set('action_name', action)
+  name && href.searchParams.set('_rcn', name) // Campaign name
+  kw && href.searchParams.set('_rck', kw) // Campaign keyword
+  return html(<img src={href.toString()} style="border:0;" alt=""/>).bodyMarkup()
+}
 
 export function matomoAnalytics(opt: Object) {
   let { url, id } = opt || {}
@@ -48,6 +87,6 @@ if (!((window.navigator && window.navigator['doNotTrack'] == 1) || (document.coo
     g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
   })();
 } 
-</script>`)
+</script><noscript><img src="${url}matomo.php?idsite=${id}&amp;rec=1" style="border:0;" alt=""></noscript>`)
   }
 }

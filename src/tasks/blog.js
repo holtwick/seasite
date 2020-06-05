@@ -18,12 +18,13 @@
 // @flow
 // @jsx jsx
 
-import {jsx} from '../site/jsx'
+import { jsx } from '../site/jsx'
 import dateformat from 'dateformat'
-import {statSync} from 'fs'
+import { statSync } from 'fs'
 import _ from 'lodash'
-import {dom, parseMarkdown, SeaSite, xml} from '../index'
-import {pathMatchesPatterns} from '../site'
+import { dom, parseMarkdown, SeaSite, xml } from '../index'
+import { pathMatchesPatterns } from '../site'
+import { matomoCampaignURL, matomoPixelImage } from '../plugins'
 
 function pathToHTMLPath(path) {
   return path.replace(/\..+?$/, '.html').replace(/\/-/, '/')
@@ -43,7 +44,7 @@ let defaults = {
     return <div>
       <div id="content"></div>
     </div>
-  }
+  },
 }
 
 export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
@@ -55,6 +56,7 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
     opt.pattern = new RegExp(opt.folder + '\/.*\.md$')
   }
 
+  const { matomo } = opt
   let maxDate: ?Date
 
   // Collect post data
@@ -67,7 +69,7 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
     let md = parseMarkdown(content)
     let props = md.props
     let html = md.html
-    let {title, date, hidden} = props
+    let { title, date, hidden } = props
     if (hidden || path.indexOf('/-') > 0) {
       return
     }
@@ -111,7 +113,7 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
       hidden,
       path,
       htmlPath: pathToHTMLPath(path),
-      url: site.publicURL(pathToHTMLPath(path))
+      url: site.publicURL(pathToHTMLPath(path)),
     })
     return false
   })
@@ -132,13 +134,27 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
       </channel>
     </rss>)
   for (let post of entries) {
+    let link = site.publicURL(post.htmlPath)
+    let html = post.html
+    if (matomo) {
+      link = matomoCampaignURL(link, {
+        name: 'rss',
+        kw: post.htmlPath,
+      })
+      html += matomoPixelImage({
+        matomo,
+        name: 'rss',
+        kw: post.htmlPath,
+        url: '/rss' + post.htmlPath,
+      })
+    }
     let atomEntry =
       <item>
         <title>{post.title}</title>
-        <link>{site.publicURL(post.htmlPath)}</link>
+        <link>{link}</link>
         <pubDate>{dateformat(post.date, 'isoDateTime')}</pubDate>
         <author>{opt.author}</author>
-        <description>{post.html}</description>
+        <description>{html}</description>
         <guid>{post.htmlPath}</guid>
       </item>
     atomContent('channel').append(atomEntry)
@@ -163,7 +179,7 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
             {/*({dateformat(post.date, 'longDate')})*/}
           </li>)}
         </ul>
-      </div>
+      </div>,
     )
     $('title').text(opt.title)
     $('#recent-posts-container').remove()
