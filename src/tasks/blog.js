@@ -24,6 +24,7 @@ import { statSync } from 'fs'
 import _ from 'lodash'
 import { dom, parseMarkdown, SeaSite, xml } from '../index'
 import { pathMatchesPatterns } from '../site'
+import { matomoCampaignURL, matomoPixelImage } from '../plugins'
 
 function pathToHTMLPath(path) {
   return path.replace(/\..+?$/, '.html').replace(/\/-/, '/')
@@ -133,13 +134,27 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
       </channel>
     </rss>)
   for (let post of entries) {
+    let link = site.publicURL(post.htmlPath)
+    let html = post.html
+    if (matomo) {
+      link = matomoCampaignURL(link, {
+        name: 'rss',
+        kw: post.htmlPath,
+      })
+      html += matomoPixelImage({
+        matomo,
+        name: 'rss',
+        kw: post.htmlPath,
+        url: '/rss' + post.htmlPath
+      })
+    }
     let atomEntry =
       <item>
         <title>{post.title}</title>
-        <link>{site.publicURL(post.htmlPath)}</link>
+        <link>{link}</link>
         <pubDate>{dateformat(post.date, 'isoDateTime')}</pubDate>
         <author>{opt.author}</author>
-        <description>{post.html}</description>
+        <description>{}</description>
         <guid>{post.htmlPath}</guid>
       </item>
     atomContent('channel').append(atomEntry)

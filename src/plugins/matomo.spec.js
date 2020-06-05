@@ -71,8 +71,7 @@ if (!((window.navigator && window.navigator['doNotTrack'] == 1) || (document.coo
     g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
   })();
 } 
-</script> 
-<noscript><p><img src="https://stats.holtwick.de/matomo/matomo.php?idsite=2&amp;rec=1" style="border:0;" alt=""></p></noscript></body></html>`)
+</script><noscript><img src="https://stats.holtwick.de/matomo/matomo.php?idsite=2&amp;rec=1" style="border:0;" alt=""></noscript></body></html>`)
   })
 
 })
