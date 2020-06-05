@@ -48,6 +48,7 @@ if (!((window.navigator && window.navigator['doNotTrack'] == 1) || (document.coo
     g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
   })();
 } 
-</script>`)
+</script> 
+<noscript><p><img src="${url}/matomo.php?idsite=${id}&amp;rec=1" style="border:0;" alt=""></p></noscript>`)
   }
 }

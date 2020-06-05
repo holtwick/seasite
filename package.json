@@ -29,7 +29,7 @@
     "@babel/preset-env": "^7.9.6",
     "@babel/preset-flow": "^7.9.0",
     "@babel/preset-react": "^7.9.4",
-    "flow-bin": "^0.124.0",
+    "flow-bin": "^0.125.1",
     "purgecss": "^2.2.1"
   },
   "dependencies": {

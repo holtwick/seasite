@@ -44,7 +44,7 @@ export function tidyCSS(gopt: Object = {}) {
       css.push($(el).html())
     })
     styles.replaceWith('')
-    let html = $.html()
+    let html = $.html() + '\n' + (gopt.additionalContent || '')
     // $('head').append(`<style type="text/css">b{color:red}</style>`)
     let r = await purgeCSS(html, css.join('\n'))
     if (r) {
