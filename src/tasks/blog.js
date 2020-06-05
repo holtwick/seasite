@@ -145,7 +145,7 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
         matomo,
         name: 'rss',
         kw: post.htmlPath,
-        url: '/rss' + post.htmlPath
+        url: '/rss' + post.htmlPath,
       })
     }
     let atomEntry =
@@ -154,7 +154,7 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
         <link>{link}</link>
         <pubDate>{dateformat(post.date, 'isoDateTime')}</pubDate>
         <author>{opt.author}</author>
-        <description>{}</description>
+        <description>{html}</description>
         <guid>{post.htmlPath}</guid>
       </item>
     atomContent('channel').append(atomEntry)

@@ -20,7 +20,7 @@
 // 2. Attribute name '__' gets transformed to ':' for namespace emulation
 // 3. Emulate CDATA by <cdata> element
 
-import {isDOM} from './dom'
+import { isDOM } from './dom'
 
 export function escapeHTML(s) {
   return s
@@ -81,14 +81,14 @@ export function jsx(tag, attrs, ...children) {
         } else if (name === 'style' && typeof v === 'object') {
           s += ` ${name}="${
             Object.keys(v).filter(
-              k => v[k] != null
+              k => v[k] != null,
             ).map(
               k => {
                 let vv = v[k]
                 vv = typeof vv === 'number' ? vv + 'px' : vv
                 return `${k.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()}:${vv}`
               }).join(';')
-            }"`
+          }"`
         } else if (v !== false && v != null) {
           s += ` ${name}="${escapeHTML(v.toString())}"`
         }

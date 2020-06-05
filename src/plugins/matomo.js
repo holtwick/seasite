@@ -20,6 +20,7 @@
 
 import log from '../log'
 import { jsx } from '../site/jsx'
+import { html } from '../site'
 
 // Support for Matomo integration, respecting do not track
 
@@ -56,7 +57,7 @@ export function matomoPixelImage(opt) {
   action && href.searchParams.set('action_name', action)
   name && href.searchParams.set('_rcn', name) // Campaign name
   kw && href.searchParams.set('_rck', kw) // Campaign keyword
-  return <img src={href.toString()} style="border:0;" alt=""/>
+  return html(<img src={href.toString()} style="border:0;" alt=""/>).bodyMarkup()
 }
 
 export function matomoAnalytics(opt: Object) {

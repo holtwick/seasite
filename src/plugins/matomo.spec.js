@@ -42,7 +42,7 @@ describe('pugin.matomo', () => {
       matomo,
       url: '/rss-opened'
     })
-    expect(html).toEqual('<img src="https://stats.holtwick.de/matomo/matomo.php?idsite=2&amp;rec=1&amp;bots=1&amp;url=%2Frss-opened&amp;_rcn=blog" style="border:0;" alt=""></img>')
+    expect(html).toEqual('<img src="https://stats.holtwick.de/matomo/matomo.php?idsite=2&amp;rec=1&amp;bots=1&amp;url=%2Frss-opened&amp;_rcn=blog" style="border:0;" alt>')
   })
 
   it('should add to page', () => {
