@@ -18,12 +18,12 @@
 // @flow
 // @jsx jsx
 
-import {jsx} from '../site/jsx'
+import { jsx } from '../site/jsx'
 import dateformat from 'dateformat'
-import {statSync} from 'fs'
+import { statSync } from 'fs'
 import _ from 'lodash'
-import {dom, parseMarkdown, SeaSite, xml} from '../index'
-import {pathMatchesPatterns} from '../site'
+import { dom, parseMarkdown, SeaSite, xml } from '../index'
+import { pathMatchesPatterns } from '../site'
 
 function pathToHTMLPath(path) {
   return path.replace(/\..+?$/, '.html').replace(/\/-/, '/')
@@ -43,7 +43,7 @@ let defaults = {
     return <div>
       <div id="content"></div>
     </div>
-  }
+  },
 }
 
 export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
@@ -55,6 +55,7 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
     opt.pattern = new RegExp(opt.folder + '\/.*\.md$')
   }
 
+  const { matomo } = opt
   let maxDate: ?Date
 
   // Collect post data
@@ -67,7 +68,7 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
     let md = parseMarkdown(content)
     let props = md.props
     let html = md.html
-    let {title, date, hidden} = props
+    let { title, date, hidden } = props
     if (hidden || path.indexOf('/-') > 0) {
       return
     }
@@ -111,7 +112,7 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
       hidden,
       path,
       htmlPath: pathToHTMLPath(path),
-      url: site.publicURL(pathToHTMLPath(path))
+      url: site.publicURL(pathToHTMLPath(path)),
     })
     return false
   })
@@ -163,7 +164,7 @@ export function blog(site: SeaSite, opt: Object = {}): Array<Object> {
             {/*({dateformat(post.date, 'longDate')})*/}
           </li>)}
         </ul>
-      </div>
+      </div>,
     )
     $('title').text(opt.title)
     $('#recent-posts-container').remove()
