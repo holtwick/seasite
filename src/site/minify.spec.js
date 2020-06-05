@@ -31,7 +31,6 @@ describe('Minify', () => {
 
   it('should purge CSS', async () => {
     let r = await  purgeCSS('Hello <b>world</b>', 'b, u { color: red }\ni { color: blue }')
-    console.log(r)
     expect(r).toEqual('b { color: red }')
   })
 
