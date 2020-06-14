@@ -18,8 +18,8 @@
 // @flow
 // @jsx jsx
 
-import {jsx} from '../site/jsx'
-import {isAbsoluteURL} from '../site/relativeurls'
+import { jsx } from '../site/jsx'
+import { isAbsoluteURL } from '../site/relativeurls'
 
 export function meta(gopt: Object = {}) {
 

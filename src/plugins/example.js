@@ -18,10 +18,10 @@
 // @flow
 // @jsx jsx
 
-import {jsx} from '../site/jsx'
+import { jsx } from '../site/jsx'
 
 export function example(name: string = '') {
-  return ($: Function, opt: Object = {value: 0}) => {
+  return ($: Function, opt: Object = { value: 0 }) => {
     $('head').append(<meta name={name} value={opt.value || 0}/>)
   }
 }

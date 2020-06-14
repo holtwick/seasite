@@ -18,13 +18,13 @@
 // @flow
 // @jsx jsx
 
-import {SeaSite} from '../site/site'
+import { SeaSite } from '../site/site'
 
 let defaults = {
   patterns: [
     /\.md/,
-    'template.html'
-  ]
+    'template.html',
+  ],
 }
 
 export function cleanup(site: SeaSite, opt: Object = {}) {

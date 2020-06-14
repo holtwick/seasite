@@ -18,14 +18,14 @@
 // @flow
 // @jsx jsx
 
-import {jsx} from '../site/jsx'
+import { jsx } from '../site/jsx'
 import assert from 'assert'
-import {isAbsoluteURL} from '../site'
+import { isAbsoluteURL } from '../site'
 
 const OPT = {
   selector: '.disqus',
   disqusURL: null, // 'https://xxx.disqus.com/embed.js',
-  privacyURL: '/privacy#comment'
+  privacyURL: '/privacy#comment',
 }
 
 export function disqus(gopt: Object = {}) {

@@ -18,9 +18,10 @@
 // @flow
 // @jsx jsx
 
-import {jsx} from '../site/jsx'
+import { jsx } from '../site/jsx'
+
 const OPT = {
-  videoTitle: 'Play video'
+  videoTitle: 'Play video',
 }
 
 export function youtube(gopt: Object = {}) {

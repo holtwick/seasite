@@ -50,7 +50,7 @@ if (command === 'init') {
     'package.json',
     'index.js',
     path.join('public', 'index.md'),
-    path.join('public', 'template.html')
+    path.join('public', 'template.html'),
   ]
 
   files.forEach(name => {

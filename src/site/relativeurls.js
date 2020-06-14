@@ -58,10 +58,10 @@ export function urlRelative(fromURL, toURL) {
 }
 
 const urlElements = [
-  {tag: 'a', attr: 'href'},
-  {tag: 'script', attr: 'src'},
-  {tag: 'link', attr: 'href'},
-  {tag: 'img', attr: 'src'}
+  { tag: 'a', attr: 'href' },
+  { tag: 'script', attr: 'src' },
+  { tag: 'link', attr: 'href' },
+  { tag: 'img', attr: 'src' },
 ]
 
 export function translateLinks($, baseURL) {

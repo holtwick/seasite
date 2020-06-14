@@ -18,8 +18,8 @@
 // @flow
 // @jsx jsx
 
-import {jsx, dom, parseMarkdown, plugin, SeaSite} from '../index'
-import {pathMatchesPatterns} from '../site'
+import { dom, jsx, parseMarkdown, plugin, SeaSite } from '../index'
+import { pathMatchesPatterns } from '../site'
 
 function pathToHTMLPath(path) {
   return path.replace(/\..+?$/, '.html').replace(/\/-/, '/')
@@ -34,7 +34,7 @@ const defaults = {
   },
   handle($, opt) {
 
-  }
+  },
 }
 
 export function markdown(site: SeaSite, gopt: Object = {}): Array<Object> {
@@ -44,7 +44,7 @@ export function markdown(site: SeaSite, gopt: Object = {}): Array<Object> {
 
   const plugins = [
     plugin.href(),
-    plugin.meta()
+    plugin.meta(),
   ]
 
   site.handle(gopt.pattern, (content, path) => {
@@ -54,7 +54,7 @@ export function markdown(site: SeaSite, gopt: Object = {}): Array<Object> {
     }
 
     let md = parseMarkdown(content, {
-      bs4: gopt.bs4
+      bs4: gopt.bs4,
     })
     let props = md.props
     let html = md.html
@@ -63,7 +63,7 @@ export function markdown(site: SeaSite, gopt: Object = {}): Array<Object> {
       html,
       content,
       path,
-      outline: md.outline
+      outline: md.outline,
     })
 
     let $ = dom(gopt.template(site, opt))
@@ -71,7 +71,7 @@ export function markdown(site: SeaSite, gopt: Object = {}): Array<Object> {
     opt.handle($, opt)
 
     $.applyPlugins(plugins, Object.assign({}, opt, {
-      path
+      path,
     }))
 
     opt.html = $.html()
