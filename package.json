@@ -3,6 +3,7 @@
   "version": "1.0.4",
   "description": "Static Site Builder",
   "main": "lib/index.js",
+  "module": "src/index.js",
   "scripts": {
     "start": "npm run watch",
     "build": "rm -rf lib && babel src -d lib",
