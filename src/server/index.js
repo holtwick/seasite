@@ -22,7 +22,55 @@ import helmet from 'helmet'
 
 const log = require('debug')('signal:server')
 
-export function server(port=8080) {
+export class Page {
+
+  status: 200
+
+  html: 'Hello'
+
+  render() {
+    return this.html
+  }
+
+}
+
+export class Handler {
+
+  pattern
+  handler
+
+  constructor(pattern, handler) {
+    this.pattern = pattern
+    this.handler = handler
+  }
+
+  match(path) {
+    return this.pattern.test(path)
+  }
+
+}
+
+export class Site {
+
+  queue = []
+
+  handle(pattern, handler) {
+    this.queue.push(new Handler(pattern, handler))
+  }
+
+  perform(path) {
+    let page = new Page()
+    for(let handler of this.queue) {
+      if (handler.match(path)) {
+        handler.handler(page)
+      }
+    }
+    return page
+  }
+
+}
+
+export function server(site, port = 8080) {
   const app = express()
   const server = new http.Server(app)
   app.use(helmet())
@@ -31,12 +79,15 @@ export function server(port=8080) {
   app.use(function (req, res, next) {
     log('req', req)
     const path = req.path
-    res.send(`Path: ${path}`)
+    let page = site.perform(path)
+    res
+
+      .send(page.render())
   })
 
   server.listen({
     // host: CONFIG.host,
-    port
+    port,
   }, info => {
     console.info(`Running on`, server.address())
   })
