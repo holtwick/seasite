@@ -21,8 +21,7 @@ import { existsSync } from 'fs'
 import { join } from 'path'
 import log from '../log'
 import { isAbsoluteURL } from '../site/relativeurls'
-
-const sizeOf = require('image-size')
+import sizeOf from 'image-size'
 
 const OPT = {}
 
