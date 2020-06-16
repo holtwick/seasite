@@ -42,7 +42,7 @@
 
   // Helper to define a logging level object; helps with optimisation.
   var defineLogLevel = function (value, name) {
-    return {value: value, name: name}
+    return { value: value, name: name }
   }
 
   // Predefined logging levels.
@@ -61,7 +61,7 @@
     this.log = this.info  // Convenience alias.
     this.count = {
       error: 0,
-      warn: 0
+      warn: 0,
     }
   }
 
@@ -130,13 +130,13 @@
     // Invokes the logger callback if it's not being filtered.
     invoke: function (level, msgArgs) {
       if (logHandler && this.enabledFor(level)) {
-        logHandler(msgArgs, merge({level: level}, this.context))
+        logHandler(msgArgs, merge({ level: level }, this.context))
       }
-    }
+    },
   }
 
   // Protected instance which all calls to the to level `Logger` module will be routed through.
-  var globalLogger = new ContextualLogger({filterLevel: Logger.OFF});
+  var globalLogger = new ContextualLogger({ filterLevel: Logger.OFF });
 
   // Configure the global Logger instance.
   (function () {
@@ -188,7 +188,7 @@
   Logger.get = function (name) {
     // All logger instances are cached so they can be configured ahead of use.
     return contextualLoggersByNameMap[name] ||
-      (contextualLoggersByNameMap[name] = new ContextualLogger(merge({name: name}, globalLogger.context)))
+      (contextualLoggersByNameMap[name] = new ContextualLogger(merge({ name: name }, globalLogger.context)))
   }
 
   // CreateDefaultHandler returns a handler function which can be passed to `Logger.setHandler()` which will

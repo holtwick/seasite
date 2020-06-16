@@ -4,7 +4,7 @@
 
 // https://github.com/jonnyreeves/js-logger
 
-import {ansicodes, checkAnsiColorsAvailable} from './colorize'
+import { ansicodes, checkAnsiColorsAvailable } from './colorize'
 
 let log = require('./logger-core')
 log.useDefaults()
@@ -21,22 +21,22 @@ function translateLogLevel(level) {
     case 'error' :
       return {
         prefix: 'E|*** ',
-        color: 'red'
+        color: 'red',
       }
     case 'warn' :
       return {
         prefix: 'W|**  ',
-        color: 'magenta'
+        color: 'magenta',
       }
     case 'info' :
       return {
         prefix: 'I|*   ',
-        color: 'cyan'
+        color: 'cyan',
       }
     case 'debug' :
       return {
         prefix: 'D|    ',
-        color: 'yellow'
+        color: 'yellow',
       }
     // case 'time' :
     //     return {
@@ -48,7 +48,7 @@ function translateLogLevel(level) {
   }
   return {
     prefix: 'V|    ',
-    color: null
+    color: null,
   }
 }
 
@@ -80,7 +80,7 @@ export function createFormatter(opt: any = {
   level: false,
   name: false,
   color: false,
-  pretty: false
+  pretty: false,
 }) {
   let alternation = true
   return function (messages: any, context: any) {
@@ -121,18 +121,18 @@ export function createNodeConsoleHandler(opt: any) {
     formatter: createFormatter({
       name: true,
       level: false,
-      color: true
-    })
+      color: true,
+    }),
   })
 }
 
 let logHandler: Array<Function> = [
-  createConsoleHandler()
+  createConsoleHandler(),
 ]
 
 if (colors) {
   logHandler = [
-    createNodeConsoleHandler()
+    createNodeConsoleHandler(),
   ]
 }
 
@@ -169,5 +169,5 @@ try {
 
 let logger = log
 export {
-  log
+  log,
 }

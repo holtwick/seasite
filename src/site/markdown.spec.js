@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {markdown} from './markdown'
+import { markdown } from './markdown'
 
 describe('Markdown', () => {
 
@@ -24,7 +24,7 @@ describe('Markdown', () => {
     expect(r).toEqual({
       'content': 'Hello **world**',
       'html': '<p>Hello <strong>world</strong></p>\n',
-      'props': {}
+      'props': {},
     })
   })
 
@@ -43,7 +43,7 @@ alert(2)
 Lorem **ipsum**
 `)
     expect(r.props).toEqual({
-      title: 'One World'
+      title: 'One World',
     })
 
     expect(r.html).toBe('<h1>This is a world</h1><pre><code class="lang-js">alert(1)\nalert(2)</code></pre>\n<p>Lorem <strong>ipsum</strong></p>\n')

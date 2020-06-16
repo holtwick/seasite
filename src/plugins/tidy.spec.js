@@ -18,9 +18,9 @@
 // (C)opyright Dirk Holtwick, 2017-01-19 <dirk.holtwick@gmail.com>
 // @jsx jsx
 
-import {jsx} from '../site/jsx'
-import {tidy} from '../plugins/tidy'
-import {html} from '../site/dom'
+import { jsx } from '../site/jsx'
+import { tidy } from '../plugins/tidy'
+import { html } from '../site/dom'
 
 describe('pugin.tidy', () => {
 
