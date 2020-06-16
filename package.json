@@ -31,9 +31,11 @@
     "@babel/preset-flow": "^7.10.1",
     "@babel/preset-react": "^7.10.1",
     "flow-bin": "^0.127.0",
-    "purgecss": "^2.3.0"
-  },
-  "dependencies": {
+    "purgecss": "^2.3.0",
+    "cors": "^2.8.5",
+    "debug": "^4.1.1",
+    "express": "^4.17.1",
+    "helmet": "^3.23.0",
     "@babel/runtime": "^7.10.2",
     "cheerio": "^1.0.0-rc.3",
     "dateformat": "^3.0.3",

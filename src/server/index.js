@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Dirk Holtwick <https://holtwick.de>
+ * Copyright (C) 2020 Dirk Holtwick <https://holtwick.de>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,12 +15,30 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export { log } from './log'
+import express from 'express'
+import http from 'http'
+import cors from 'cors'
+import helmet from 'helmet'
 
-import * as plugin from './plugins'
-import * as task from './tasks'
+const log = require('debug')('signal:server')
 
-export * from './site'
-export * from './server'
+export function server(port=8080) {
+  const app = express()
+  const server = new http.Server(app)
+  app.use(helmet())
+  app.use(cors())
 
-export { plugin, task }
+  app.use(function (req, res, next) {
+    log('req', req)
+    const path = req.path
+    res.send(`Path: ${path}`)
+  })
+
+  server.listen({
+    // host: CONFIG.host,
+    port
+  }, info => {
+    console.info(`Running on`, server.address())
+  })
+}
+
