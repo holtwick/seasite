@@ -18,9 +18,9 @@
 // @flow
 // @jsx jsx
 
-import {SeaSite} from '../index'
+import { SeaSite } from '../index'
 import log from '../log'
-import {isDOM, isPattern, pathMatchesPatterns} from '../site'
+import { isDOM, isPattern, pathMatchesPatterns } from '../site'
 
 function pathToHTMLPath(path) {
   return path.replace(/\..+?$/, '.html').replace(/\/-/, '/')
@@ -28,7 +28,7 @@ function pathToHTMLPath(path) {
 
 const defaults = {
   pattern: /.*/,
-  plugins: []
+  plugins: [],
 }
 
 export function handle(site: SeaSite, gopt: Object = {}): Array<Object> {
@@ -46,7 +46,7 @@ export function handle(site: SeaSite, gopt: Object = {}): Array<Object> {
 
     let opt = Object.assign({}, defaults, gopt, {
       site,
-      path
+      path,
     })
 
     if (isDOM($) && plugins && plugins.length) {
@@ -83,7 +83,7 @@ export async function handleAsync(site: SeaSite, gopt: Object = {}): Array<Objec
 
     let opt = Object.assign({}, defaults, gopt, {
       site,
-      path
+      path,
     })
 
     if (isDOM($) && plugins && plugins.length) {

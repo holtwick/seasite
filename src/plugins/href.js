@@ -18,14 +18,14 @@
 // @flow
 
 import * as url from 'url'
-import {handleLinks, urlRelative} from '../site/relativeurls'
+import { handleLinks, urlRelative } from '../site/relativeurls'
 
 const defaults = {
   relative: false,
   handleURL(url) {
     return url
   },
-  ignore: null
+  ignore: null,
 }
 
 export function href(gopt: Object = {}) {
