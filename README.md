@@ -3,6 +3,9 @@
 Static web site builder inspired by jQuery:
 <https://holtwick.de/blog/static-jquery>
 
+> **Please note, this project is discontinued by favor of its successor [HOSTIC](https://github.com/holtwick/hostic)**
+
+
 ### Installation
 
 Install via [npm](https://www.npmjs.com/package/seasite):
